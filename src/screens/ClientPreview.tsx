@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Heart, MapPin, Clock, Calendar, Check, X, Minus, Wine } from 'lucide-react';
 import { useSettings, useInvitations, useGuests, useRsvps, useBeverages } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import type { WeddingEvent, RsvpStatus } from '@/types';
 
 function formatDate(iso: string): string {
@@ -39,6 +39,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const guests = useGuests();
   const rsvps = useRsvps();
   const beverages = useBeverages();
+  const { upsertRsvp, addGuest, updateGuest } = useStore();
 
   const [search, setSearch] = useState('');
   const [foundInv, setFoundInv] = useState<string | null>(null);
@@ -92,12 +93,12 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
     if (inv) setSearch(inv.invitationNumber);
   };
 
-  const submitRsvp = async () => {
+  const submitRsvp = () => {
     if (!foundInv) return;
     const now = Date.now();
     const existing = rsvpByInv.get(foundInv);
     const inv = invitations.find((i) => i.id === foundInv);
-    await db.rsvps.put({
+    upsertRsvp({
       id: existing?.id ?? foundInv,
       invitationId: foundInv,
       status,
@@ -110,14 +111,14 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
     for (const p of people) {
       const existingGuest = invGuests.find((g) => g.firstName === p.firstName);
       if (existingGuest) {
-        await db.guests.put({
+        updateGuest({
           ...existingGuest,
           beverageId: p.beverageId || null,
           beverageQuantity: p.beverageId ? 1 : null,
           updatedAt: now,
         });
       } else if (p.firstName.trim()) {
-        await db.guests.add({
+        addGuest({
           id: crypto.randomUUID(),
           invitationId: foundInv,
           firstName: p.firstName.trim(),

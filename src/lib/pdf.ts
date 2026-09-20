@@ -1,9 +1,7 @@
 import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
-import { db } from '@/db/database';
 import type { Invitation, WeddingSettings, Guest, TableEntity, Beverage, Rsvp } from '@/types';
 
-// Generate a QR code data URL locally in the browser — no external service.
 export async function generateQrDataUrl(text: string): Promise<string> {
   return QRCode.toDataURL(text, {
     margin: 1,
@@ -12,18 +10,22 @@ export async function generateQrDataUrl(text: string): Promise<string> {
   });
 }
 
-export async function generateQrInvitationsPdf(): Promise<void> {
-  const [invitations, settings, guests] = await Promise.all([
-    db.invitations.toArray(),
-    db.settings.get('current'),
-    db.guests.toArray(),
-  ]);
+interface PdfData {
+  settings: WeddingSettings | null;
+  invitations: Invitation[];
+  guests: Guest[];
+  rsvps: Rsvp[];
+  tables: TableEntity[];
+  beverages: Beverage[];
+}
 
+export async function generateQrInvitationsPdf(data: PdfData): Promise<void> {
+  const { invitations, settings, guests } = data;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 12;
-  const cardW = (pageW - margin * 2 - 8) / 2; // 2 cards per row, 8mm gutter
+  const cardW = (pageW - margin * 2 - 8) / 2;
   const cardH = 70;
   const gutter = 8;
   let x = margin;
@@ -41,20 +43,17 @@ export async function generateQrInvitationsPdf(): Promise<void> {
       y = margin;
     }
 
-    // Card border
     doc.setDrawColor(184, 134, 11);
     doc.setLineWidth(0.6);
     doc.roundedRect(x, y, cardW, cardH, 3, 3, 'S');
 
-    // Logo (if set)
     if (settings?.logoDataUrl) {
       try {
         const fmt = settings.logoDataUrl.includes('image/png') ? 'PNG' : 'JPEG';
         doc.addImage(settings.logoDataUrl, fmt, x + 4, y + 3, 8, 8);
-      } catch { /* skip if image format unsupported */ }
+      } catch { /* skip */ }
     }
 
-    // Header
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(26, 26, 26);
@@ -67,10 +66,8 @@ export async function generateQrInvitationsPdf(): Promise<void> {
       doc.text(`${formatDate(settings.weddingDate)}${timeStr}`, x + 4, y + 13);
     }
 
-    // QR
     doc.addImage(qrData, 'PNG', x + cardW - 34, y + 6, 28, 28);
 
-    // Family info
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
     doc.setTextColor(26, 26, 26);
@@ -88,14 +85,12 @@ export async function generateQrInvitationsPdf(): Promise<void> {
       doc.text(`Tél: ${inv.contactPhone}`, x + 4, y + 44);
     }
 
-    // People list
     let py = y + 50;
     for (const p of people.slice(0, 4)) {
       doc.text(`• ${p.firstName} ${p.lastName}${p.isChild ? ' (enfant)' : ''}`, x + 4, py);
       py += 4;
     }
 
-    // Footer
     doc.setFontSize(7);
     doc.setTextColor(150, 150, 150);
     doc.text(`Token: ${inv.qrToken.slice(0, 12)}...`, x + 4, y + cardH - 4);
@@ -110,14 +105,8 @@ export async function generateQrInvitationsPdf(): Promise<void> {
   doc.save('qr-invitations.pdf');
 }
 
-export async function generateSeatingPdf(): Promise<void> {
-  const [tables, guests, invitations, settings] = await Promise.all([
-    db.weddingTables.toArray(),
-    db.guests.toArray(),
-    db.invitations.toArray(),
-    db.settings.get('current'),
-  ]);
-
+export async function generateSeatingPdf(data: PdfData): Promise<void> {
+  const { tables, guests, invitations, settings } = data;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
   const margin = 15;
@@ -138,10 +127,7 @@ export async function generateSeatingPdf(): Promise<void> {
   const sorted = [...tables].sort((a, b) => a.name.localeCompare(b.name));
 
   for (const t of sorted) {
-    if (y > 270) {
-      doc.addPage();
-      y = 20;
-    }
+    if (y > 270) { doc.addPage(); y = 20; }
     const tableGuests = guests
       .filter((g) => g.tableId === t.id)
       .sort((a, b) => (a.seatNumber ?? 999) - (b.seatNumber ?? 999));
@@ -158,10 +144,7 @@ export async function generateSeatingPdf(): Promise<void> {
     doc.setFontSize(9);
     doc.setTextColor(60, 60, 60);
     for (const g of tableGuests) {
-      if (y > 285) {
-        doc.addPage();
-        y = 20;
-      }
+      if (y > 285) { doc.addPage(); y = 20; }
       const inv = invById.get(g.invitationId);
       const seat = g.seatNumber ? `Place ${g.seatNumber}` : '—';
       doc.text(`  ${seat}  —  ${g.firstName} ${g.lastName}${inv ? `  (${inv.familyName})` : ''}${g.isChild ? '  (enfant)' : ''}`, margin + 2, y);
@@ -173,14 +156,8 @@ export async function generateSeatingPdf(): Promise<void> {
   doc.save('plan-tables.pdf');
 }
 
-export async function generateBeveragePdf(): Promise<void> {
-  const [guests, beverages, invitations, tables] = await Promise.all([
-    db.guests.toArray(),
-    db.beverages.toArray(),
-    db.invitations.toArray(),
-    db.weddingTables.toArray(),
-  ]);
-
+export async function generateBeveragePdf(data: PdfData): Promise<void> {
+  const { guests, beverages, invitations, tables } = data;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const margin = 15;
   const pageW = doc.internal.pageSize.getWidth();
@@ -190,7 +167,6 @@ export async function generateBeveragePdf(): Promise<void> {
   doc.setTextColor(26, 26, 26);
   doc.text('Plan boissons', margin, 20);
 
-  // Summary by beverage
   const bevById = new Map(beverages.map((b) => [b.id, b]));
   const totals = new Map<string, { category: string; total: number }>();
   for (const g of guests) {
@@ -216,7 +192,6 @@ export async function generateBeveragePdf(): Promise<void> {
     y += 6;
   }
 
-  // Detail by guest
   y += 10;
   if (y > 270) { doc.addPage(); y = 20; }
   doc.setFont('helvetica', 'bold');
@@ -239,14 +214,8 @@ export async function generateBeveragePdf(): Promise<void> {
   doc.save('plan-boissons.pdf');
 }
 
-export async function generateGuestListPdf(): Promise<void> {
-  const [guests, invitations, rsvps, settings] = await Promise.all([
-    db.guests.toArray(),
-    db.invitations.toArray(),
-    db.rsvps.toArray(),
-    db.settings.get('current'),
-  ]);
-
+export async function generateGuestListPdf(data: PdfData): Promise<void> {
+  const { guests, invitations, rsvps, settings } = data;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const margin = 15;
   const pageW = doc.internal.pageSize.getWidth();
@@ -306,12 +275,3 @@ function formatTime(t: string): string {
   if (isNaN(h) || h < 0 || h > 23) h = 0;
   return `${String(h).padStart(2, '0')}h${m}`;
 }
-
-export type {
-  Invitation,
-  WeddingSettings,
-  Guest,
-  TableEntity,
-  Beverage,
-  Rsvp,
-};

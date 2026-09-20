@@ -11,7 +11,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
 import { useTables, useGuests } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import type { TableEntity } from '@/types';
 
 const TABLE_SIZE = { round: 88, square: 84, rect: 120 };
@@ -20,6 +20,7 @@ export function FloorPlanScreen() {
   const tables = useTables();
   const guests = useGuests();
   const { show } = useToast();
+  const { updateTable } = useStore();
   const [selected, setSelected] = useState<string | null>(null);
 
   const sensors = useSensors(
@@ -34,13 +35,13 @@ export function FloorPlanScreen() {
     return m;
   }, [guests]);
 
-  const onDragEnd = async (e: DragEndEvent) => {
+  const onDragEnd = (e: DragEndEvent) => {
     const id = String(e.active.id);
     const delta = e.delta;
     if (!delta || (delta.x === 0 && delta.y === 0)) return;
     const table = tables.find((t) => t.id === id);
     if (!table) return;
-    await db.weddingTables.put({
+    updateTable({
       ...table,
       x: Math.max(20, table.x + delta.x),
       y: Math.max(20, table.y + delta.y),

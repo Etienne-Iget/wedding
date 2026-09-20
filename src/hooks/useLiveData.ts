@@ -1,27 +1,26 @@
-import { useLiveQuery } from 'dexie-react-hooks';
-import { db, SETTINGS_ID } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import type { WeddingSettings, Invitation, Guest, TableEntity, Beverage, Rsvp } from '@/types';
 
 export function useSettings(): WeddingSettings | undefined {
-  return useLiveQuery(() => db.settings.get(SETTINGS_ID), [], undefined);
+  return useStore().settings ?? undefined;
 }
 
 export function useInvitations(): Invitation[] {
-  return useLiveQuery(() => db.invitations.orderBy('invitationNumber').toArray(), [], []) ?? [];
+  return useStore().invitations;
 }
 
 export function useGuests(): Guest[] {
-  return useLiveQuery(() => db.guests.toArray(), [], []) ?? [];
+  return useStore().guests;
 }
 
 export function useTables(): TableEntity[] {
-  return useLiveQuery(() => db.weddingTables.toArray(), [], []) ?? [];
+  return useStore().tables;
 }
 
 export function useBeverages(): Beverage[] {
-  return useLiveQuery(() => db.beverages.toArray(), [], []) ?? [];
+  return useStore().beverages;
 }
 
 export function useRsvps(): Rsvp[] {
-  return useLiveQuery(() => db.rsvps.toArray(), [], []) ?? [];
+  return useStore().rsvps;
 }

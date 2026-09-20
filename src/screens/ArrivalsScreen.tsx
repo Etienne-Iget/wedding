@@ -17,7 +17,7 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
 import { useInvitations, useGuests, useRsvps } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import type { Invitation } from '@/types';
 
 export function ArrivalsScreen() {
@@ -25,6 +25,7 @@ export function ArrivalsScreen() {
   const guests = useGuests();
   const rsvps = useRsvps();
   const { show } = useToast();
+  const { updateInvitation } = useStore();
 
   const [scanning, setScanning] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
@@ -83,7 +84,7 @@ export function ArrivalsScreen() {
         return 'already';
       }
       const now = Date.now();
-      await db.invitations.put({ ...inv, checkedInAt: now, updatedAt: now });
+      updateInvitation({ ...inv, checkedInAt: now, updatedAt: now });
       setLastScanned({ ...inv, checkedInAt: now });
       setFlash('success');
       return 'success';
@@ -91,8 +92,8 @@ export function ArrivalsScreen() {
     [rsvpByInv]
   );
 
-  const undoCheckIn = async (inv: Invitation) => {
-    await db.invitations.put({ ...inv, checkedInAt: null, updatedAt: Date.now() });
+  const undoCheckIn = (inv: Invitation) => {
+    updateInvitation({ ...inv, checkedInAt: null, updatedAt: Date.now() });
     show('info', `Arrivée de ${inv.familyName} annulée.`);
     if (lastScanned?.id === inv.id) setLastScanned(null);
   };

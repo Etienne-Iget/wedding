@@ -14,7 +14,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
 import { useInvitations, useGuests, useTables, useBeverages, useSettings } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import { uuid } from '@/lib/id';
 import type { Guest } from '@/types';
 
@@ -35,6 +35,7 @@ export function GuestsScreen() {
   const beverages = useBeverages();
   const settings = useSettings();
   const { show } = useToast();
+  const { addGuest, updateGuest, deleteGuest } = useStore();
 
   const [search, setSearch] = useState('');
   const [filterInv, setFilterInv] = useState('');
@@ -106,7 +107,7 @@ export function GuestsScreen() {
     const beverageId = values.beverageId || null;
 
     if (editing) {
-      await db.guests.put({
+      updateGuest({
         ...editing,
         invitationId: values.invitationId,
         firstName: values.firstName,
@@ -119,7 +120,7 @@ export function GuestsScreen() {
       });
       show('success', 'Invité mis à jour.');
     } else {
-      await db.guests.add({
+      addGuest({
         id: uuid(),
         invitationId: values.invitationId,
         firstName: values.firstName,
@@ -137,9 +138,9 @@ export function GuestsScreen() {
     setShowForm(false);
   };
 
-  const onDelete = async () => {
+  const onDelete = () => {
     if (!deleteId) return;
-    await db.guests.delete(deleteId);
+    deleteGuest(deleteId);
     show('success', 'Invité supprimé.');
   };
 

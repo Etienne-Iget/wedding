@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   DatabaseBackup,
   Download,
@@ -11,19 +11,21 @@ import {
   Loader2,
   CloudOff,
   ShieldCheck,
+  CloudUpload,
+  RotateCcw,
 } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
+import { useStore } from '@/store/StoreContext';
 import { useSettings, useInvitations, useGuests, useTables, useBeverages, useRsvps } from '@/hooks/useLiveData';
 import {
-  exportBackup,
   downloadJson,
   parseBackupFile,
-  restoreBackup,
   summarizeBackup,
   type RestoreSummary,
   type RestoreMode,
+  type WeddingData,
 } from '@/lib/backup';
 import {
   exportGuestsCsv,
@@ -34,9 +36,8 @@ import {
   generateGuestListPdf,
   generateSeatingPdf,
   generateBeveragePdf,
+  generateQrInvitationsPdf,
 } from '@/lib/pdf';
-import { saveAutoBackup, getAutoBackupAge } from '@/lib/autoBackup';
-import type { BackupFile } from '@/types';
 
 export function BackupScreen() {
   const settings = useSettings();
@@ -46,22 +47,38 @@ export function BackupScreen() {
   const beverages = useBeverages();
   const rsvps = useRsvps();
   const { show } = useToast();
+  const { buildWeddingData, replaceAll, mergeAll, isDirty, resetToPublished } = useStore();
   const fileRef = useRef<HTMLInputElement>(null);
-  const [autoBackupAge, setAutoBackupAge] = useState<number | null>(null);
 
   const [busy, setBusy] = useState(false);
-  const [pending, setPending] = useState<{ file: BackupFile; summary: RestoreSummary } | null>(null);
+  const [pending, setPending] = useState<{ data: WeddingData; summary: RestoreSummary } | null>(null);
   const [restoreMode, setRestoreMode] = useState<RestoreMode>('replace');
 
-  const doExport = async () => {
+  const pdfData = { settings: settings ?? null, invitations, guests, rsvps, tables, beverages };
+
+  const doExport = () => {
     setBusy(true);
     try {
-      const backup = await exportBackup();
+      const data = buildWeddingData();
       const filename = `${settings?.weddingId ?? 'mariage'}.json`;
-      downloadJson(filename, backup);
+      downloadJson(filename, data);
       show('success', 'Sauvegarde téléchargée avec succès.');
-    } catch (e) {
+    } catch {
       show('error', "Erreur lors de l'export.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const doPublish = () => {
+    setBusy(true);
+    try {
+      const data = buildWeddingData();
+      const filename = 'wedding-data.json';
+      downloadJson(filename, data);
+      show('success', 'Fichier de publication téléchargé. Placez-le dans le dossier public/data/ et redéployez le site.');
+    } catch {
+      show('error', 'Erreur lors de la génération du fichier de publication.');
     } finally {
       setBusy(false);
     }
@@ -73,7 +90,7 @@ export function BackupScreen() {
       const text = await file.text();
       const parsed = parseBackupFile(text);
       const summary = summarizeBackup(parsed);
-      setPending({ file: parsed, summary });
+      setPending({ data: parsed, summary });
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Fichier illisible.';
       show('error', msg);
@@ -83,91 +100,78 @@ export function BackupScreen() {
     }
   };
 
-  const confirmRestore = async () => {
+  const confirmRestore = () => {
     if (!pending) return;
     setBusy(true);
     try {
-      await restoreBackup(pending.file, restoreMode);
-      show('success', `Sauvegarde restaurée (${pending.summary.invitations} invitations, ${pending.summary.guests} invités).`);
+      if (restoreMode === 'replace') {
+        replaceAll(pending.data);
+      } else {
+        mergeAll(pending.data);
+      }
+      show('success', `Données restaurées (${pending.summary.invitations} invitations, ${pending.summary.guests} invités).`);
       setPending(null);
-    } catch (e) {
+    } catch {
       show('error', 'Erreur lors de la restauration.');
     } finally {
       setBusy(false);
     }
   };
 
-  const csvActions = [
-    { label: 'Invités', desc: 'invitation, famille, table, place, RSVP, boisson', fn: exportGuestsCsv },
-    { label: 'Boissons', desc: 'invité, table, place, boisson, quantité', fn: exportBeveragesCsv },
-    { label: 'Tables', desc: 'table, capacité, occupé, disponible', fn: exportTablesCsv },
-  ];
-
-  useEffect(() => {
-    const update = () => setAutoBackupAge(getAutoBackupAge());
-    update();
-    const id = setInterval(update, 5000);
-    return () => clearInterval(id);
-  }, []);
-
-  const formatBackupAge = (ms: number): string => {
-    const min = Math.floor(ms / 60000);
-    if (min < 1) return 'il y a quelques secondes';
-    if (min < 60) return `il y a ${min} min`;
-    const h = Math.floor(min / 60);
-    if (h < 24) return `il y a ${h} h`;
-    const d = Math.floor(h / 24);
-    return `il y a ${d} jour(s)`;
+  const doReset = async () => {
+    await resetToPublished();
+    show('info', 'Modifications non publiées annulées. Les données publiées ont été rechargées.');
   };
 
+  const csvActions = [
+    { label: 'Invités', desc: 'invitation, famille, table, place, RSVP, boisson', fn: () => exportGuestsCsv(pdfData) },
+    { label: 'Boissons', desc: 'invité, table, place, boisson, quantité', fn: () => exportBeveragesCsv(pdfData) },
+    { label: 'Tables', desc: 'table, capacité, occupé, disponible', fn: () => exportTablesCsv(pdfData) },
+  ];
+
   const pdfActions = [
-    { label: 'Liste des invités', desc: 'Liste complète triée par famille', fn: generateGuestListPdf, icon: FileText },
-    { label: 'Plan de tables', desc: 'Répartition par table et place', fn: generateSeatingPdf, icon: FileText },
-    { label: 'Plan boissons', desc: 'Récapitulatif et détail par invité', fn: generateBeveragePdf, icon: FileText },
+    { label: 'Liste des invités', desc: 'Liste complète triée par famille', fn: () => generateGuestListPdf(pdfData), icon: FileText },
+    { label: 'Plan de tables', desc: 'Répartition par table et place', fn: () => generateSeatingPdf(pdfData), icon: FileText },
+    { label: 'Plan boissons', desc: 'Récapitulatif et détail par invité', fn: () => generateBeveragePdf(pdfData), icon: FileText },
+    { label: 'QR codes', desc: 'Cartes d\'invitation avec QR code', fn: () => generateQrInvitationsPdf(pdfData), icon: FileText },
   ];
 
   return (
     <div className="space-y-6 max-w-4xl">
       <PageHeader
-        title="Sauvegarde & Restauration"
-        subtitle="Vos données restent sur votre appareil. Exportez-les régulièrement."
+        title="Sauvegarde & Publication"
+        subtitle="Publiez vos données pour qu'elles soient visibles par tous les visiteurs"
         icon={<DatabaseBackup size={22} />}
       />
 
-      {/* Privacy banner */}
-      <div className="card p-5 border-sage-500/30 bg-sage-500/5">
+      {/* Publish banner */}
+      <div className="card p-5 border-gold-300 bg-gold-50/50">
         <div className="flex items-start gap-3">
-          <ShieldCheck size={22} className="text-sage-600 shrink-0 mt-0.5" />
-          <div>
-            <h3 className="text-sm font-semibold text-sage-600">100% local & privé</h3>
-            <p className="text-sm text-ink-600 mt-1">
-              Aucune donnée n'est envoyée vers un serveur. Tout est stocké dans votre navigateur (IndexedDB).
-              Pensez à exporter une sauvegarde régulièrement et à la conserver en lieu sûr.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Auto-save status */}
-      <div className="card p-5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-500/15 text-sage-600">
-            <ShieldCheck size={20} />
-          </div>
+          <CloudUpload size={22} className="text-gold-600 shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-ink-800">Sauvegarde automatique active</h3>
-            <p className="text-sm text-ink-500 mt-0.5">
-              {autoBackupAge !== null
-                ? `Dernière sauvegarde locale : ${formatBackupAge(autoBackupAge)}`
-                : 'En attente de la première sauvegarde…'}
+            <h3 className="text-sm font-semibold text-ink-800">Publier les données du mariage</h3>
+            <p className="text-sm text-ink-600 mt-1">
+              Téléchargez le fichier <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded">wedding-data.json</span>,
+              puis placez-le dans le dossier <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded">public/data/</span> de votre projet
+              et redéployez le site. Tous les visiteurs verront alors les mêmes données.
             </p>
+            {isDirty && (
+              <p className="text-xs text-amber-700 mt-2 bg-amber-100 rounded-lg px-3 py-2">
+                Vous avez des modifications non publiées. Elles sont sauvegardées sur cet appareil mais ne sont pas encore visibles par les autres visiteurs.
+              </p>
+            )}
+            <div className="mt-3 flex flex-wrap gap-3">
+              <button onClick={doPublish} disabled={busy} className="btn-primary">
+                {busy ? <Loader2 size={18} className="animate-spin" /> : <CloudUpload size={18} />}
+                Télécharger le fichier de publication
+              </button>
+              {isDirty && (
+                <button onClick={doReset} disabled={busy} className="btn-secondary">
+                  <RotateCcw size={18} /> Annuler les modifications non publiées
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="mt-3 rounded-lg bg-ink-50 px-4 py-3">
-          <p className="text-xs text-ink-400">
-            Vos données sont automatiquement enregistrées à chaque modification et restaurées au redémarrage de l'application.
-            Vous pouvez exporter un fichier JSON manuellement pour une sauvegarde externe.
-          </p>
         </div>
       </div>
 
@@ -191,7 +195,6 @@ export function BackupScreen() {
         </div>
         <p className="text-sm text-ink-500 mb-4">
           Le fichier JSON contient toutes les données du mariage et permet une restauration complète.
-          Nom du fichier : <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded">{settings?.weddingId ?? 'mariage'}.json</span>
         </p>
         <div className="flex flex-wrap gap-3">
           <button onClick={doExport} disabled={busy} className="btn-primary">
@@ -219,7 +222,7 @@ export function BackupScreen() {
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           {csvActions.map((a) => (
-            <button key={a.label} onClick={() => a.fn()} className="card-hover p-4 text-left">
+            <button key={a.label} onClick={a.fn} className="card-hover p-4 text-left">
               <p className="font-medium text-ink-800">{a.label}</p>
               <p className="text-xs text-ink-400 mt-1">{a.desc}</p>
             </button>
@@ -231,14 +234,13 @@ export function BackupScreen() {
       <div className="card p-6">
         <div className="flex items-center gap-2 mb-4">
           <FileText size={18} className="text-red-500" />
-          <h3 className="text-base font-semibold text-ink-800">Génération PDF (locale)</h3>
+          <h3 className="text-base font-semibold text-ink-800">Génération PDF</h3>
         </div>
-        <p className="text-sm text-ink-500 mb-4">Les PDF sont générés directement dans votre navigateur. Aucun fichier n'est envoyé vers un serveur.</p>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {pdfActions.map((a) => {
             const Icon = a.icon;
             return (
-              <button key={a.label} onClick={() => a.fn()} className="card-hover p-4 text-left">
+              <button key={a.label} onClick={() => void a.fn()} className="card-hover p-4 text-left">
                 <Icon size={18} className="text-red-400 mb-2" />
                 <p className="font-medium text-ink-800">{a.label}</p>
                 <p className="text-xs text-ink-400 mt-1">{a.desc}</p>
@@ -256,7 +258,7 @@ export function BackupScreen() {
             <h3 className="text-sm font-semibold text-ink-700">Fonctionnement hors ligne</h3>
             <p className="text-sm text-ink-500 mt-1">
               Cette application est une PWA. Une fois installée, elle fonctionne sans connexion Internet.
-              Toutes les opérations (ajout d'invités, RSVP, plan de tables, génération de PDF) s'effectuent localement.
+              Les données publiées sont incluses dans le site et visibles par tous les visiteurs.
             </p>
           </div>
         </div>

@@ -1,4 +1,3 @@
-import { db } from '@/db/database';
 import type { Beverage, Guest, Invitation, Rsvp, TableEntity } from '@/types';
 import { downloadText } from './backup';
 
@@ -15,15 +14,16 @@ function rowsToCsv(rows: (string | number | null | undefined)[][]): string {
   return rows.map((r) => r.map(csvEscape).join(',')).join('\n');
 }
 
-export async function exportGuestsCsv(): Promise<void> {
-  const [guests, invitations, tables, rsvps, beverages] = await Promise.all([
-    db.guests.toArray(),
-    db.invitations.toArray(),
-    db.weddingTables.toArray(),
-    db.rsvps.toArray(),
-    db.beverages.toArray(),
-  ]);
+interface CsvData {
+  guests: Guest[];
+  invitations: Invitation[];
+  rsvps: Rsvp[];
+  tables: TableEntity[];
+  beverages: Beverage[];
+}
 
+export function exportGuestsCsv(data: CsvData): void {
+  const { guests, invitations, tables, rsvps, beverages } = data;
   const invById = new Map(invitations.map((i) => [i.id, i]));
   const tableById = new Map(tables.map((t) => [t.id, t]));
   const rsvpByInv = new Map(rsvps.map((r) => [r.invitationId, r]));
@@ -51,14 +51,8 @@ export async function exportGuestsCsv(): Promise<void> {
   downloadText('invites.csv', rowsToCsv(rows), 'text/csv');
 }
 
-export async function exportBeveragesCsv(): Promise<void> {
-  const [guests, invitations, tables, beverages] = await Promise.all([
-    db.guests.toArray(),
-    db.invitations.toArray(),
-    db.weddingTables.toArray(),
-    db.beverages.toArray(),
-  ]);
-
+export function exportBeveragesCsv(data: CsvData): void {
+  const { guests, invitations, tables, beverages } = data;
   const invById = new Map(invitations.map((i) => [i.id, i]));
   const tableById = new Map(tables.map((t) => [t.id, t]));
   const bevById = new Map(beverages.map((b) => [b.id, b]));
@@ -83,12 +77,8 @@ export async function exportBeveragesCsv(): Promise<void> {
   downloadText('boissons.csv', rowsToCsv(rows), 'text/csv');
 }
 
-export async function exportTablesCsv(): Promise<void> {
-  const [tables, guests] = await Promise.all([
-    db.weddingTables.toArray(),
-    db.guests.toArray(),
-  ]);
-
+export function exportTablesCsv(data: CsvData): void {
+  const { tables, guests } = data;
   const header = ['table', 'capacity', 'occupied', 'available'];
   const rows: (string | number)[][] = [header];
 
@@ -98,26 +88,4 @@ export async function exportTablesCsv(): Promise<void> {
   }
 
   downloadText('tables.csv', rowsToCsv(rows), 'text/csv');
-}
-
-// Aggregate beverage quantities for planning.
-export async function beverageSummary(): Promise<Array<{ name: string; category: string; total: number }>> {
-  const [guests, beverages] = await Promise.all([
-    db.guests.toArray(),
-    db.beverages.toArray(),
-  ]);
-  const bevById = new Map(beverages.map((b) => [b.id, b]));
-  const totals = new Map<string, number>();
-  for (const g of guests) {
-    if (!g.beverageId) continue;
-    const bev = bevById.get(g.beverageId);
-    if (!bev) continue;
-    const qty = g.beverageQuantity ?? 1;
-    totals.set(bev.name, (totals.get(bev.name) ?? 0) + qty);
-  }
-  return Array.from(totals.entries()).map(([name, total]) => ({
-    name,
-    category: bevById.get(beverages.find((b) => b.name === name)?.id ?? '')?.category ?? 'other',
-    total,
-  }));
 }

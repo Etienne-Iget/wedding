@@ -4,7 +4,7 @@ import { Settings as SettingsIcon, Save, Upload, Trash2, Image as ImageIcon } fr
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useToast } from '@/components/ui/Toast';
 import { useSettings } from '@/hooks/useLiveData';
-import { db, SETTINGS_ID } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import type { WeddingSettings, WeddingEvent } from '@/types';
 
 interface FormValues {
@@ -49,6 +49,7 @@ function fileToDataUrl(file: File): Promise<string> {
 export function SettingsScreen() {
   const settings = useSettings();
   const { show } = useToast();
+  const { updateSettings } = useStore();
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
 
   const [logoDataUrl, setLogoDataUrl] = useState<string | null>(null);
@@ -119,7 +120,7 @@ export function SettingsScreen() {
   const onSubmit = async (values: FormValues) => {
     const now = Date.now();
     const updated: WeddingSettings = {
-      id: SETTINGS_ID,
+      id: 'current',
       applicationName: settings?.applicationName ?? 'Wedding Guest Manager',
       weddingId: values.weddingId,
       brideName: values.brideName,
@@ -140,7 +141,7 @@ export function SettingsScreen() {
       },
       updatedAt: now,
     };
-    await db.settings.put(updated);
+    updateSettings(updated);
     show('success', 'Paramètres du mariage enregistrés.');
   };
 

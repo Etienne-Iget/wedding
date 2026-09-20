@@ -13,9 +13,9 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
 import { useInvitations, useGuests, useRsvps, useBeverages, useSettings } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
-import { mergeRsvpImport, parseBackupFile } from '@/lib/backup';
-import type { RsvpStatus, Invitation } from '@/types';
+import { useStore } from '@/store/StoreContext';
+import { parseBackupFile, type RestoreMode } from '@/lib/backup';
+import type { RsvpStatus, Invitation, Guest } from '@/types';
 
 interface PersonChoice {
   guestId: string | null; // null = a person allowed but not yet registered as a Guest
@@ -31,6 +31,7 @@ export function RsvpScreen() {
   const beverages = useBeverages();
   const settings = useSettings();
   const { show } = useToast();
+  const { upsertRsvp, addGuest, updateGuest, mergeRsvps } = useStore();
 
   const [search, setSearch] = useState('');
   const [selectedInv, setSelectedInv] = useState<Invitation | null>(null);
@@ -89,14 +90,14 @@ export function RsvpScreen() {
     setPeople((p) => p.filter((_, i) => i !== idx));
   };
 
-  const save = async () => {
+  const save = () => {
     if (!selectedInv) return;
     setSaving(true);
     try {
       const now = Date.now();
       // upsert RSVP
       const existing = rsvpByInv.get(selectedInv.id);
-      await db.rsvps.put({
+      upsertRsvp({
         id: existing?.id ?? selectedInv.id,
         invitationId: selectedInv.id,
         status,
@@ -106,12 +107,11 @@ export function RsvpScreen() {
         updatedAt: now,
       });
 
-      // upsert guest beverage choices and create missing guests
       for (const p of people) {
         if (p.guestId) {
-          const g = await db.guests.get(p.guestId);
+          const g = guests.find((x) => x.id === p.guestId);
           if (g) {
-            await db.guests.put({
+            updateGuest({
               ...g,
               beverageId: p.beverageId || null,
               beverageQuantity: p.beverageId ? p.quantity : null,
@@ -119,7 +119,7 @@ export function RsvpScreen() {
             });
           }
         } else if (p.firstName.trim()) {
-          await db.guests.add({
+          addGuest({
             id: crypto.randomUUID(),
             invitationId: selectedInv.id,
             firstName: p.firstName.trim(),
@@ -151,7 +151,7 @@ export function RsvpScreen() {
       // Accept either a full backup file or a standalone { rsvps: [...] } object
       const rsvpList = Array.isArray(parsed) ? parsed : parsed.rsvps ?? parsed.data?.rsvps ?? [];
       if (!Array.isArray(rsvpList)) throw new Error('Aucune liste de RSVP trouvée dans ce fichier.');
-      const count = await mergeRsvpImport(rsvpList);
+      const count = mergeRsvps(rsvpList as Guest[] as any);
       show('success', `${count} RSVP importés.`);
     } catch (e) {
       show('error', 'Fichier RSVP invalide ou illisible.');

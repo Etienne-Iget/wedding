@@ -20,7 +20,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
 import { useBeverages, useGuests } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import { uuid } from '@/lib/id';
 import type { Beverage } from '@/types';
 
@@ -71,6 +71,7 @@ export function BeveragesScreen() {
   const beverages = useBeverages();
   const guests = useGuests();
   const { show } = useToast();
+  const { addBeverage, updateBeverage, deleteBeverage } = useStore();
 
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Beverage | null>(null);
@@ -113,25 +114,18 @@ export function BeveragesScreen() {
     const now = Date.now();
     const stock = values.stock === '' ? null : Number(values.stock);
     if (editing) {
-      await db.beverages.put({ ...editing, name: values.name, category: values.category, isAlcoholic: values.isAlcoholic, stock, notes: values.notes || undefined, updatedAt: now });
+      updateBeverage({ ...editing, name: values.name, category: values.category, isAlcoholic: values.isAlcoholic, stock, notes: values.notes || undefined, updatedAt: now });
       show('success', 'Boisson mise à jour.');
     } else {
-      await db.beverages.add({ id: uuid(), name: values.name, category: values.category, isAlcoholic: values.isAlcoholic, stock, notes: values.notes || undefined, createdAt: now, updatedAt: now });
+      addBeverage({ id: uuid(), name: values.name, category: values.category, isAlcoholic: values.isAlcoholic, stock, notes: values.notes || undefined, createdAt: now, updatedAt: now });
       show('success', 'Boisson ajoutée.');
     }
     setShowForm(false);
   };
 
-  const onDelete = async () => {
+  const onDelete = () => {
     if (!deleteId) return;
-    // clear beverage selection on guests
-    const usingGuests = guests.filter((g) => g.beverageId === deleteId);
-    await db.transaction('rw', [db.beverages, db.guests], async () => {
-      await db.beverages.delete(deleteId);
-      for (const g of usingGuests) {
-        await db.guests.put({ ...g, beverageId: null, beverageQuantity: null });
-      }
-    });
+    deleteBeverage(deleteId);
     show('success', 'Boisson supprimée.');
   };
 

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "weddingId": "etienne-hannah-2026",
+  "exportedAt": "2026-09-20T00:00:00.000Z",
+  "settings": {
+    "id": "current",
+    "weddingId": "etienne-hannah-2026",
+    "applicationName": "Wedding Guest Manager",
+    "brideName": "Hannah",
+    "groomName": "Étienne",
+    "weddingDate": "2026-09-12",
+    "venueName": "",
+    "venueAddress": "",
+    "maxGuests": 100,
+    "contactEmail": "",
+    "currency": "EUR",
+    "primaryColor": "#b8860b",
+    "logoDataUrl": null,
+    "heroPhotoDataUrl": null,
+    "events": {
+      "dot": { "date": "", "time": "", "venueName": "", "venueAddress": "" },
+      "civil": { "date": "", "time": "", "venueName": "", "venueAddress": "" },
+      "religious": { "date": "", "time": "", "venueName": "", "venueAddress": "" }
+    },
+    "updatedAt": 0
+  },
+  "invitations": [],
+  "guests": [],
+  "rsvps": [],
+  "tables": [],
+  "beverages": []
+}

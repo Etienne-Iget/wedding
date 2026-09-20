@@ -16,7 +16,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
 import { useTables, useGuests } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useStore } from '@/store/StoreContext';
 import { uuid } from '@/lib/id';
 import { tableOccupancy } from '@/lib/stats';
 import type { TableEntity } from '@/types';
@@ -33,6 +33,7 @@ export function TablesScreen() {
   const tables = useTables();
   const guests = useGuests();
   const { show } = useToast();
+  const { addTable, updateTable, deleteTable } = useStore();
 
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<TableEntity | null>(null);
@@ -67,10 +68,10 @@ export function TablesScreen() {
   const onSubmit = async (values: FormValues) => {
     const now = Date.now();
     if (editing) {
-      await db.weddingTables.put({ ...editing, name: values.name, capacity: values.capacity, shape: values.shape, updatedAt: now });
+      updateTable({ ...editing, name: values.name, capacity: values.capacity, shape: values.shape, updatedAt: now });
       show('success', 'Table mise à jour.');
     } else {
-      await db.weddingTables.add({
+      addTable({
         id: uuid(),
         name: values.name,
         capacity: values.capacity,
@@ -87,16 +88,9 @@ export function TablesScreen() {
     setShowForm(false);
   };
 
-  const onDelete = async () => {
+  const onDelete = () => {
     if (!deleteId) return;
-    // unassign guests from deleted table
-    const tableGuests = guests.filter((g) => g.tableId === deleteId);
-    await db.transaction('rw', [db.weddingTables, db.guests], async () => {
-      await db.weddingTables.delete(deleteId);
-      for (const g of tableGuests) {
-        await db.guests.put({ ...g, tableId: null, seatNumber: null });
-      }
-    });
+    deleteTable(deleteId);
     show('success', 'Table supprimée. Les invités ont été déplacés.');
   };
 

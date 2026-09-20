@@ -19,8 +19,8 @@ import { Modal } from '@/components/ui/Modal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
-import { useInvitations, useGuests, useRsvps, useSettings } from '@/hooks/useLiveData';
-import { db } from '@/db/database';
+import { useInvitations, useGuests, useRsvps, useSettings, useTables, useBeverages } from '@/hooks/useLiveData';
+import { useStore } from '@/store/StoreContext';
 import { uuid, generateQrToken, nextInvitationNumber } from '@/lib/id';
 import { generateQrDataUrl, generateQrInvitationsPdf } from '@/lib/pdf';
 import type { Invitation } from '@/types';
@@ -38,6 +38,9 @@ export function InvitationsScreen() {
   const guests = useGuests();
   const rsvps = useRsvps();
   const settings = useSettings();
+  const tables = useTables();
+  const beverages = useBeverages();
+  const { addInvitation, updateInvitation, deleteInvitation, upsertRsvp } = useStore();
   const { show } = useToast();
 
   const [search, setSearch] = useState('');
@@ -92,7 +95,7 @@ export function InvitationsScreen() {
   const onSubmit = async (values: FormValues) => {
     const now = Date.now();
     if (editing) {
-      await db.invitations.put({
+      updateInvitation({
         ...editing,
         familyName: values.familyName,
         maxPeople: values.maxPeople,
@@ -105,7 +108,7 @@ export function InvitationsScreen() {
     } else {
       const number = nextInvitationNumber(invitations);
       const id = uuid();
-      await db.invitations.add({
+      addInvitation({
         id,
         invitationNumber: number,
         familyName: values.familyName,
@@ -117,8 +120,7 @@ export function InvitationsScreen() {
         createdAt: now,
         updatedAt: now,
       });
-      // create a pending RSVP record
-      await db.rsvps.put({
+      upsertRsvp({
         id,
         invitationId: id,
         status: 'pending',
@@ -132,13 +134,9 @@ export function InvitationsScreen() {
     setShowForm(false);
   };
 
-  const onDelete = async () => {
+  const onDelete = () => {
     if (!deleteId) return;
-    await db.transaction('rw', [db.invitations, db.guests, db.rsvps], async () => {
-      await db.invitations.delete(deleteId);
-      await db.guests.where('invitationId').equals(deleteId).delete();
-      await db.rsvps.where('invitationId').equals(deleteId).delete();
-    });
+    deleteInvitation(deleteId);
     show('success', 'Invitation supprimée.');
   };
 
@@ -218,7 +216,7 @@ export function InvitationsScreen() {
   const exportPdf = async () => {
     setPdfBusy(true);
     try {
-      await generateQrInvitationsPdf();
+      await generateQrInvitationsPdf({ settings: settings ?? null, invitations, guests, rsvps, tables, beverages });
       show('success', 'PDF des QR codes généré.');
     } catch (e) {
       show('error', 'Erreur lors de la génération du PDF.');

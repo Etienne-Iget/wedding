@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Sidebar, type RouteId } from '@/components/layout/Sidebar';
 import { ToastProvider } from '@/components/ui/Toast';
+import { StoreProvider, useStore } from '@/store/StoreContext';
 import { Dashboard } from '@/screens/Dashboard';
 import { SettingsScreen } from '@/screens/SettingsScreen';
 import { InvitationsScreen } from '@/screens/InvitationsScreen';
@@ -13,9 +14,6 @@ import { FloorPlanScreen } from '@/screens/FloorPlanScreen';
 import { BackupScreen } from '@/screens/BackupScreen';
 import { ClientPreview } from '@/screens/ClientPreview';
 import { useSettings } from '@/hooks/useLiveData';
-import { ensureSeedData } from '@/lib/backup';
-import { saveAutoBackup, restoreAutoBackup } from '@/lib/autoBackup';
-import { db } from '@/db/database';
 
 function formatDate(iso: string): string {
   try {
@@ -27,51 +25,21 @@ function formatDate(iso: string): string {
 
 function AppContent() {
   const [route, setRoute] = useState<RouteId>('dashboard');
-  const [ready, setReady] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [inviteToken, setInviteToken] = useState<string | null>(null);
   const settings = useSettings();
+  const { loaded } = useStore();
 
   useEffect(() => {
-    (async () => {
-      await restoreAutoBackup();
-      await ensureSeedData();
-      setReady(true);
-      // Check URL for ?invite=TOKEN to auto-open guest view
-      const params = new URLSearchParams(window.location.search);
-      const inv = params.get('invite');
-      if (inv) {
-        setInviteToken(inv);
-        setShowPreview(true);
-      }
-    })();
+    const params = new URLSearchParams(window.location.search);
+    const inv = params.get('invite');
+    if (inv) {
+      setInviteToken(inv);
+      setShowPreview(true);
+    }
   }, []);
 
-  // Auto-save to localStorage whenever any table changes
-  useEffect(() => {
-    if (!ready) return;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const debouncedSave = () => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => { void saveAutoBackup(); }, 800);
-    };
-    const unsubscribers: unknown[] = [];
-    for (const table of [db.settings, db.invitations, db.guests, db.rsvps, db.weddingTables, db.beverages, db.metadata]) {
-      unsubscribers.push(table.hook('creating', debouncedSave));
-      unsubscribers.push(table.hook('updating', debouncedSave));
-      unsubscribers.push(table.hook('deleting', debouncedSave));
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-      for (const h of unsubscribers) {
-        if (h && typeof (h as { unsubscribe?: () => void }).unsubscribe === 'function') {
-          (h as { unsubscribe: () => void }).unsubscribe();
-        }
-      }
-    };
-  }, [ready]);
-
-  if (!ready) {
+  if (!loaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cream">
         <div className="text-center">
@@ -122,7 +90,6 @@ function AppContent() {
           onClose={() => {
             setShowPreview(false);
             setInviteToken(null);
-            // Clean URL
             if (window.location.search) {
               window.history.replaceState({}, '', window.location.pathname);
             }
@@ -136,7 +103,9 @@ function AppContent() {
 export default function App() {
   return (
     <ToastProvider>
-      <AppContent />
+      <StoreProvider>
+        <AppContent />
+      </StoreProvider>
     </ToastProvider>
   );
 }

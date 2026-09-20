@@ -1,6 +1,3 @@
-// Core domain types for the wedding guest manager.
-// All data lives in IndexedDB on the admin's device — nothing is sent to a server.
-
 export type RsvpStatus = 'pending' | 'confirmed' | 'declined';
 
 export interface WeddingEvent {
@@ -11,15 +8,15 @@ export interface WeddingEvent {
 }
 
 export interface WeddingSettings {
-  id: string; // always 'current'
-  weddingId: string; // e.g. 'etienne-hannah-2026'
+  id: string;
+  weddingId: string;
   applicationName: string;
   brideName: string;
   groomName: string;
-  weddingDate: string; // ISO date
+  weddingDate: string;
   venueName: string;
   venueAddress: string;
-  maxGuests: number; // overall cap (e.g. 100)
+  maxGuests: number;
   contactEmail: string;
   currency: string;
   primaryColor: string;
@@ -34,27 +31,27 @@ export interface WeddingSettings {
 }
 
 export interface Invitation {
-  id: string; // uuid
-  invitationNumber: string; // INV-001
+  id: string;
+  invitationNumber: string;
   familyName: string;
-  maxPeople: number; // people allowed on this invitation
-  qrToken: string; // unique token encoded in QR code
+  maxPeople: number;
+  qrToken: string;
   contactPhone?: string;
   email?: string;
   notes?: string;
-  checkedInAt?: number | null; // timestamp when guest arrived (scanned at door)
+  checkedInAt?: number | null;
   createdAt: number;
   updatedAt: number;
 }
 
 export interface Guest {
-  id: string; // uuid
-  invitationId: string; // parent invitation
+  id: string;
+  invitationId: string;
   firstName: string;
   lastName: string;
   tableId?: string | null;
   seatNumber?: number | null;
-  beverageId?: string | null; // chosen beverage
+  beverageId?: string | null;
   beverageQuantity?: number | null;
   isChild: boolean;
   createdAt: number;
@@ -62,21 +59,21 @@ export interface Guest {
 }
 
 export interface Rsvp {
-  id: string; // equals invitationId for 1:1 mapping
+  id: string;
   invitationId: string;
   status: RsvpStatus;
-  attendingCount: number; // number of people attending
+  attendingCount: number;
   submittedAt: number | null;
   note?: string | null;
   updatedAt: number;
 }
 
 export interface TableEntity {
-  id: string; // uuid
-  name: string; // "Table 1"
+  id: string;
+  name: string;
   capacity: number;
   shape: 'round' | 'rect' | 'square';
-  x: number; // position on floor plan (px)
+  x: number;
   y: number;
   rotation?: number;
   color?: string | null;
@@ -85,7 +82,7 @@ export interface TableEntity {
 }
 
 export interface Beverage {
-  id: string; // uuid
+  id: string;
   name: string;
   category: 'soft' | 'wine' | 'beer' | 'champagne' | 'water' | 'juice' | 'cocktail' | 'other';
   isAlcoholic: boolean;
@@ -95,28 +92,16 @@ export interface Beverage {
   updatedAt: number;
 }
 
-export interface AppMetadata {
-  id: string; // always 'current'
-  schemaVersion: number;
-  lastBackupAt?: number;
-  installedAt: number;
-}
-
-// Shape of the full JSON backup file.
-export interface BackupFile {
+export interface WeddingData {
   version: number;
-  application: string;
   weddingId: string;
   exportedAt: string;
-  data: {
-    settings: WeddingSettings | null;
-    invitations: Invitation[];
-    guests: Guest[];
-    rsvps: Rsvp[];
-    tables: TableEntity[];
-    beverages: Beverage[];
-    metadata: AppMetadata | null;
-  };
+  settings: WeddingSettings;
+  invitations: Invitation[];
+  guests: Guest[];
+  rsvps: Rsvp[];
+  tables: TableEntity[];
+  beverages: Beverage[];
 }
 
 export const CURRENT_SCHEMA_VERSION = 1;
