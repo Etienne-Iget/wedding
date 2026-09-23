@@ -199,6 +199,14 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               {settings.venueName && ` · ${settings.venueName}`}
             </p>
           )}
+
+          <a
+            href="#rsvp"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-3.5 text-white font-medium text-lg transition-all hover:bg-gold-600 hover:scale-105 shadow-lg shadow-gold-500/20"
+          >
+            <Heart size={20} fill="currentColor" />
+            Confirmez votre présence
+          </a>
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
@@ -233,7 +241,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       </div>
 
       {/* RSVP section */}
-      <div className="bg-ink-800 py-20 px-6">
+      <div id="rsvp" className="bg-ink-800 py-20 px-6 scroll-mt-0">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-center font-display text-4xl text-white mb-2">Confirmez votre présence</h2>
           <div className="mx-auto h-px w-20 bg-gold-400 mb-12" />
