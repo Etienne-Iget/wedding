@@ -118,17 +118,17 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
       {/* Hero banner */}
       {settings && (
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-ink-800 to-ink-700 p-8 text-white animate-slide-up">
-          {settings.heroPhotoDataUrl && (
+          {settings.heroPhotoSrc && (
             <div className="absolute inset-0">
-              <img src={settings.heroPhotoDataUrl} alt="" className="h-full w-full object-cover opacity-30" />
+              <img src={settings.heroPhotoSrc} alt="" className="h-full w-full object-cover opacity-30" />
               <div className="absolute inset-0 bg-gradient-to-r from-ink-900/80 to-ink-700/60" />
             </div>
           )}
           <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-gold-500/10 blur-3xl" />
           <div className="absolute bottom-0 left-1/3 h-32 w-32 rounded-full bg-gold-500/10 blur-2xl" />
           <div className="relative flex items-center gap-3">
-            {settings.logoDataUrl && (
-              <img src={settings.logoDataUrl} alt="Logo" className="h-12 w-12 object-contain shrink-0" />
+            {settings.logoSrc && (
+              <img src={settings.logoSrc} alt="Logo" className="h-12 w-12 object-contain shrink-0" />
             )}
             <div>
               <p className="text-gold-300 text-sm font-medium tracking-wider uppercase">Notre mariage</p>

@@ -60,10 +60,10 @@ interface SidebarProps {
   onNavigate: (id: RouteId) => void;
   coupleNames: string;
   weddingDate: string;
-  logoDataUrl?: string | null;
+  logoSrc?: string | null;
 }
 
-export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoDataUrl }: SidebarProps) {
+export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoSrc }: SidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const close = () => setMobileOpen(false);
@@ -79,8 +79,8 @@ export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoDat
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-500/20 text-gold-300 shrink-0 overflow-hidden">
-          {logoDataUrl ? (
-            <img src={logoDataUrl} alt="Logo" className="h-full w-full object-contain" />
+          {logoSrc ? (
+            <img src={logoSrc} alt="Logo" className="h-full w-full object-contain" />
           ) : (
             <Heart size={20} fill="currentColor" />
           )}
@@ -138,8 +138,8 @@ export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoDat
       {/* Mobile top bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-ink-800 px-4 py-3 text-white">
         <div className="flex items-center gap-2">
-          {logoDataUrl ? (
-            <img src={logoDataUrl} alt="Logo" className="h-6 w-6 object-contain" />
+          {logoSrc ? (
+            <img src={logoSrc} alt="Logo" className="h-6 w-6 object-contain" />
           ) : (
             <Heart size={18} className="text-gold-400" fill="currentColor" />
           )}

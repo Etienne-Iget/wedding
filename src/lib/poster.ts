@@ -71,9 +71,9 @@ export async function generatePoster(
   ctx.fillRect(0, 0, W, H);
 
   // Try to draw hero photo as background with overlay
-  if (settings.heroPhotoDataUrl) {
+  if (settings.heroPhotoSrc) {
     try {
-      const img = await loadImage(settings.heroPhotoDataUrl);
+      const img = await loadImage(settings.heroPhotoSrc);
       // Draw image covering the canvas (object-fit: cover)
       const scale = Math.max(W / img.width, H / img.height);
       const sw = W / scale;
@@ -106,9 +106,9 @@ export async function generatePoster(
 
   // Logo at top
   let logoBottom = 120;
-  if (settings.logoDataUrl) {
+  if (settings.logoSrc) {
     try {
-      const logoImg = await loadImage(settings.logoDataUrl);
+      const logoImg = await loadImage(settings.logoSrc);
       const logoSize = 90;
       const logoX = centerX - logoSize / 2;
       const logoY = 80;
@@ -242,5 +242,8 @@ export function downloadPoster(dataUrl: string, filename: string = 'save-the-dat
   const link = document.createElement('a');
   link.download = filename;
   link.href = dataUrl;
+  link.rel = 'noopener';
+  document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
 }

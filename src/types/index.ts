@@ -20,8 +20,8 @@ export interface WeddingSettings {
   contactEmail: string;
   currency: string;
   primaryColor: string;
-  logoDataUrl: string | null;
-  heroPhotoDataUrl: string | null;
+  logoSrc: string | null;
+  heroPhotoSrc: string | null;
   events: {
     dot: WeddingEvent;
     civil: WeddingEvent;

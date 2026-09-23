@@ -3,7 +3,6 @@ import {
   useContext,
   useState,
   useEffect,
-  useRef,
   type ReactNode,
 } from 'react';
 import type {
@@ -18,7 +17,6 @@ import type {
 import { CURRENT_SCHEMA_VERSION, APPLICATION_NAME } from '@/types';
 
 const DATA_URL = '/data/wedding-data.json';
-const DRAFT_KEY = 'wgm:draft';
 
 interface StoreState {
   settings: WeddingSettings | null;
@@ -107,8 +105,8 @@ function defaultSettings(): WeddingSettings {
     contactEmail: '',
     currency: 'EUR',
     primaryColor: '#b8860b',
-    logoDataUrl: null,
-    heroPhotoDataUrl: null,
+    logoSrc: null,
+    heroPhotoSrc: null,
     events: {
       dot: { date: '', time: '', venueName: '', venueAddress: '' },
       civil: { date: '', time: '', venueName: '', venueAddress: '' },
@@ -120,59 +118,21 @@ function defaultSettings(): WeddingSettings {
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<StoreState>(emptyState);
-  const draftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     (async () => {
-      let published: WeddingData;
       try {
         const res = await fetch(DATA_URL, { cache: 'no-cache' });
-        published = await res.json();
+        const published: WeddingData = await res.json();
+        setState(dataToState(published, false));
       } catch {
-        published = { version: CURRENT_SCHEMA_VERSION, weddingId: 'mariage', exportedAt: '', settings: defaultSettings(), invitations: [], guests: [], rsvps: [], tables: [], beverages: [] };
+        setState(dataToState(stateToData(emptyState), false));
       }
-
-      const draftJson = localStorage.getItem(DRAFT_KEY);
-      if (draftJson) {
-        try {
-          const draft = JSON.parse(draftJson) as WeddingData;
-          setState(dataToState(draft, true));
-          return;
-        } catch {
-          // fall through to published
-        }
-      }
-      setState(dataToState(published, false));
     })();
   }, []);
 
-  const scheduleDraftSave = (next: StoreState) => {
-    if (draftTimer.current) clearTimeout(draftTimer.current);
-    draftTimer.current = setTimeout(() => {
-      try {
-        const data = stateToData(next);
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
-      } catch {
-        // localStorage might be full — try without images
-        try {
-          const data = stateToData(next);
-          if (data.settings) {
-            data.settings = { ...data.settings, logoDataUrl: null, heroPhotoDataUrl: null };
-          }
-          localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
-        } catch {
-          // give up silently
-        }
-      }
-    }, 500);
-  };
-
   const mutate = (updater: (prev: StoreState) => StoreState) => {
-    setState((prev) => {
-      const next = { ...updater(prev), isDirty: true, loaded: true };
-      scheduleDraftSave(next);
-      return next;
-    });
+    setState((prev) => ({ ...updater(prev), isDirty: true, loaded: true }));
   };
 
   const updateSettings = (settings: WeddingSettings) =>
@@ -294,7 +254,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const buildWeddingData = (): WeddingData => stateToData(state);
 
   const resetToPublished = async () => {
-    localStorage.removeItem(DRAFT_KEY);
     try {
       const res = await fetch(DATA_URL, { cache: 'no-cache' });
       const published = await res.json();

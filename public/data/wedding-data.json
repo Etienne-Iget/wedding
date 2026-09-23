@@ -15,8 +15,8 @@
     "contactEmail": "",
     "currency": "EUR",
     "primaryColor": "#b8860b",
-    "logoDataUrl": null,
-    "heroPhotoDataUrl": null,
+    "logoSrc": null,
+    "heroPhotoSrc": null,
     "events": {
       "dot": { "date": "", "time": "", "venueName": "", "venueAddress": "" },
       "civil": { "date": "", "time": "", "venueName": "", "venueAddress": "" },

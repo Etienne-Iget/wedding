@@ -147,8 +147,8 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
   const ev = settings.events ?? { dot: { date: '', time: '', venueName: '', venueAddress: '' }, civil: { date: '', time: '', venueName: '', venueAddress: '' }, religious: { date: '', time: '', venueName: '', venueAddress: '' } };
   const countdown = daysUntil(settings.weddingDate);
-  const heroImage = settings.heroPhotoDataUrl;
-  const logo = settings.logoDataUrl;
+  const heroImage = settings.heroPhotoSrc;
+  const logo = settings.logoSrc;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink-900">

@@ -31,8 +31,8 @@ export const weddingSettingsSchema = z.object({
   contactEmail: z.string().default(''),
   currency: z.string().default('EUR'),
   primaryColor: z.string().default('#b8860b'),
-  logoDataUrl: z.string().nullable().default(null),
-  heroPhotoDataUrl: z.string().nullable().default(null),
+  logoSrc: z.string().nullable().default(null),
+  heroPhotoSrc: z.string().nullable().default(null),
   events: z.object({
     dot: eventSchema,
     civil: eventSchema,

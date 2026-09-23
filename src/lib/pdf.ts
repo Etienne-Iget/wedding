@@ -47,17 +47,17 @@ export async function generateQrInvitationsPdf(data: PdfData): Promise<void> {
     doc.setLineWidth(0.6);
     doc.roundedRect(x, y, cardW, cardH, 3, 3, 'S');
 
-    if (settings?.logoDataUrl) {
+    if (settings?.logoSrc) {
       try {
-        const fmt = settings.logoDataUrl.includes('image/png') ? 'PNG' : 'JPEG';
-        doc.addImage(settings.logoDataUrl, fmt, x + 4, y + 3, 8, 8);
+        const fmt = settings.logoSrc.includes('.png') ? 'PNG' : 'JPEG';
+        doc.addImage(settings.logoSrc, fmt, x + 4, y + 3, 8, 8);
       } catch { /* skip */ }
     }
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(26, 26, 26);
-    doc.text(settings ? `${settings.brideName} & ${settings.groomName}` : 'Notre Mariage', x + (settings?.logoDataUrl ? 14 : 4), y + 8);
+    doc.text(settings ? `${settings.brideName} & ${settings.groomName}` : 'Notre Mariage', x + (settings?.logoSrc ? 14 : 4), y + 8);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(110, 110, 110);

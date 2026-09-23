@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Settings as SettingsIcon, Save, Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Trash2, Image as ImageIcon, Info } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useToast } from '@/components/ui/Toast';
 import { useSettings } from '@/hooks/useLiveData';
@@ -18,6 +18,8 @@ interface FormValues {
   currency: string;
   weddingId: string;
   primaryColor: string;
+  logoSrc: string;
+  heroPhotoSrc: string;
   dotDate: string;
   dotTime: string;
   dotVenueName: string;
@@ -34,28 +36,14 @@ interface FormValues {
 
 const emptyEvent: WeddingEvent = { date: '', time: '', venueName: '', venueAddress: '' };
 
-const MAX_LOGO_SIZE = 512 * 1024;
-const MAX_PHOTO_SIZE = 3 * 1024 * 1024;
-
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error('Lecture du fichier échouée'));
-    reader.readAsDataURL(file);
-  });
-}
-
 export function SettingsScreen() {
   const settings = useSettings();
   const { show } = useToast();
   const { updateSettings } = useStore();
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>();
 
-  const [logoDataUrl, setLogoDataUrl] = useState<string | null>(null);
-  const [heroPhotoDataUrl, setHeroPhotoDataUrl] = useState<string | null>(null);
-  const logoInputRef = useRef<HTMLInputElement>(null);
-  const photoInputRef = useRef<HTMLInputElement>(null);
+  const [logoSrc, setLogoSrc] = useState<string>('');
+  const [heroPhotoSrc, setHeroPhotoSrc] = useState<string>('');
 
   useEffect(() => {
     if (settings) {
@@ -71,6 +59,8 @@ export function SettingsScreen() {
         currency: settings.currency,
         weddingId: settings.weddingId,
         primaryColor: settings.primaryColor,
+        logoSrc: settings.logoSrc ?? '',
+        heroPhotoSrc: settings.heroPhotoSrc ?? '',
         dotDate: ev.dot.date,
         dotTime: ev.dot.time,
         dotVenueName: ev.dot.venueName,
@@ -84,38 +74,10 @@ export function SettingsScreen() {
         religiousVenueName: ev.religious.venueName,
         religiousVenueAddress: ev.religious.venueAddress,
       });
-      setLogoDataUrl(settings.logoDataUrl ?? null);
-      setHeroPhotoDataUrl(settings.heroPhotoDataUrl ?? null);
+      setLogoSrc(settings.logoSrc ?? '');
+      setHeroPhotoSrc(settings.heroPhotoSrc ?? '');
     }
   }, [settings, reset]);
-
-  const onLogoChange = async (file: File | undefined) => {
-    if (!file) return;
-    if (file.size > MAX_LOGO_SIZE) {
-      show('error', 'Le logo doit faire moins de 512 Ko.');
-      return;
-    }
-    try {
-      const url = await fileToDataUrl(file);
-      setLogoDataUrl(url);
-    } catch {
-      show('error', 'Impossible de charger le logo.');
-    }
-  };
-
-  const onPhotoChange = async (file: File | undefined) => {
-    if (!file) return;
-    if (file.size > MAX_PHOTO_SIZE) {
-      show('error', 'La photo doit faire moins de 3 Mo.');
-      return;
-    }
-    try {
-      const url = await fileToDataUrl(file);
-      setHeroPhotoDataUrl(url);
-    } catch {
-      show('error', 'Impossible de charger la photo.');
-    }
-  };
 
   const onSubmit = async (values: FormValues) => {
     const now = Date.now();
@@ -132,8 +94,8 @@ export function SettingsScreen() {
       contactEmail: values.contactEmail,
       currency: values.currency,
       primaryColor: values.primaryColor,
-      logoDataUrl,
-      heroPhotoDataUrl,
+      logoSrc: logoSrc || null,
+      heroPhotoSrc: heroPhotoSrc || null,
       events: {
         dot: { date: values.dotDate, time: values.dotTime, venueName: values.dotVenueName, venueAddress: values.dotVenueAddress },
         civil: { date: values.civilDate, time: values.civilTime, venueName: values.civilVenueName, venueAddress: values.civilVenueAddress },
@@ -142,7 +104,7 @@ export function SettingsScreen() {
       updatedAt: now,
     };
     updateSettings(updated);
-    show('success', 'Paramètres du mariage enregistrés.');
+    show('success', 'Paramètres du mariage enregistrés. Pensez à publier les modifications via la page Sauvegarde.');
   };
 
   if (!settings) {
@@ -169,86 +131,78 @@ export function SettingsScreen() {
           </div>
         </Section>
 
-        <Section title="Logo & Photo principale" subtitle="Affichés dans l'application et sur la page invité">
-          <div className="grid gap-6 sm:grid-cols-2">
-            {/* Logo upload */}
-            <div>
-              <label className="label">Logo du mariage</label>
-              <div className="mt-1 flex items-center gap-4">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
-                  {logoDataUrl ? (
-                    <img src={logoDataUrl} alt="Logo" className="h-full w-full object-contain" />
-                  ) : (
-                    <ImageIcon size={24} className="text-ink-300" />
-                  )}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => logoInputRef.current?.click()}
-                    className="btn-secondary btn-sm"
-                  >
-                    <Upload size={16} /> Choisir un logo
-                  </button>
-                  {logoDataUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setLogoDataUrl(null)}
-                      className="btn-ghost btn-sm text-red-500 hover:text-red-600"
-                    >
-                      <Trash2 size={16} /> Retirer
-                    </button>
-                  )}
-                  <p className="text-xs text-ink-400">PNG ou JPG, max 512 Ko</p>
-                </div>
-              </div>
-              <input
-                ref={logoInputRef}
-                type="file"
-                accept="image/png,image/jpeg,image/svg+xml"
-                className="hidden"
-                onChange={(e) => { onLogoChange(e.target.files?.[0]); e.target.value = ''; }}
-              />
+        <Section title="Logo & Photo principale" subtitle="Chemins des images placées dans le dossier public/images/ du projet">
+          <div className="space-y-4">
+            <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 flex gap-2">
+              <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
+              <p className="text-xs text-blue-800">
+                Placez vos images dans le dossier <span className="font-mono">public/images/</span> de votre projet,
+                puis indiquez le chemin ici. Exemple : <span className="font-mono">/images/logo.png</span>.
+                Les images sont déployées avec le site et visibles par tous les visiteurs.
+              </p>
             </div>
-
-            {/* Hero photo upload */}
-            <div>
-              <label className="label">Photo principale</label>
-              <div className="mt-1 flex items-center gap-4">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
-                  {heroPhotoDataUrl ? (
-                    <img src={heroPhotoDataUrl} alt="Photo principale" className="h-full w-full object-cover" />
-                  ) : (
-                    <ImageIcon size={24} className="text-ink-300" />
-                  )}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => photoInputRef.current?.click()}
-                    className="btn-secondary btn-sm"
-                  >
-                    <Upload size={16} /> Choisir une photo
-                  </button>
-                  {heroPhotoDataUrl && (
-                    <button
-                      type="button"
-                      onClick={() => setHeroPhotoDataUrl(null)}
-                      className="btn-ghost btn-sm text-red-500 hover:text-red-600"
-                    >
-                      <Trash2 size={16} /> Retirer
-                    </button>
-                  )}
-                  <p className="text-xs text-ink-400">PNG ou JPG, max 3 Mo</p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <label className="label">Logo du mariage</label>
+                <div className="mt-1 flex items-center gap-4">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
+                    {logoSrc ? (
+                      <img src={logoSrc} alt="Logo" className="h-full w-full object-contain" />
+                    ) : (
+                      <ImageIcon size={24} className="text-ink-300" />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2 flex-1">
+                    <input
+                      className="input font-mono text-sm"
+                      placeholder="/images/logo.png"
+                      value={logoSrc}
+                      onChange={(e) => setLogoSrc(e.target.value)}
+                    />
+                    {logoSrc && (
+                      <button
+                        type="button"
+                        onClick={() => setLogoSrc('')}
+                        className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
+                      >
+                        <Trash2 size={16} /> Retirer
+                      </button>
+                    )}
+                    <p className="text-xs text-ink-400">Chemin depuis public/, ex: /images/logo.png</p>
+                  </div>
                 </div>
               </div>
-              <input
-                ref={photoInputRef}
-                type="file"
-                accept="image/png,image/jpeg"
-                className="hidden"
-                onChange={(e) => { onPhotoChange(e.target.files?.[0]); e.target.value = ''; }}
-              />
+
+              <div>
+                <label className="label">Photo principale</label>
+                <div className="mt-1 flex items-center gap-4">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
+                    {heroPhotoSrc ? (
+                      <img src={heroPhotoSrc} alt="Photo principale" className="h-full w-full object-cover" />
+                    ) : (
+                      <ImageIcon size={24} className="text-ink-300" />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2 flex-1">
+                    <input
+                      className="input font-mono text-sm"
+                      placeholder="/images/main-photo.jpg"
+                      value={heroPhotoSrc}
+                      onChange={(e) => setHeroPhotoSrc(e.target.value)}
+                    />
+                    {heroPhotoSrc && (
+                      <button
+                        type="button"
+                        onClick={() => setHeroPhotoSrc('')}
+                        className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
+                      >
+                        <Trash2 size={16} /> Retirer
+                      </button>
+                    )}
+                    <p className="text-xs text-ink-400">Chemin depuis public/, ex: /images/main-photo.jpg</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </Section>
@@ -323,8 +277,10 @@ export function SettingsScreen() {
 
       <div className="card p-5 border-amber-200 bg-amber-50/50">
         <p className="text-sm text-amber-800">
-          <strong>Confidentialité :</strong> toutes ces informations, y compris le logo et la photo, restent enregistrées localement sur votre appareil.
-          Aucune donnée n'est envoyée vers un serveur.
+          <strong>Publication :</strong> les modifications sont enregistrées en mémoire et visibles immédiatement dans l'aperçu.
+          Pour les rendre visibles par tous les visiteurs, exportez le fichier de publication depuis la page « Sauvegarde »,
+          puis placez-le dans <span className="font-mono text-xs">public/data/</span> et redéployez le site.
+          Les images doivent être placées dans <span className="font-mono text-xs">public/images/</span> et commitées dans le dépôt.
         </p>
       </div>
     </div>

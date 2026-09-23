@@ -71,7 +71,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-cream">
-      <Sidebar current={route} onNavigate={setRoute} coupleNames={coupleNames} weddingDate={weddingDate} logoDataUrl={settings?.logoDataUrl} />
+      <Sidebar current={route} onNavigate={setRoute} coupleNames={coupleNames} weddingDate={weddingDate} logoSrc={settings?.logoSrc} />
       <main className="lg:pl-64 pt-16 lg:pt-0 min-h-screen flex flex-col">
         <div className="flex-1 mx-auto max-w-6xl w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8 animate-fade-in" key={route}>
           {render()}
