@@ -14,6 +14,7 @@ import { FloorPlanScreen } from '@/screens/FloorPlanScreen';
 import { BackupScreen } from '@/screens/BackupScreen';
 import { ClientPreview } from '@/screens/ClientPreview';
 import { useSettings } from '@/hooks/useLiveData';
+import { useFavicon } from '@/hooks/useFavicon';
 
 function formatDate(iso: string): string {
   try {
@@ -29,6 +30,7 @@ function AppContent() {
   const [inviteToken, setInviteToken] = useState<string | null>(null);
   const settings = useSettings();
   const { loaded } = useStore();
+  useFavicon(settings);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

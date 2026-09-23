@@ -81,13 +81,26 @@ export function SettingsScreen() {
     }
   }, [settings, reset]);
 
-  const fileToDataUrl = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = () => reject(new Error('Lecture du fichier échouée'));
-      reader.readAsDataURL(file);
-    });
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Upload échoué');
+      }
+      const data = await res.json();
+      return data.url as string;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Upload échoué';
+      show('error', msg);
+      return null;
+    }
+  };
 
   const onLogoChange = async (file: File | undefined) => {
     if (!file) return;
@@ -95,11 +108,10 @@ export function SettingsScreen() {
       show('error', 'Le logo doit faire moins de 2 Mo.');
       return;
     }
-    try {
-      const url = await fileToDataUrl(file);
+    const url = await uploadImage(file);
+    if (url) {
       setLogoSrc(url);
-    } catch {
-      show('error', 'Impossible de charger le logo.');
+      show('success', 'Logo enregistré sur le disque.');
     }
   };
 
@@ -109,11 +121,10 @@ export function SettingsScreen() {
       show('error', 'La photo doit faire moins de 5 Mo.');
       return;
     }
-    try {
-      const url = await fileToDataUrl(file);
+    const url = await uploadImage(file);
+    if (url) {
       setHeroPhotoSrc(url);
-    } catch {
-      show('error', 'Impossible de charger la photo.');
+      show('success', 'Photo enregistrée sur le disque.');
     }
   };
 
@@ -192,13 +203,22 @@ export function SettingsScreen() {
                   {logoSrc && (
                     <button
                       type="button"
-                      onClick={() => setLogoSrc('')}
+                      onClick={() => {
+                        if (logoSrc.startsWith('/images/')) {
+                          fetch('/api/delete-image', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ url: logoSrc }),
+                          }).catch(() => {});
+                        }
+                        setLogoSrc('');
+                      }}
                       className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
                     >
                       <Trash2 size={16} /> Retirer
                     </button>
                   )}
-                  <p className="text-xs text-ink-400">PNG ou JPG, max 2 Mo</p>
+                  <p className="text-xs text-ink-400">PNG ou JPG, max 2 Mo — enregistré sur le disque</p>
                 </div>
               </div>
               <input
@@ -231,13 +251,22 @@ export function SettingsScreen() {
                   {heroPhotoSrc && (
                     <button
                       type="button"
-                      onClick={() => setHeroPhotoSrc('')}
+                      onClick={() => {
+                        if (heroPhotoSrc.startsWith('/images/')) {
+                          fetch('/api/delete-image', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ url: heroPhotoSrc }),
+                          }).catch(() => {});
+                        }
+                        setHeroPhotoSrc('');
+                      }}
                       className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
                     >
                       <Trash2 size={16} /> Retirer
                     </button>
                   )}
-                  <p className="text-xs text-ink-400">PNG ou JPG, max 5 Mo</p>
+                  <p className="text-xs text-ink-400">PNG ou JPG, max 5 Mo — enregistré sur le disque</p>
                 </div>
               </div>
               <input

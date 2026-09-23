@@ -11,7 +11,6 @@ export default defineConfig({
     jsonPersistPlugin(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg'],
       manifest: {
         name: 'Mariage — Gestion des invités',
         short_name: 'Mariage',
@@ -23,11 +22,7 @@ export default defineConfig({
         start_url: '/',
         scope: '/',
         lang: 'fr',
-        icons: [
-          { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-          { src: '/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-        ],
+        icons: [],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
