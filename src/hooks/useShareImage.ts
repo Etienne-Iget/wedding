@@ -17,6 +17,10 @@ export function useShareImage(settings: WeddingSettings | null) {
     if (key === lastKey.current) return;
     lastKey.current = key;
 
+    const absolutePosterUrl = `${window.location.origin}/poster.webp`;
+    setMetaAttr('meta[property="og:image"]', 'content', absolutePosterUrl);
+    setMetaAttr('meta[name="twitter:image"]', 'content', absolutePosterUrl);
+
     let cancelled = false;
     (async () => {
       try {
@@ -25,7 +29,7 @@ export function useShareImage(settings: WeddingSettings | null) {
         setMetaAttr('meta[property="og:image"]', 'content', dataUrl);
         setMetaAttr('meta[name="twitter:image"]', 'content', dataUrl);
       } catch {
-        // keep static fallback poster
+        // keep static poster URL as fallback
       }
     })();
 
