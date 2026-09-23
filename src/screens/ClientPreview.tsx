@@ -162,15 +162,19 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const heroImage = settings.heroPhotoSrc;
   const logo = settings.logoSrc;
 
+  const isGuestMode = !!inviteToken;
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink-900">
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="fixed top-4 right-4 z-50 flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md transition-colors hover:bg-white/20"
-      >
-        <X size={18} /> Quitter l'aperçu
-      </button>
+      {/* Close button — only for admin preview, not for guests */}
+      {!isGuestMode && (
+        <button
+          onClick={onClose}
+          className="fixed top-4 right-4 z-50 flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md transition-colors hover:bg-white/20"
+        >
+          <X size={18} /> Quitter l'aperçu
+        </button>
+      )}
 
       {/* Hero section */}
       <div className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
@@ -247,9 +251,9 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
           <div className="space-y-8">
             <EventCard
-              title="La Dot"
-              event={ev.dot}
-              icon={<Heart size={24} className="text-gold-500" />}
+              title="Mariage Religieux"
+              event={ev.religious}
+              icon={<Heart size={24} className="text-gold-500" fill="currentColor" />}
             />
             <EventCard
               title="Mariage Civil"
@@ -257,9 +261,9 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               icon={<Calendar size={24} className="text-gold-500" />}
             />
             <EventCard
-              title="Mariage Religieux"
-              event={ev.religious}
-              icon={<Heart size={24} className="text-gold-500" fill="currentColor" />}
+              title="La Dot"
+              event={ev.dot}
+              icon={<Heart size={24} className="text-gold-500" />}
             />
           </div>
         </div>
@@ -273,16 +277,24 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
           {!foundInv && !submitted && (
             <div className="space-y-4">
-              <p className="text-center text-ink-300 text-sm mb-6">
-                Recherchez votre invitation par numéro ou nom de famille.
-              </p>
-              <input
-                className="w-full rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white placeholder:text-ink-400 focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/30"
-                placeholder="Ex : INV-001 ou Kabeya"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              {searchResults.length > 0 && (
+              {isGuestMode ? (
+                <p className="text-center text-ink-300 text-sm mb-6">
+                  Recherchez votre invitation ci-dessous pour confirmer votre présence.
+                </p>
+              ) : (
+                <p className="text-center text-ink-300 text-sm mb-6">
+                  Recherchez votre invitation par numéro ou nom de famille.
+                </p>
+              )}
+              {!isGuestMode && (
+                <input
+                  className="w-full rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white placeholder:text-ink-400 focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/30"
+                  placeholder="Ex : INV-001 ou Kabeya"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              )}
+              {searchResults.length > 0 && !isGuestMode && (
                 <div className="space-y-2">
                   {searchResults.map((inv) => (
                     <button
@@ -300,7 +312,13 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                   ))}
                 </div>
               )}
-              {search && searchResults.length === 0 && (
+              {isGuestMode && !foundInv && (
+                <div className="rounded-lg bg-white/5 px-4 py-6 text-center">
+                  <p className="text-white font-medium">Aucune invitation trouvée pour ce lien.</p>
+                  <p className="text-xs text-ink-400 mt-2">Vérifiez que vous avez bien utilisé le lien qui vous a été envoyé.</p>
+                </div>
+              )}
+              {search && searchResults.length === 0 && !isGuestMode && (
                 <p className="text-center text-ink-400 text-sm">Aucune invitation trouvée.</p>
               )}
             </div>
@@ -313,9 +331,11 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                 <h3 className="font-display text-2xl text-white">
                   Famille {invitations.find((i) => i.id === foundInv)?.familyName}
                 </h3>
-                <button onClick={() => { setFoundInv(null); setSearch(''); }} className="mt-2 text-xs text-ink-400 hover:text-gold-300">
-                  ← Changer d'invitation
-                </button>
+                {!isGuestMode && (
+                  <button onClick={() => { setFoundInv(null); setSearch(''); }} className="mt-2 text-xs text-ink-400 hover:text-gold-300">
+                    ← Changer d'invitation
+                  </button>
+                )}
               </div>
 
               <div>

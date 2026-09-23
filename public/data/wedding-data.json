@@ -1,7 +1,7 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-09-23T16:33:48.467Z",
+  "exportedAt": "2026-09-23T15:34:29.344Z",
   "settings": {
     "id": "current",
     "applicationName": "Wedding Guest Manager",
@@ -15,8 +15,8 @@
     "contactEmail": "etienneiget5@gmail.com",
     "currency": "USD",
     "primaryColor": "#b8860b",
-    "logoSrc": "/images/img-1790181199581-w1y2s6.jpg",
-    "heroPhotoSrc": "/images/img-1790181222915-lkku4x.png",
+    "logoSrc": null,
+    "heroPhotoSrc": null,
     "events": {
       "dot": {
         "date": "2026-12-23",
@@ -37,7 +37,7 @@
         "venueAddress": "Bujumbura"
       }
     },
-    "updatedAt": 1790181228166
+    "updatedAt": 1790174397874
   },
   "invitations": [
     {

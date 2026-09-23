@@ -26,8 +26,8 @@ function formatDate(iso: string): string {
 
 function AppContent() {
   const [route, setRoute] = useState<RouteId>('dashboard');
-  const [showPreview, setShowPreview] = useState(false);
   const [inviteToken, setInviteToken] = useState<string | null>(null);
+  const [showAdminPreview, setShowAdminPreview] = useState(false);
   const settings = useSettings();
   const { loaded } = useStore();
   useFavicon(settings);
@@ -37,7 +37,6 @@ function AppContent() {
     const inv = params.get('invite');
     if (inv) {
       setInviteToken(inv);
-      setShowPreview(true);
     }
   }, []);
 
@@ -52,12 +51,34 @@ function AppContent() {
     );
   }
 
+  if (inviteToken) {
+    return (
+      <ClientPreview
+        inviteToken={inviteToken}
+        onClose={() => {
+          setInviteToken(null);
+          if (window.location.search) {
+            window.history.replaceState({}, '', window.location.pathname);
+          }
+        }}
+      />
+    );
+  }
+
+  if (showAdminPreview) {
+    return (
+      <ClientPreview
+        onClose={() => setShowAdminPreview(false)}
+      />
+    );
+  }
+
   const coupleNames = settings ? `${settings.brideName} & ${settings.groomName}` : 'Notre mariage';
   const weddingDate = settings ? formatDate(settings.weddingDate) : '';
 
   const render = () => {
     switch (route) {
-      case 'dashboard': return <Dashboard onNavigate={setRoute} onPreview={() => setShowPreview(true)} />;
+      case 'dashboard': return <Dashboard onNavigate={setRoute} onPreview={() => setShowAdminPreview(true)} />;
       case 'settings': return <SettingsScreen />;
       case 'invitations': return <InvitationsScreen />;
       case 'guests': return <GuestsScreen />;
@@ -67,7 +88,7 @@ function AppContent() {
       case 'beverages': return <BeveragesScreen />;
       case 'floorplan': return <FloorPlanScreen />;
       case 'backup': return <BackupScreen />;
-      default: return <Dashboard onNavigate={setRoute} onPreview={() => setShowPreview(true)} />;
+      default: return <Dashboard onNavigate={setRoute} />;
     }
   };
 
@@ -86,18 +107,6 @@ function AppContent() {
           </div>
         </footer>
       </main>
-      {showPreview && (
-        <ClientPreview
-          inviteToken={inviteToken}
-          onClose={() => {
-            setShowPreview(false);
-            setInviteToken(null);
-            if (window.location.search) {
-              window.history.replaceState({}, '', window.location.pathname);
-            }
-          }}
-        />
-      )}
     </div>
   );
 }
