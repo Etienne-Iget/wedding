@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Heart, MapPin, Clock, Calendar, Check, X, Minus, Wine } from 'lucide-react';
 import { useSettings, useInvitations, useGuests, useRsvps, useBeverages } from '@/hooks/useLiveData';
 import { useStore } from '@/store/StoreContext';
+import { generateQrDataUrl } from '@/lib/pdf';
 import type { WeddingEvent, RsvpStatus } from '@/types';
 
 function formatDate(iso: string): string {
@@ -48,6 +49,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const [note, setNote] = useState('');
   const [people, setPeople] = useState<{ firstName: string; beverageId: string }[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   const rsvpByInv = new Map(rsvps.map((r) => [r.invitationId, r]));
   const invGuests = foundInv ? guests.filter((g) => g.invitationId === foundInv) : [];
@@ -75,6 +77,16 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       const ig = guests.filter((g) => g.invitationId === foundInv);
       setPeople(ig.map((g) => ({ firstName: g.firstName, beverageId: g.beverageId ?? '' })));
       setSubmitted(false);
+      const inv = invitations.find((i) => i.id === foundInv);
+      if (inv) {
+        generateQrDataUrl(`${inv.invitationNumber}|${inv.qrToken}`)
+          .then(setQrCodeUrl)
+          .catch(() => setQrCodeUrl(null));
+      } else {
+        setQrCodeUrl(null);
+      }
+    } else {
+      setQrCodeUrl(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [foundInv]);
@@ -200,9 +212,22 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
             </p>
           )}
 
+          {qrCodeUrl && (
+            <div className="mb-6 inline-flex flex-col items-center gap-2">
+              <div className="rounded-xl bg-white p-3 shadow-lg">
+                <img src={qrCodeUrl} alt="QR code d'invitation" className="h-28 w-28" />
+              </div>
+              {foundInv && (
+                <p className="font-mono text-xs text-gold-300">
+                  {invitations.find((i) => i.id === foundInv)?.invitationNumber}
+                </p>
+              )}
+            </div>
+          )}
+
           <a
             href="#rsvp"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-3.5 text-white font-medium text-lg transition-all hover:bg-gold-600 hover:scale-105 shadow-lg shadow-gold-500/20"
+            className="mt-2 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-3.5 text-white font-medium text-lg transition-all hover:bg-gold-600 hover:scale-105 shadow-lg shadow-gold-500/20"
           >
             <Heart size={20} fill="currentColor" />
             Confirmez votre présence
