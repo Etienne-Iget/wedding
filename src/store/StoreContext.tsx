@@ -160,6 +160,127 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       } catch {
         // dev server unavailable — silently ignore
       }
+
+      const ts = new Date().toISOString();
+
+      // Table occupancy
+      const tableOccupancy = next.tables.map((t) => {
+        const assigned = next.guests.filter((g) => g.tableId === t.id);
+        return {
+          id: t.id,
+          name: t.name,
+          capacity: t.capacity,
+          occupied: assigned.length,
+          available: Math.max(0, t.capacity - assigned.length),
+          guests: assigned.map((g) => ({
+            id: g.id,
+            firstName: g.firstName,
+            lastName: g.lastName,
+            seatNumber: g.seatNumber ?? null,
+            isChild: g.isChild,
+          })),
+        };
+      });
+
+      // Recent RSVPs (most recent first, max 50)
+      const recentRsvps = [...next.rsvps]
+        .filter((r) => r.status !== 'pending')
+        .sort((a, b) => b.updatedAt - a.updatedAt)
+        .slice(0, 50)
+        .map((r) => {
+          const inv = next.invitations.find((i) => i.id === r.invitationId);
+          return {
+            id: r.id,
+            invitationId: r.invitationId,
+            invitationNumber: inv?.invitationNumber ?? '',
+            familyName: inv?.familyName ?? '',
+            status: r.status,
+            attendingCount: r.attendingCount,
+            note: r.note ?? null,
+            submittedAt: r.submittedAt,
+            updatedAt: r.updatedAt,
+          };
+        });
+
+      // Arrivals (checked-in invitations)
+      const arrivals = next.invitations
+        .filter((i) => i.checkedInAt != null)
+        .sort((a, b) => (b.checkedInAt ?? 0) - (a.checkedInAt ?? 0))
+        .map((i) => {
+          const guestCount = next.guests.filter((g) => g.invitationId === i.id).length;
+          return {
+            id: i.id,
+            invitationNumber: i.invitationNumber,
+            familyName: i.familyName,
+            maxPeople: i.maxPeople,
+            guestCount,
+            checkedInAt: i.checkedInAt,
+          };
+        });
+
+      // Guests (full list with table/invitation info)
+      const guestsExport = next.guests.map((g) => {
+        const inv = next.invitations.find((i) => i.id === g.invitationId);
+        const table = next.tables.find((t) => t.id === g.tableId);
+        const bev = next.beverages.find((b) => b.id === g.beverageId);
+        return {
+          id: g.id,
+          firstName: g.firstName,
+          lastName: g.lastName,
+          familyName: inv?.familyName ?? '',
+          invitationNumber: inv?.invitationNumber ?? '',
+          tableName: table?.name ?? null,
+          seatNumber: g.seatNumber ?? null,
+          beverageName: bev?.name ?? null,
+          beverageQuantity: g.beverageQuantity ?? null,
+          isChild: g.isChild,
+          updatedAt: g.updatedAt,
+        };
+      });
+
+      // Floor plan (tables with positions + assigned guests)
+      const floorPlan = next.tables.map((t) => {
+        const assigned = next.guests
+          .filter((g) => g.tableId === t.id)
+          .sort((a, b) => (a.seatNumber ?? 999) - (b.seatNumber ?? 999))
+          .map((g) => ({
+            id: g.id,
+            firstName: g.firstName,
+            lastName: g.lastName,
+            seatNumber: g.seatNumber ?? null,
+            isChild: g.isChild,
+          }));
+        return {
+          id: t.id,
+          name: t.name,
+          shape: t.shape,
+          capacity: t.capacity,
+          x: t.x,
+          y: t.y,
+          rotation: t.rotation ?? 0,
+          color: t.color ?? null,
+          occupied: assigned.length,
+          guests: assigned,
+        };
+      });
+
+      const extraFiles = [
+        { file: 'table-occupancy', data: { exportedAt: ts, tables: tableOccupancy } },
+        { file: 'recent-rsvps', data: { exportedAt: ts, rsvps: recentRsvps } },
+        { file: 'arrivals', data: { exportedAt: ts, arrivals } },
+        { file: 'guests', data: { exportedAt: ts, guests: guestsExport } },
+        { file: 'floor-plan', data: { exportedAt: ts, tables: floorPlan } },
+      ];
+
+      await Promise.all(
+        extraFiles.map((f) =>
+          fetch(SAVE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(f),
+          }).catch(() => {})
+        )
+      );
     }, 300);
   };
 

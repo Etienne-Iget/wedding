@@ -2,12 +2,22 @@ import type { Plugin } from 'vite';
 import { writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 
-const DATA_FILE = resolve(process.cwd(), 'public/data/wedding-data.json');
+const DATA_DIR = resolve(process.cwd(), 'public/data');
+const DATA_FILE = resolve(DATA_DIR, 'wedding-data.json');
+
+const EXTRA_FILES: Record<string, string> = {
+  'table-occupancy': resolve(DATA_DIR, 'table-occupancy.json'),
+  'recent-rsvps': resolve(DATA_DIR, 'recent-rsvps.json'),
+  'arrivals': resolve(DATA_DIR, 'arrivals.json'),
+  'guests': resolve(DATA_DIR, 'guests.json'),
+  'floor-plan': resolve(DATA_DIR, 'floor-plan.json'),
+};
 
 export function jsonPersistPlugin(): Plugin {
   return {
     name: 'json-persist',
     configureServer(server) {
+      // Save main or extra file — body: { file?: key, data: object }
       server.middlewares.use('/api/save', (req, res, next) => {
         if (req.method === 'OPTIONS') {
           res.writeHead(204);
@@ -32,8 +42,13 @@ export function jsonPersistPlugin(): Plugin {
         req.on('end', () => {
           try {
             const parsed = JSON.parse(body);
-            mkdirSync(dirname(DATA_FILE), { recursive: true });
-            writeFileSync(DATA_FILE, JSON.stringify(parsed, null, 2) + '\n', 'utf-8');
+            const fileKey = parsed.file as string | undefined;
+            const targetFile = fileKey && EXTRA_FILES[fileKey]
+              ? EXTRA_FILES[fileKey]
+              : DATA_FILE;
+            const payload = parsed.data ?? parsed;
+            mkdirSync(dirname(targetFile), { recursive: true });
+            writeFileSync(targetFile, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ ok: true }));
           } catch (e) {
@@ -44,6 +59,7 @@ export function jsonPersistPlugin(): Plugin {
         });
       });
 
+      // Load main file
       server.middlewares.use('/api/load', (_req, res, _next) => {
         try {
           const content = readFileSync(DATA_FILE, 'utf-8');

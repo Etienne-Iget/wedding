@@ -1,7 +1,7 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-09-23T14:39:58.175Z",
+  "exportedAt": "2026-09-23T15:34:29.344Z",
   "settings": {
     "id": "current",
     "applicationName": "Wedding Guest Manager",
@@ -62,16 +62,43 @@
       "updatedAt": 1790174337976
     }
   ],
-  "guests": [],
+  "guests": [
+    {
+      "id": "5ba2f89a-a553-4ac5-8db5-3585b514977f",
+      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "firstName": "olivier",
+      "lastName": "Igugu Olivier",
+      "tableId": null,
+      "seatNumber": null,
+      "beverageId": null,
+      "beverageQuantity": null,
+      "isChild": false,
+      "createdAt": 1790177573108,
+      "updatedAt": 1790177573108
+    },
+    {
+      "id": "5481d5ec-7fdf-463a-9265-ce244c91d7c9",
+      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "firstName": "maggy",
+      "lastName": "Igugu Olivier",
+      "tableId": null,
+      "seatNumber": null,
+      "beverageId": null,
+      "beverageQuantity": null,
+      "isChild": false,
+      "createdAt": 1790177573108,
+      "updatedAt": 1790177573108
+    }
+  ],
   "rsvps": [
     {
       "id": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
       "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
       "status": "pending",
       "attendingCount": 0,
-      "submittedAt": null,
+      "submittedAt": 1790177573108,
       "note": null,
-      "updatedAt": 1790174214751
+      "updatedAt": 1790177669044
     },
     {
       "id": "827c6a09-44d9-49c4-ba26-24262694f8da",
