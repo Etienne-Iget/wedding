@@ -10,8 +10,6 @@ import {
   CheckCircle2,
   Loader2,
   CloudOff,
-  ShieldCheck,
-  CloudUpload,
   RotateCcw,
 } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -70,20 +68,6 @@ export function BackupScreen() {
     }
   };
 
-  const doPublish = () => {
-    setBusy(true);
-    try {
-      const data = buildWeddingData();
-      const filename = 'wedding-data.json';
-      downloadJson(filename, data);
-      show('success', 'Fichier de publication téléchargé. Placez-le dans le dossier public/data/ et redéployez le site.');
-    } catch {
-      show('error', 'Erreur lors de la génération du fichier de publication.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const handleFile = async (file: File) => {
     setBusy(true);
     try {
@@ -120,7 +104,7 @@ export function BackupScreen() {
 
   const doReset = async () => {
     await resetToPublished();
-    show('info', 'Modifications non publiées annulées. Les données publiées ont été rechargées.');
+    show('info', 'Fichier wedding-data.json rechargé depuis le disque.');
   };
 
   const csvActions = [
@@ -144,30 +128,27 @@ export function BackupScreen() {
         icon={<DatabaseBackup size={22} />}
       />
 
-      {/* Publish banner */}
-      <div className="card p-5 border-gold-300 bg-gold-50/50">
+      {/* Auto-save banner */}
+      <div className="card p-5 border-green-200 bg-green-50/50">
         <div className="flex items-start gap-3">
-          <CloudUpload size={22} className="text-gold-600 shrink-0 mt-0.5" />
+          <CheckCircle2 size={22} className="text-green-600 shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-ink-800">Publier les données du mariage</h3>
+            <h3 className="text-sm font-semibold text-ink-800">Sauvegarde automatique active</h3>
             <p className="text-sm text-ink-600 mt-1">
-              Téléchargez le fichier <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded">wedding-data.json</span>,
-              puis placez-le dans le dossier <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded">public/data/</span> de votre projet
-              et redéployez le site. Tous les visiteurs verront alors les mêmes données.
+              Toutes les modifications sont enregistrées automatiquement dans le fichier
+              <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded ml-1">wedding-data.json</span>
+              sur le disque. Le fichier se trouve dans <span className="font-mono text-xs bg-ink-100 px-1.5 py-0.5 rounded">public/data/</span>
+              et est inclus dans le déploiement du site.
             </p>
             {isDirty && (
               <p className="text-xs text-amber-700 mt-2 bg-amber-100 rounded-lg px-3 py-2">
-                Vous avez des modifications non publiées. Elles sont sauvegardées sur cet appareil mais ne sont pas encore visibles par les autres visiteurs.
+                Des modifications sont en cours d'enregistrement dans le fichier.
               </p>
             )}
             <div className="mt-3 flex flex-wrap gap-3">
-              <button onClick={doPublish} disabled={busy} className="btn-primary">
-                {busy ? <Loader2 size={18} className="animate-spin" /> : <CloudUpload size={18} />}
-                Télécharger le fichier de publication
-              </button>
               {isDirty && (
                 <button onClick={doReset} disabled={busy} className="btn-secondary">
-                  <RotateCcw size={18} /> Annuler les modifications non publiées
+                  <RotateCcw size={18} /> Recharger le fichier
                 </button>
               )}
             </div>

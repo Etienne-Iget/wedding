@@ -3,6 +3,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
   type ReactNode,
 } from 'react';
 import type {
@@ -17,6 +18,8 @@ import type {
 import { CURRENT_SCHEMA_VERSION, APPLICATION_NAME } from '@/types';
 
 const DATA_URL = '/data/wedding-data.json';
+const SAVE_URL = '/api/save';
+const LOAD_URL = '/api/load';
 
 interface StoreState {
   settings: WeddingSettings | null;
@@ -118,21 +121,54 @@ function defaultSettings(): WeddingSettings {
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<StoreState>(emptyState);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(DATA_URL, { cache: 'no-cache' });
-        const published: WeddingData = await res.json();
+        const res = await fetch(LOAD_URL, { cache: 'no-cache' });
+        if (res.ok) {
+          const data: WeddingData = await res.json();
+          setState(dataToState(data, false));
+          return;
+        }
+        const fallback = await fetch(DATA_URL, { cache: 'no-cache' });
+        const published: WeddingData = await fallback.json();
         setState(dataToState(published, false));
       } catch {
-        setState(dataToState(stateToData(emptyState), false));
+        const fallback = await fetch(DATA_URL, { cache: 'no-cache' }).catch(() => null);
+        if (fallback?.ok) {
+          const published: WeddingData = await fallback.json();
+          setState(dataToState(published, false));
+        } else {
+          setState(dataToState(stateToData(emptyState), false));
+        }
       }
     })();
   }, []);
 
+  const persist = (next: StoreState) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(async () => {
+      const data = stateToData(next);
+      try {
+        await fetch(SAVE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+      } catch {
+        // dev server unavailable — silently ignore
+      }
+    }, 300);
+  };
+
   const mutate = (updater: (prev: StoreState) => StoreState) => {
-    setState((prev) => ({ ...updater(prev), isDirty: true, loaded: true }));
+    setState((prev) => {
+      const next = { ...updater(prev), isDirty: true, loaded: true };
+      persist(next);
+      return next;
+    });
   };
 
   const updateSettings = (settings: WeddingSettings) =>
@@ -255,8 +291,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const resetToPublished = async () => {
     try {
-      const res = await fetch(DATA_URL, { cache: 'no-cache' });
-      const published = await res.json();
+      const res = await fetch(LOAD_URL, { cache: 'no-cache' });
+      if (res.ok) {
+        const data = await res.json();
+        setState(dataToState(data, false));
+        return;
+      }
+      const fallback = await fetch(DATA_URL, { cache: 'no-cache' });
+      const published = await fallback.json();
       setState(dataToState(published, false));
     } catch {
       setState((prev) => ({ ...prev, isDirty: false }));

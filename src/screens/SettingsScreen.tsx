@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Settings as SettingsIcon, Save, Trash2, Image as ImageIcon, Info } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Trash2, Image as ImageIcon, Upload } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { useToast } from '@/components/ui/Toast';
 import { useSettings } from '@/hooks/useLiveData';
@@ -44,6 +44,8 @@ export function SettingsScreen() {
 
   const [logoSrc, setLogoSrc] = useState<string>('');
   const [heroPhotoSrc, setHeroPhotoSrc] = useState<string>('');
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const photoInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (settings) {
@@ -79,6 +81,42 @@ export function SettingsScreen() {
     }
   }, [settings, reset]);
 
+  const fileToDataUrl = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error('Lecture du fichier échouée'));
+      reader.readAsDataURL(file);
+    });
+
+  const onLogoChange = async (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      show('error', 'Le logo doit faire moins de 2 Mo.');
+      return;
+    }
+    try {
+      const url = await fileToDataUrl(file);
+      setLogoSrc(url);
+    } catch {
+      show('error', 'Impossible de charger le logo.');
+    }
+  };
+
+  const onPhotoChange = async (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      show('error', 'La photo doit faire moins de 5 Mo.');
+      return;
+    }
+    try {
+      const url = await fileToDataUrl(file);
+      setHeroPhotoSrc(url);
+    } catch {
+      show('error', 'Impossible de charger la photo.');
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
     const now = Date.now();
     const updated: WeddingSettings = {
@@ -104,7 +142,7 @@ export function SettingsScreen() {
       updatedAt: now,
     };
     updateSettings(updated);
-    show('success', 'Paramètres du mariage enregistrés. Pensez à publier les modifications via la page Sauvegarde.');
+    show('success', 'Paramètres enregistrés dans wedding-data.json.');
   };
 
   if (!settings) {
@@ -131,78 +169,84 @@ export function SettingsScreen() {
           </div>
         </Section>
 
-        <Section title="Logo & Photo principale" subtitle="Chemins des images placées dans le dossier public/images/ du projet">
-          <div className="space-y-4">
-            <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 flex gap-2">
-              <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
-              <p className="text-xs text-blue-800">
-                Placez vos images dans le dossier <span className="font-mono">public/images/</span> de votre projet,
-                puis indiquez le chemin ici. Exemple : <span className="font-mono">/images/logo.png</span>.
-                Les images sont déployées avec le site et visibles par tous les visiteurs.
-              </p>
+        <Section title="Logo & Photo principale" subtitle="Sélectionnez les images depuis votre appareil. Elles s'enregistreront en même temps que les autres paramètres.">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div>
+              <label className="label">Logo du mariage</label>
+              <div className="mt-1 flex items-center gap-4">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
+                  {logoSrc ? (
+                    <img src={logoSrc} alt="Logo" className="h-full w-full object-contain" />
+                  ) : (
+                    <ImageIcon size={24} className="text-ink-300" />
+                  )}
+                </div>
+                <div className="flex flex-col gap-2 flex-1">
+                  <button
+                    type="button"
+                    onClick={() => logoInputRef.current?.click()}
+                    className="btn-secondary btn-sm"
+                  >
+                    <Upload size={16} /> Choisir un logo
+                  </button>
+                  {logoSrc && (
+                    <button
+                      type="button"
+                      onClick={() => setLogoSrc('')}
+                      className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
+                    >
+                      <Trash2 size={16} /> Retirer
+                    </button>
+                  )}
+                  <p className="text-xs text-ink-400">PNG ou JPG, max 2 Mo</p>
+                </div>
+              </div>
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/svg+xml"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) onLogoChange(f); e.target.value = ''; }}
+              />
             </div>
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="label">Logo du mariage</label>
-                <div className="mt-1 flex items-center gap-4">
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
-                    {logoSrc ? (
-                      <img src={logoSrc} alt="Logo" className="h-full w-full object-contain" />
-                    ) : (
-                      <ImageIcon size={24} className="text-ink-300" />
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-2 flex-1">
-                    <input
-                      className="input font-mono text-sm"
-                      placeholder="/images/logo.png"
-                      value={logoSrc}
-                      onChange={(e) => setLogoSrc(e.target.value)}
-                    />
-                    {logoSrc && (
-                      <button
-                        type="button"
-                        onClick={() => setLogoSrc('')}
-                        className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
-                      >
-                        <Trash2 size={16} /> Retirer
-                      </button>
-                    )}
-                    <p className="text-xs text-ink-400">Chemin depuis public/, ex: /images/logo.png</p>
-                  </div>
-                </div>
-              </div>
 
-              <div>
-                <label className="label">Photo principale</label>
-                <div className="mt-1 flex items-center gap-4">
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
-                    {heroPhotoSrc ? (
-                      <img src={heroPhotoSrc} alt="Photo principale" className="h-full w-full object-cover" />
-                    ) : (
-                      <ImageIcon size={24} className="text-ink-300" />
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-2 flex-1">
-                    <input
-                      className="input font-mono text-sm"
-                      placeholder="/images/main-photo.jpg"
-                      value={heroPhotoSrc}
-                      onChange={(e) => setHeroPhotoSrc(e.target.value)}
-                    />
-                    {heroPhotoSrc && (
-                      <button
-                        type="button"
-                        onClick={() => setHeroPhotoSrc('')}
-                        className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
-                      >
-                        <Trash2 size={16} /> Retirer
-                      </button>
-                    )}
-                    <p className="text-xs text-ink-400">Chemin depuis public/, ex: /images/main-photo.jpg</p>
-                  </div>
+            <div>
+              <label className="label">Photo principale</label>
+              <div className="mt-1 flex items-center gap-4">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-ink-200 bg-cream overflow-hidden">
+                  {heroPhotoSrc ? (
+                    <img src={heroPhotoSrc} alt="Photo principale" className="h-full w-full object-cover" />
+                  ) : (
+                    <ImageIcon size={24} className="text-ink-300" />
+                  )}
+                </div>
+                <div className="flex flex-col gap-2 flex-1">
+                  <button
+                    type="button"
+                    onClick={() => photoInputRef.current?.click()}
+                    className="btn-secondary btn-sm"
+                  >
+                    <Upload size={16} /> Choisir une photo
+                  </button>
+                  {heroPhotoSrc && (
+                    <button
+                      type="button"
+                      onClick={() => setHeroPhotoSrc('')}
+                      className="btn-ghost btn-sm text-red-500 hover:text-red-600 self-start"
+                    >
+                      <Trash2 size={16} /> Retirer
+                    </button>
+                  )}
+                  <p className="text-xs text-ink-400">PNG ou JPG, max 5 Mo</p>
                 </div>
               </div>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/png,image/jpeg"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) onPhotoChange(f); e.target.value = ''; }}
+              />
             </div>
           </div>
         </Section>
@@ -275,12 +319,11 @@ export function SettingsScreen() {
         </div>
       </form>
 
-      <div className="card p-5 border-amber-200 bg-amber-50/50">
-        <p className="text-sm text-amber-800">
-          <strong>Publication :</strong> les modifications sont enregistrées en mémoire et visibles immédiatement dans l'aperçu.
-          Pour les rendre visibles par tous les visiteurs, exportez le fichier de publication depuis la page « Sauvegarde »,
-          puis placez-le dans <span className="font-mono text-xs">public/data/</span> et redéployez le site.
-          Les images doivent être placées dans <span className="font-mono text-xs">public/images/</span> et commitées dans le dépôt.
+      <div className="card p-5 border-green-200 bg-green-50/50">
+        <p className="text-sm text-green-800">
+          <strong>Sauvegarde automatique :</strong> toutes les données que vous saisissez — noms, date, logo, photo, invitations, invités, tables, boissons —
+          sont enregistrées automatiquement dans le fichier <span className="font-mono text-xs">wedding-data.json</span> à chaque modification.
+          Le fichier se trouve dans <span className="font-mono text-xs">public/data/</span> et est inclus dans le déploiement du site.
         </p>
       </div>
     </div>
