@@ -15,6 +15,7 @@ import { BackupScreen } from '@/screens/BackupScreen';
 import { ClientPreview } from '@/screens/ClientPreview';
 import { useSettings } from '@/hooks/useLiveData';
 import { useFavicon } from '@/hooks/useFavicon';
+import { useShareImage } from '@/hooks/useShareImage';
 
 function formatDate(iso: string): string {
   try {
@@ -31,6 +32,7 @@ function AppContent() {
   const settings = useSettings();
   const { loaded } = useStore();
   useFavicon(settings);
+  useShareImage(settings);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
