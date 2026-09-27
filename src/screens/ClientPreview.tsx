@@ -47,7 +47,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const [status, setStatus] = useState<RsvpStatus>('pending');
   const [attendingCount, setAttendingCount] = useState(1);
   const [note, setNote] = useState('');
-  const [people, setPeople] = useState<{ firstName: string; beverageId: string }[]>([]);
+  const [people, setPeople] = useState<{ firstName: string; beverageId: string }[]>([{ firstName: '', beverageId: '' }]);
   const [submitted, setSubmitted] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
@@ -75,7 +75,13 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       setAttendingCount(existing?.attendingCount ?? 1);
       setNote(existing?.note ?? '');
       const ig = guests.filter((g) => g.invitationId === foundInv);
-      setPeople(ig.map((g) => ({ firstName: g.firstName, beverageId: g.beverageId ?? '' })));
+      if (ig.length > 0) {
+        setPeople(ig.map((g) => ({ firstName: g.firstName, beverageId: g.beverageId ?? '' })));
+        setAttendingCount(Math.min(2, Math.max(1, ig.length)));
+      } else {
+        setPeople([{ firstName: '', beverageId: '' }]);
+        setAttendingCount(1);
+      }
       setSubmitted(false);
       const inv = invitations.find((i) => i.id === foundInv);
       if (inv) {
@@ -351,46 +357,57 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                 <>
                   <div>
                     <label className="block text-sm text-ink-300 mb-2">Nombre de personnes présentes</label>
-                    <input
-                      type="number"
-                      min={1}
-                      max={invitations.find((i) => i.id === foundInv)?.maxPeople ?? 10}
-                      className="w-full rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white focus:border-gold-400 focus:outline-none"
-                      value={attendingCount}
-                      onChange={(e) => setAttendingCount(Math.max(1, Number(e.target.value) || 1))}
-                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <CountButton
+                        active={attendingCount === 1}
+                        onClick={() => {
+                          setAttendingCount(1);
+                          setPeople((prev) => prev.slice(0, 1).length === 1 ? prev.slice(0, 1) : [{ firstName: '', beverageId: '' }]);
+                        }}
+                        label="1 personne"
+                      />
+                      <CountButton
+                        active={attendingCount === 2}
+                        onClick={() => {
+                          setAttendingCount(2);
+                          setPeople((prev) => {
+                            const arr = prev.slice(0, 2);
+                            while (arr.length < 2) arr.push({ firstName: '', beverageId: '' });
+                            return arr;
+                          });
+                        }}
+                        label="2 personnes"
+                      />
+                    </div>
                   </div>
 
                   <div>
                     <label className="block text-sm text-ink-300 mb-2">Choix des boissons</label>
-                    <div className="space-y-2">
-                      {people.map((p, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <Wine size={16} className="text-gold-400 shrink-0" />
-                          <input
-                            className="flex-1 rounded-lg bg-white/10 border border-white/20 px-3 py-2 text-white text-sm focus:border-gold-400 focus:outline-none"
-                            placeholder="Prénom"
-                            value={p.firstName}
-                            onChange={(e) => setPeople((prev) => prev.map((x, i) => i === idx ? { ...x, firstName: e.target.value } : x))}
-                          />
-                          <select
-                            className="w-32 rounded-lg bg-white/10 border border-white/20 px-3 py-2 text-white text-sm focus:border-gold-400 focus:outline-none"
-                            value={p.beverageId}
-                            onChange={(e) => setPeople((prev) => prev.map((x, i) => i === idx ? { ...x, beverageId: e.target.value } : x))}
-                          >
-                            <option value="" className="bg-ink-800">Boisson</option>
-                            {beverages.map((b) => (
-                              <option key={b.id} value={b.id} className="bg-ink-800">{b.name}</option>
-                            ))}
-                          </select>
+                    <div className="space-y-3">
+                      {people.slice(0, attendingCount).map((p, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <p className="text-xs text-gold-300 font-medium">Personne {idx + 1}</p>
+                          <div className="flex items-center gap-2">
+                            <Wine size={16} className="text-gold-400 shrink-0" />
+                            <input
+                              className="flex-1 rounded-lg bg-white/10 border border-white/20 px-3 py-2 text-white text-sm focus:border-gold-400 focus:outline-none"
+                              placeholder="Prénom"
+                              value={p.firstName}
+                              onChange={(e) => setPeople((prev) => prev.map((x, i) => i === idx ? { ...x, firstName: e.target.value } : x))}
+                            />
+                            <select
+                              className="w-32 rounded-lg bg-white/10 border border-white/20 px-3 py-2 text-white text-sm focus:border-gold-400 focus:outline-none"
+                              value={p.beverageId}
+                              onChange={(e) => setPeople((prev) => prev.map((x, i) => i === idx ? { ...x, beverageId: e.target.value } : x))}
+                            >
+                              <option value="" className="bg-ink-800">Boisson</option>
+                              {beverages.map((b) => (
+                                <option key={b.id} value={b.id} className="bg-ink-800">{b.name}</option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
                       ))}
-                      <button
-                        onClick={() => setPeople((prev) => [...prev, { firstName: '', beverageId: '' }])}
-                        className="text-xs text-gold-300 hover:text-gold-400"
-                      >
-                        + Ajouter une personne
-                      </button>
                     </div>
                   </div>
                 </>
@@ -499,6 +516,21 @@ function StatusButton({ active, onClick, icon, label }: { active: boolean; onCli
       }`}
     >
       {icon} {label}
+    </button>
+  );
+}
+
+function CountButton({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+        active
+          ? 'bg-gold-500 text-white border-gold-500'
+          : 'bg-white/5 text-ink-200 border-white/20 hover:bg-white/10'
+      }`}
+    >
+      {label}
     </button>
   );
 }
