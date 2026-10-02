@@ -11,10 +11,12 @@ import {
   RotateCcw,
   X,
   AlertTriangle,
+  AlertCircle,
 } from 'lucide-react';
 import jsQR from 'jsqr';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
 import { useInvitations, useGuests, useRsvps } from '@/hooks/useLiveData';
 import { useStore } from '@/store/StoreContext';
@@ -32,6 +34,7 @@ export function ArrivalsScreen() {
   const [search, setSearch] = useState('');
   const [lastScanned, setLastScanned] = useState<Invitation | null>(null);
   const [flash, setFlash] = useState<'success' | 'warning' | 'info' | null>(null);
+  const [duplicateInv, setDuplicateInv] = useState<Invitation | null>(null);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -81,6 +84,7 @@ export function ArrivalsScreen() {
       if (inv.checkedInAt != null) {
         setLastScanned(inv);
         setFlash('info');
+        setDuplicateInv(inv);
         return 'already';
       }
       const now = Date.now();
@@ -549,6 +553,38 @@ export function ArrivalsScreen() {
           </div>
         )}
       </div>
+
+      {/* Duplicate scan modal */}
+      <Modal
+        open={duplicateInv !== null}
+        onClose={() => setDuplicateInv(null)}
+        size="sm"
+      >
+        <div className="text-center space-y-4">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
+            <AlertCircle size={32} className="text-amber-600" />
+          </div>
+          <h3 className="font-display text-xl text-ink-800">Invitation déjà scannée</h3>
+          <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3">
+            <p className="font-medium text-ink-800">{duplicateInv?.familyName}</p>
+            <p className="text-xs text-ink-500 mt-1">
+              {duplicateInv?.invitationNumber}
+              {duplicateInv?.checkedInAt
+                ? ` — enregistré à ${new Date(duplicateInv.checkedInAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
+                : ''}
+            </p>
+          </div>
+          <p className="text-sm text-ink-400">
+            Cette invitation a déjà été enregistrée comme arrivée. Aucune nouvelle entrée n'a été créée.
+          </p>
+          <button
+            onClick={() => setDuplicateInv(null)}
+            className="btn-primary w-full"
+          >
+            Fermer
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

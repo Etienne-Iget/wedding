@@ -222,6 +222,12 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
             </p>
           )}
 
+          {settings.welcomeMessage && (
+            <p className="mt-6 max-w-md mx-auto text-ink-200 text-base italic leading-relaxed">
+              {settings.welcomeMessage}
+            </p>
+          )}
+
           {qrCodeUrl && (
             <div className="mb-6 inline-flex flex-col items-center gap-2">
               <div className="rounded-xl bg-white p-3 shadow-lg">

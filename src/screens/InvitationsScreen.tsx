@@ -155,22 +155,33 @@ export function InvitationsScreen() {
     const link = invitationLink(inv);
     const couple = settings ? `${settings.brideName} & ${settings.groomName}` : 'Notre mariage';
     const dateStr = settings?.weddingDate ? formatDateLong(settings.weddingDate) : '';
-    const lines = [
-      `Chère famille ${inv.familyName},`,
-      ``,
-      `${couple} ont la joie de vous inviter à célébrer leur mariage${dateStr ? ` le ${dateStr}` : ''}.`,
-      ``,
-      `Votre invitation : ${inv.invitationNumber}`,
-      `Nombre de personnes autorisées : ${inv.maxPeople}`,
-      ``,
-      `Cliquez sur ce lien pour voir votre invitation et confirmer votre présence :`,
-      link,
-      ``,
-      `Vous pouvez scanner le QR code joint pour accéder directement à votre page.`,
-      ``,
-      `Nous avons hâte de célébrer avec vous !`,
-    ];
-    return lines.join('\n');
+    const dateSegment = dateStr ? ` le ${dateStr}` : '';
+
+    const template = settings?.invitationMessageTemplate?.trim()
+      ? settings.invitationMessageTemplate
+      : [
+          'Chère famille {familyName},',
+          '',
+          '{couple} ont la joie de vous inviter à célébrer leur mariage{date}.',
+          '',
+          'Votre invitation : {invitationNumber}',
+          'Nombre de personnes autorisées : {maxPeople}',
+          '',
+          'Cliquez sur ce lien pour voir votre invitation et confirmer votre présence :',
+          '{link}',
+          '',
+          'Vous pouvez scanner le QR code joint pour accéder directement à votre page.',
+          '',
+          'Nous avons hâte de célébrer avec vous !',
+        ].join('\n');
+
+    return template
+      .replaceAll('{familyName}', inv.familyName)
+      .replaceAll('{couple}', couple)
+      .replaceAll('{date}', dateSegment)
+      .replaceAll('{invitationNumber}', inv.invitationNumber)
+      .replaceAll('{maxPeople}', String(inv.maxPeople))
+      .replaceAll('{link}', link);
   };
 
   const openSend = async (inv: Invitation) => {

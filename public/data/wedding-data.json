@@ -1,7 +1,7 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-09-23T17:15:18.873Z",
+  "exportedAt": "2026-10-02T15:09:38.327Z",
   "settings": {
     "id": "current",
     "applicationName": "Wedding Guest Manager",
@@ -15,8 +15,10 @@
     "contactEmail": "etienneiget5@gmail.com",
     "currency": "USD",
     "primaryColor": "#b8860b",
-    "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
-    "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
+    "logoSrc": null,
+    "heroPhotoSrc": null,
+    "welcomeMessage": "Nous sommes ravis de vous compter parmi nos invités. Merci de confirmer votre présence !",
+    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, en date du {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\n\nCliquez sur ce lien pour voir votre invitation et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
     "events": {
       "dot": {
         "date": "2026-12-23",
@@ -37,7 +39,7 @@
         "venueAddress": "Bujumbura"
       }
     },
-    "updatedAt": 1790183718571
+    "updatedAt": 1790953778025
   },
   "invitations": [
     {

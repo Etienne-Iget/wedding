@@ -22,6 +22,8 @@ export interface WeddingSettings {
   primaryColor: string;
   logoSrc: string | null;
   heroPhotoSrc: string | null;
+  welcomeMessage: string;
+  invitationMessageTemplate: string;
   events: {
     dot: WeddingEvent;
     civil: WeddingEvent;

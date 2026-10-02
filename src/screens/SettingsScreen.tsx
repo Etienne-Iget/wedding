@@ -20,6 +20,8 @@ interface FormValues {
   primaryColor: string;
   logoSrc: string;
   heroPhotoSrc: string;
+  welcomeMessage: string;
+  invitationMessageTemplate: string;
   dotDate: string;
   dotTime: string;
   dotVenueName: string;
@@ -63,6 +65,8 @@ export function SettingsScreen() {
         primaryColor: settings.primaryColor,
         logoSrc: settings.logoSrc ?? '',
         heroPhotoSrc: settings.heroPhotoSrc ?? '',
+        welcomeMessage: settings.welcomeMessage ?? '',
+        invitationMessageTemplate: settings.invitationMessageTemplate ?? '',
         dotDate: ev.dot.date,
         dotTime: ev.dot.time,
         dotVenueName: ev.dot.venueName,
@@ -145,6 +149,8 @@ export function SettingsScreen() {
       primaryColor: values.primaryColor,
       logoSrc: logoSrc || null,
       heroPhotoSrc: heroPhotoSrc || null,
+      welcomeMessage: values.welcomeMessage,
+      invitationMessageTemplate: values.invitationMessageTemplate,
       events: {
         dot: { date: values.dotDate, time: values.dotTime, venueName: values.dotVenueName, venueAddress: values.dotVenueAddress },
         civil: { date: values.civilDate, time: values.civilTime, venueName: values.civilVenueName, venueAddress: values.civilVenueAddress },
@@ -278,6 +284,31 @@ export function SettingsScreen() {
               />
             </div>
           </div>
+        </Section>
+
+        <Section title="Message d'accueil" subtitle="Message personnalisé affiché sur la page d'invitation vue par les invités">
+          <Field label="Message d'accueil" help="Ce texte apparaîtra sur la page que vos invités voient en ouvrant leur lien d'invitation">
+            <textarea
+              className="input"
+              rows={3}
+              placeholder="Ex : Nous sommes ravis de vous compter parmi nos invités..."
+              {...register('welcomeMessage')}
+            />
+          </Field>
+        </Section>
+
+        <Section title="Modèle du message d'invitation" subtitle="Message utilisé lors de l'envoi d'une invitation par WhatsApp ou email">
+          <Field
+            label="Modèle du message d'invitation"
+            help="Utilisez ces variables entre accolades : {familyName} · {couple} · {date} · {invitationNumber} · {maxPeople} · {link}"
+          >
+            <textarea
+              className="input font-mono text-xs"
+              rows={8}
+              placeholder="Chère famille {familyName},..."
+              {...register('invitationMessageTemplate')}
+            />
+          </Field>
         </Section>
 
         <Section title="Événement principal" subtitle="Date et lieu du mariage">
