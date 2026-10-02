@@ -216,10 +216,20 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
             </p>
           )}
           {settings.weddingDate && (
-            <p className="mt-3 text-ink-200 text-lg">
-              {formatDate(settings.weddingDate)}
-              {settings.venueName && ` · ${settings.venueName}`}
-            </p>
+            <div className="mt-4 flex flex-col items-center gap-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Date</span>
+                <span className="h-px w-4 bg-gold-400/50" />
+                <span className="text-white text-lg font-medium">{formatDate(settings.weddingDate)}</span>
+              </div>
+              {settings.venueName && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Lieu de la Reception</span>
+                  <span className="h-px w-4 bg-gold-400/50" />
+                  <span className="text-ink-200 text-lg font-medium">{settings.venueName}</span>
+                </div>
+              )}
+            </div>
           )}
 
           {settings.welcomeMessage && (
@@ -263,8 +273,8 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
           <div className="space-y-8">
             <EventCard
-              title="Mariage Religieux"
-              event={ev.religious}
+              title="La Dot"
+              event={ev.dot}
               icon={<Heart size={24} className="text-gold-500" fill="currentColor" />}
             />
             <EventCard
@@ -273,9 +283,9 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               icon={<Calendar size={24} className="text-gold-500" />}
             />
             <EventCard
-              title="La Dot"
-              event={ev.dot}
-              icon={<Heart size={24} className="text-gold-500" />}
+              title="Mariage Religieux"
+              event={ev.religious}
+              icon={<Heart size={24} className="text-gold-500" fill="currentColor" />}
             />
           </div>
         </div>
@@ -301,7 +311,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               {!isGuestMode && (
                 <input
                   className="w-full rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white placeholder:text-ink-400 focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/30"
-                  placeholder="Ex : INV-001 ou Kabeya"
+                  placeholder="Ex : INV-001 ou Iget"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -487,22 +497,28 @@ function EventCard({ title, event, icon }: { title: string; event: WeddingEvent;
         </div>
         <h3 className="font-display text-2xl text-ink-800">{title}</h3>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 ml-2">
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-4 ml-2">
         {event.date && (
-          <div className="flex items-center gap-2 text-ink-600">
-            <Calendar size={18} className="text-gold-500" />
-            <span>{formatDate(event.date)}{event.time && ` à ${formatTime(event.time)}`}</span>
+          <div className="flex items-start gap-2">
+            <Calendar size={18} className="text-gold-500 shrink-0 mt-0.5" />
+            <div>
+              <span className="text-xs font-semibold tracking-wider uppercase text-gold-600">Date</span>
+              <p className="text-ink-700 font-medium">{formatDate(event.date)}{event.time && ` à ${formatTime(event.time)}`}</p>
+            </div>
           </div>
         )}
         {event.venueName && (
-          <div className="flex items-center gap-2 text-ink-600">
-            <MapPin size={18} className="text-gold-500" />
-            <span>{event.venueName}</span>
+          <div className="flex items-start gap-2">
+            <MapPin size={18} className="text-gold-500 shrink-0 mt-0.5" />
+            <div>
+              <span className="text-xs font-semibold tracking-wider uppercase text-gold-600">Lieu</span>
+              <p className="text-ink-700 font-medium">{event.venueName}</p>
+            </div>
           </div>
         )}
         {event.venueAddress && (
-          <div className="flex items-center gap-2 text-ink-500 text-sm sm:col-span-2">
-            <MapPin size={14} className="text-ink-300" />
+          <div className="flex items-start gap-2 text-ink-500 text-sm sm:col-span-2">
+            <MapPin size={14} className="text-ink-300 shrink-0 mt-0.5" />
             <span>{event.venueAddress}</span>
           </div>
         )}

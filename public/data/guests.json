@@ -1,31 +1,4 @@
 {
-  "exportedAt": "2026-10-02T15:09:38.365Z",
-  "guests": [
-    {
-      "id": "5ba2f89a-a553-4ac5-8db5-3585b514977f",
-      "firstName": "olivier",
-      "lastName": "Igugu Olivier",
-      "familyName": "Igugu Olivier",
-      "invitationNumber": "INV-001",
-      "tableName": null,
-      "seatNumber": null,
-      "beverageName": null,
-      "beverageQuantity": null,
-      "isChild": false,
-      "updatedAt": 1790177573108
-    },
-    {
-      "id": "5481d5ec-7fdf-463a-9265-ce244c91d7c9",
-      "firstName": "maggy",
-      "lastName": "Igugu Olivier",
-      "familyName": "Igugu Olivier",
-      "invitationNumber": "INV-001",
-      "tableName": null,
-      "seatNumber": null,
-      "beverageName": null,
-      "beverageQuantity": null,
-      "isChild": false,
-      "updatedAt": 1790177573108
-    }
-  ]
+  "exportedAt": "2026-10-02T16:10:33.159Z",
+  "guests": []
 }

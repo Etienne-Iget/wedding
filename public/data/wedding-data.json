@@ -1,7 +1,7 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-10-02T15:09:38.327Z",
+  "exportedAt": "2026-10-02T16:10:33.150Z",
   "settings": {
     "id": "current",
     "applicationName": "Wedding Guest Manager",
@@ -15,10 +15,10 @@
     "contactEmail": "etienneiget5@gmail.com",
     "currency": "USD",
     "primaryColor": "#b8860b",
-    "logoSrc": null,
-    "heroPhotoSrc": null,
+    "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
+    "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
     "welcomeMessage": "Nous sommes ravis de vous compter parmi nos invités. Merci de confirmer votre présence !",
-    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, en date du {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\n\nCliquez sur ce lien pour voir votre invitation et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
+    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, en date du {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\n\nCliquez sur ce lien pour voir votre invitation, le programme et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
     "events": {
       "dot": {
         "date": "2026-12-23",
@@ -39,7 +39,7 @@
         "venueAddress": "Bujumbura"
       }
     },
-    "updatedAt": 1790953778025
+    "updatedAt": 1790957432849
   },
   "invitations": [
     {
@@ -48,11 +48,11 @@
       "familyName": "Igugu Olivier",
       "maxPeople": 2,
       "qrToken": "7c753d4d7337331ccf9eacf74211ca8c",
-      "contactPhone": "0991667227",
+      "contactPhone": "+243971313615",
       "email": "oligug@gmail.com",
       "notes": "Frere du marié",
       "createdAt": 1790174214751,
-      "updatedAt": 1790174214751
+      "updatedAt": 1790505288189
     },
     {
       "id": "827c6a09-44d9-49c4-ba26-24262694f8da",
@@ -60,38 +60,12 @@
       "familyName": "Igugu Christian",
       "maxPeople": 2,
       "qrToken": "cbd921fa20f92f518922b7631ef77c23",
+      "contactPhone": "+243991393913",
       "createdAt": 1790174337976,
-      "updatedAt": 1790174337976
+      "updatedAt": 1790505879102
     }
   ],
-  "guests": [
-    {
-      "id": "5ba2f89a-a553-4ac5-8db5-3585b514977f",
-      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
-      "firstName": "olivier",
-      "lastName": "Igugu Olivier",
-      "tableId": null,
-      "seatNumber": null,
-      "beverageId": null,
-      "beverageQuantity": null,
-      "isChild": false,
-      "createdAt": 1790177573108,
-      "updatedAt": 1790177573108
-    },
-    {
-      "id": "5481d5ec-7fdf-463a-9265-ce244c91d7c9",
-      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
-      "firstName": "maggy",
-      "lastName": "Igugu Olivier",
-      "tableId": null,
-      "seatNumber": null,
-      "beverageId": null,
-      "beverageQuantity": null,
-      "isChild": false,
-      "createdAt": 1790177573108,
-      "updatedAt": 1790177573108
-    }
-  ],
+  "guests": [],
   "rsvps": [
     {
       "id": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
@@ -113,5 +87,92 @@
     }
   ],
   "tables": [],
-  "beverages": []
+  "beverages": [
+    {
+      "id": "d0baff81-7af3-4793-8a9b-bd69892c8a56",
+      "name": "Coca Cola",
+      "category": "soft",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505329687,
+      "updatedAt": 1790505329687
+    },
+    {
+      "id": "a0661a1c-5253-4732-af75-e7e5ce7c04b5",
+      "name": "Fanta",
+      "category": "soft",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505352985,
+      "updatedAt": 1790505352985
+    },
+    {
+      "id": "345f4360-a871-4364-9636-cbd5c4ffd66c",
+      "name": "Amstel 50cl",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 3,
+      "createdAt": 1790505399635,
+      "updatedAt": 1790505474815
+    },
+    {
+      "id": "8bd05cad-e644-46ef-a50f-1ca825831d22",
+      "name": "Amstel Bright 50cl",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 3,
+      "createdAt": 1790505441961,
+      "updatedAt": 1790505479372
+    },
+    {
+      "id": "271b8524-8157-4a5f-8015-0c390ef579c7",
+      "name": "Primus",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 3,
+      "createdAt": 1790505456380,
+      "updatedAt": 1790505484429
+    },
+    {
+      "id": "0d68bb9a-a064-4144-91f0-e740432bd55d",
+      "name": "Amstel Royal",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 2,
+      "notes": "2 par personne",
+      "createdAt": 1790505518355,
+      "updatedAt": 1790505534544
+    },
+    {
+      "id": "a4460cd2-84ad-40d2-b049-6e46ff9e79ea",
+      "name": "Aquavie",
+      "category": "water",
+      "isAlcoholic": false,
+      "stock": null,
+      "createdAt": 1790505589966,
+      "updatedAt": 1790505589966
+    },
+    {
+      "id": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",
+      "name": "Fruito Passion",
+      "category": "juice",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505625452,
+      "updatedAt": 1790505682097
+    },
+    {
+      "id": "8b4f5442-b7f7-4cd7-8b62-d8efd6cf1c0f",
+      "name": "Fruito Mango",
+      "category": "juice",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505663426,
+      "updatedAt": 1790505663426
+    }
+  ]
 }
