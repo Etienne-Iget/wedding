@@ -1,0 +1,162 @@
+{
+  "exportedAt": "2026-10-11T13:26:17.713Z",
+  "tables": [
+    {
+      "id": "be83b846-82be-463d-8980-393c2e99dee6",
+      "name": "Table d’honneur",
+      "capacity": 4,
+      "occupied": 2,
+      "available": 2,
+      "guests": [
+        {
+          "id": "ce3604e2-18bd-4a66-ab99-1ea50f63c322",
+          "firstName": "Etienne",
+          "lastName": "Tshisekedi Igugu",
+          "seatNumber": 2,
+          "isChild": false
+        },
+        {
+          "id": "6ebc6bd3-44bb-49aa-977b-d56f0ace74ce",
+          "firstName": "Hannah",
+          "lastName": "Kadwidwi",
+          "seatNumber": 1,
+          "isChild": false
+        }
+      ]
+    },
+    {
+      "id": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
+      "name": "Table Parent",
+      "capacity": 4,
+      "occupied": 2,
+      "available": 2,
+      "guests": [
+        {
+          "id": "872bc24e-7905-437d-869b-111a03961a54",
+          "firstName": "Denis",
+          "lastName": "Igugu ",
+          "seatNumber": 1,
+          "isChild": false
+        },
+        {
+          "id": "a84caf6b-ba18-44a6-b1e3-8d9e8c238027",
+          "firstName": "Clementine",
+          "lastName": "Madiya",
+          "seatNumber": 2,
+          "isChild": false
+        }
+      ]
+    },
+    {
+      "id": "107a4b5e-6743-457c-bb03-719dcf1b060f",
+      "name": "Table frère Etienne",
+      "capacity": 8,
+      "occupied": 2,
+      "available": 6,
+      "guests": [
+        {
+          "id": "f06bb318-24f1-495f-aa5d-a7d510ca67ae",
+          "firstName": "Olivier",
+          "lastName": "Igugu",
+          "seatNumber": 2,
+          "isChild": false
+        },
+        {
+          "id": "74a99e2f-03c9-44af-b4c3-785ca6c72ceb",
+          "firstName": "Maggy",
+          "lastName": "Igugu",
+          "seatNumber": 1,
+          "isChild": true
+        }
+      ]
+    },
+    {
+      "id": "168c117f-25e3-4559-bf1f-c4a07fc18747",
+      "name": "Table Frère Hannah",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "5e066ff1-8b88-441c-bdf6-03b08ec56ba9",
+      "name": "Table Amis Hannah",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "b2934ebb-64ad-4e1b-8232-dd62d83f627a",
+      "name": "Table Amis Etienne",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "0693deb3-e6e6-4929-b66a-f450879003df",
+      "name": "Table Burundaise ",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "c582b585-2d91-4fa3-948a-b3360eae1bc8",
+      "name": "Table Congolaise",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "213d1f25-4795-43e7-a07e-9821dd9ddfa3",
+      "name": "Table Travail Hannah",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "ad1cca0d-b935-4792-bb68-d88caffb1a54",
+      "name": "Table Ombakids",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "e5984683-4eca-48b8-9068-a14340bbceba",
+      "name": "Table M Sioni",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "1e7664dc-4ea2-41ed-ac5c-487e5781ab9d",
+      "name": "Table 12",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "b4bab959-623d-4f3f-ba3a-83c901224f62",
+      "name": "Table 13",
+      "capacity": 8,
+      "occupied": 0,
+      "available": 8,
+      "guests": []
+    },
+    {
+      "id": "92a797c7-e5b3-46c6-a8da-364d50c6e08b",
+      "name": "Table GSM",
+      "capacity": 4,
+      "occupied": 0,
+      "available": 4,
+      "guests": []
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "exportedAt": "2026-10-11T13:26:17.713Z",
+  "guests": [
+    {
+      "id": "ce3604e2-18bd-4a66-ab99-1ea50f63c322",
+      "firstName": "Etienne",
+      "lastName": "Tshisekedi Igugu",
+      "familyName": "Tshisekedi Igugu Etienne",
+      "invitationNumber": "INV-003",
+      "tableName": "Table d’honneur",
+      "seatNumber": 2,
+      "beverageName": "Fruito Passion",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1791299151215
+    },
+    {
+      "id": "6ebc6bd3-44bb-49aa-977b-d56f0ace74ce",
+      "firstName": "Hannah",
+      "lastName": "Kadwidwi",
+      "familyName": "Tshisekedi Igugu Etienne",
+      "invitationNumber": "INV-003",
+      "tableName": "Table d’honneur",
+      "seatNumber": 1,
+      "beverageName": "Fanta",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1791299151215
+    },
+    {
+      "id": "f06bb318-24f1-495f-aa5d-a7d510ca67ae",
+      "firstName": "Olivier",
+      "lastName": "Igugu",
+      "familyName": "Igugu Olivier",
+      "invitationNumber": "INV-001",
+      "tableName": "Table frère Etienne",
+      "seatNumber": 2,
+      "beverageName": "Amstel Royal",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1791298548621
+    },
+    {
+      "id": "74a99e2f-03c9-44af-b4c3-785ca6c72ceb",
+      "firstName": "Maggy",
+      "lastName": "Igugu",
+      "familyName": "Igugu Olivier",
+      "invitationNumber": "INV-001",
+      "tableName": "Table frère Etienne",
+      "seatNumber": 1,
+      "beverageName": "Fruito Passion",
+      "beverageQuantity": 1,
+      "isChild": true,
+      "updatedAt": 1791298515730
+    },
+    {
+      "id": "872bc24e-7905-437d-869b-111a03961a54",
+      "firstName": "Denis",
+      "lastName": "Igugu ",
+      "familyName": "Igugu Kuderha Denis ",
+      "invitationNumber": "INV-005",
+      "tableName": "Table Parent",
+      "seatNumber": 1,
+      "beverageName": "Primus",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1791625040739
+    },
+    {
+      "id": "a84caf6b-ba18-44a6-b1e3-8d9e8c238027",
+      "firstName": "Clementine",
+      "lastName": "Madiya",
+      "familyName": "Igugu Kuderha Denis ",
+      "invitationNumber": "INV-005",
+      "tableName": "Table Parent",
+      "seatNumber": 2,
+      "beverageName": "Fruito Passion",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1791625082604
+    }
+  ]
+}

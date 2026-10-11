@@ -1,0 +1,523 @@
+{
+  "version": 1,
+  "weddingId": "etienne-hannah-2026",
+  "exportedAt": "2026-10-11T13:26:17.700Z",
+  "settings": {
+    "id": "current",
+    "weddingId": "etienne-hannah-2026",
+    "applicationName": "Wedding Guest Manager",
+    "brideName": "Hannah",
+    "groomName": "Étienne",
+    "weddingDate": "2026-12-26",
+    "venueName": "Kiriri Garden",
+    "venueAddress": "Bujumbura",
+    "maxGuests": 100,
+    "contactEmail": "etienneiget5@gmail.com",
+    "currency": "USD",
+    "primaryColor": "#b8860b",
+    "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
+    "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
+    "events": {
+      "dot": {
+        "date": "2026-12-23",
+        "time": "14:30",
+        "venueName": "Fidodido",
+        "venueAddress": "Bujumbura"
+      },
+      "civil": {
+        "date": "2026-12-26",
+        "time": "11:30",
+        "venueName": "Kiriri Garden",
+        "venueAddress": "Bujumbura"
+      },
+      "religious": {
+        "date": "2026-12-26",
+        "time": "12:30",
+        "venueName": "Kiriri Garden",
+        "venueAddress": "Bujumbura"
+      }
+    },
+    "updatedAt": 1791287506976
+  },
+  "invitations": [
+    {
+      "id": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "invitationNumber": "INV-001",
+      "familyName": "Igugu Olivier",
+      "maxPeople": 2,
+      "qrToken": "7c753d4d7337331ccf9eacf74211ca8c",
+      "contactPhone": "+243971313615",
+      "email": "oligug@gmail.com",
+      "notes": "Frere du marié",
+      "createdAt": 1790174214751,
+      "updatedAt": 1790505288189
+    },
+    {
+      "id": "827c6a09-44d9-49c4-ba26-24262694f8da",
+      "invitationNumber": "INV-002",
+      "familyName": "Igugu Christian",
+      "maxPeople": 2,
+      "qrToken": "cbd921fa20f92f518922b7631ef77c23",
+      "contactPhone": "+243991393913",
+      "createdAt": 1790174337976,
+      "updatedAt": 1790505879102
+    },
+    {
+      "id": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "invitationNumber": "INV-003",
+      "familyName": "Tshisekedi Igugu Etienne",
+      "maxPeople": 2,
+      "qrToken": "fa1f61b9afadfdcb3b5ba8bc12b806e1",
+      "contactPhone": "+25767056776",
+      "email": "etienneiget@gmail.com",
+      "createdAt": 1791288859852,
+      "updatedAt": 1791288859852
+    },
+    {
+      "id": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "invitationNumber": "INV-004",
+      "familyName": "Bahizire Dieudonné Kadwidwi",
+      "maxPeople": 2,
+      "qrToken": "75e9e2f39faa1fbad12cd5803b4f85bb",
+      "contactPhone": "+25761052765",
+      "notes": "Père de la Mariée",
+      "createdAt": 1791298691026,
+      "updatedAt": 1791298770207
+    },
+    {
+      "id": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "invitationNumber": "INV-005",
+      "familyName": "Igugu Kuderha Denis ",
+      "maxPeople": 2,
+      "qrToken": "84b5237af3ad06723876cf02df2dbf81",
+      "contactPhone": "+243991980852",
+      "notes": "Père du Marié",
+      "createdAt": 1791298897366,
+      "updatedAt": 1791298897366
+    },
+    {
+      "id": "41da556b-7f37-4a6b-b1f8-d71257269e99",
+      "invitationNumber": "INV-006",
+      "familyName": "Ada Victoire Joyce",
+      "maxPeople": 2,
+      "qrToken": "e0fcde7ba21e6c47f4bec65167d96d37",
+      "contactPhone": "+25768683662",
+      "email": "victoireada.23@gmail.com",
+      "createdAt": 1791345802239,
+      "updatedAt": 1791345802239
+    },
+    {
+      "id": "54df19a2-8486-413f-94e5-199650b0c3df",
+      "invitationNumber": "INV-007",
+      "familyName": "Christian Mbagira",
+      "maxPeople": 2,
+      "qrToken": "d1cff88723cc20ee884561c08d0d9efd",
+      "contactPhone": "+243994947954",
+      "createdAt": 1791725177398,
+      "updatedAt": 1791725177398
+    }
+  ],
+  "guests": [
+    {
+      "id": "ce3604e2-18bd-4a66-ab99-1ea50f63c322",
+      "invitationId": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "firstName": "Etienne",
+      "lastName": "Tshisekedi Igugu",
+      "tableId": "be83b846-82be-463d-8980-393c2e99dee6",
+      "seatNumber": 2,
+      "beverageId": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1791288936897,
+      "updatedAt": 1791299151215
+    },
+    {
+      "id": "6ebc6bd3-44bb-49aa-977b-d56f0ace74ce",
+      "invitationId": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "firstName": "Hannah",
+      "lastName": "Kadwidwi",
+      "tableId": "be83b846-82be-463d-8980-393c2e99dee6",
+      "seatNumber": 1,
+      "beverageId": "a0661a1c-5253-4732-af75-e7e5ce7c04b5",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1791288936897,
+      "updatedAt": 1791299151215
+    },
+    {
+      "id": "f06bb318-24f1-495f-aa5d-a7d510ca67ae",
+      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "firstName": "Olivier",
+      "lastName": "Igugu",
+      "tableId": "107a4b5e-6743-457c-bb03-719dcf1b060f",
+      "seatNumber": 2,
+      "beverageId": "0d68bb9a-a064-4144-91f0-e740432bd55d",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1791298338613,
+      "updatedAt": 1791298548621
+    },
+    {
+      "id": "74a99e2f-03c9-44af-b4c3-785ca6c72ceb",
+      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "firstName": "Maggy",
+      "lastName": "Igugu",
+      "tableId": "107a4b5e-6743-457c-bb03-719dcf1b060f",
+      "seatNumber": 1,
+      "beverageId": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",
+      "beverageQuantity": 1,
+      "isChild": true,
+      "createdAt": 1791298338613,
+      "updatedAt": 1791298515730
+    },
+    {
+      "id": "872bc24e-7905-437d-869b-111a03961a54",
+      "invitationId": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "firstName": "Denis",
+      "lastName": "Igugu ",
+      "tableId": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
+      "seatNumber": 1,
+      "beverageId": "271b8524-8157-4a5f-8015-0c390ef579c7",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1791624949954,
+      "updatedAt": 1791625040739
+    },
+    {
+      "id": "a84caf6b-ba18-44a6-b1e3-8d9e8c238027",
+      "invitationId": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "firstName": "Clementine",
+      "lastName": "Madiya",
+      "tableId": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
+      "seatNumber": 2,
+      "beverageId": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1791624949954,
+      "updatedAt": 1791625082604
+    }
+  ],
+  "rsvps": [
+    {
+      "id": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "submittedAt": 1790177573108,
+      "note": null,
+      "updatedAt": 1791298338613
+    },
+    {
+      "id": "827c6a09-44d9-49c4-ba26-24262694f8da",
+      "invitationId": "827c6a09-44d9-49c4-ba26-24262694f8da",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1790174337976
+    },
+    {
+      "id": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "invitationId": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "submittedAt": 1791288936897,
+      "note": null,
+      "updatedAt": 1791299151215
+    },
+    {
+      "id": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "invitationId": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1791298691026
+    },
+    {
+      "id": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "invitationId": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "submittedAt": 1791624949954,
+      "note": "Parent du Marie",
+      "updatedAt": 1791624949954
+    },
+    {
+      "id": "41da556b-7f37-4a6b-b1f8-d71257269e99",
+      "invitationId": "41da556b-7f37-4a6b-b1f8-d71257269e99",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1791345802239
+    },
+    {
+      "id": "54df19a2-8486-413f-94e5-199650b0c3df",
+      "invitationId": "54df19a2-8486-413f-94e5-199650b0c3df",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1791725177398
+    }
+  ],
+  "tables": [
+    {
+      "id": "be83b846-82be-463d-8980-393c2e99dee6",
+      "name": "Table d’honneur",
+      "capacity": 4,
+      "shape": "rect",
+      "x": 229.31821483072667,
+      "y": 29.135050377318294,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791286690980,
+      "updatedAt": 1791625713619
+    },
+    {
+      "id": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
+      "name": "Table Parent",
+      "capacity": 4,
+      "shape": "round",
+      "x": 74.15477672520962,
+      "y": 140.29544317271814,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791286731198,
+      "updatedAt": 1791299634274
+    },
+    {
+      "id": "107a4b5e-6743-457c-bb03-719dcf1b060f",
+      "name": "Table frère Etienne",
+      "capacity": 8,
+      "shape": "round",
+      "x": 416.5336504520948,
+      "y": 141.87410852412745,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791286807445,
+      "updatedAt": 1791299639699
+    },
+    {
+      "id": "168c117f-25e3-4559-bf1f-c4a07fc18747",
+      "name": "Table Frère Hannah",
+      "capacity": 8,
+      "shape": "round",
+      "x": 417.09444320497937,
+      "y": 248.8933947488278,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791286854894,
+      "updatedAt": 1791299644085
+    },
+    {
+      "id": "5e066ff1-8b88-441c-bdf6-03b08ec56ba9",
+      "name": "Table Amis Hannah",
+      "capacity": 8,
+      "shape": "round",
+      "x": 71.42170892583374,
+      "y": 371.74447945042755,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791286939490,
+      "updatedAt": 1791299647721
+    },
+    {
+      "id": "b2934ebb-64ad-4e1b-8232-dd62d83f627a",
+      "name": "Table Amis Etienne",
+      "capacity": 8,
+      "shape": "round",
+      "x": 415.81789769651266,
+      "y": 368.260685086153,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791286956750,
+      "updatedAt": 1791299651672
+    },
+    {
+      "id": "0693deb3-e6e6-4929-b66a-f450879003df",
+      "name": "Table Burundaise ",
+      "capacity": 8,
+      "shape": "round",
+      "x": 68.43955650247347,
+      "y": 486.1632052028514,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791287007720,
+      "updatedAt": 1791299655270
+    },
+    {
+      "id": "c582b585-2d91-4fa3-948a-b3360eae1bc8",
+      "name": "Table Congolaise",
+      "capacity": 8,
+      "shape": "round",
+      "x": 413.6057897882125,
+      "y": 485.9969050343569,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791287035328,
+      "updatedAt": 1791299658960
+    },
+    {
+      "id": "213d1f25-4795-43e7-a07e-9821dd9ddfa3",
+      "name": "Table Travail Hannah",
+      "capacity": 8,
+      "shape": "round",
+      "x": 72.32839832191246,
+      "y": 248.83015951275127,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791287052372,
+      "updatedAt": 1791299662626
+    },
+    {
+      "id": "ad1cca0d-b935-4792-bb68-d88caffb1a54",
+      "name": "Table Ombakids",
+      "capacity": 8,
+      "shape": "round",
+      "x": 183.10328728524172,
+      "y": 488.00760409664315,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791300835488,
+      "updatedAt": 1791346005622
+    },
+    {
+      "id": "e5984683-4eca-48b8-9068-a14340bbceba",
+      "name": "Table M Sioni",
+      "capacity": 8,
+      "shape": "round",
+      "x": 307.46727493053925,
+      "y": 487.0424469982743,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791301226974,
+      "updatedAt": 1791346053070
+    },
+    {
+      "id": "1e7664dc-4ea2-41ed-ac5c-487e5781ab9d",
+      "name": "Table 12",
+      "capacity": 8,
+      "shape": "round",
+      "x": 409.14755964159656,
+      "y": 598.1313766349549,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791301254385,
+      "updatedAt": 1791346034839
+    },
+    {
+      "id": "b4bab959-623d-4f3f-ba3a-83c901224f62",
+      "name": "Table 13",
+      "capacity": 8,
+      "shape": "round",
+      "x": 69.41038966135557,
+      "y": 598.9625795635301,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791301256594,
+      "updatedAt": 1791346010437
+    },
+    {
+      "id": "92a797c7-e5b3-46c6-a8da-364d50c6e08b",
+      "name": "Table GSM",
+      "capacity": 4,
+      "shape": "round",
+      "x": 233.05603506057253,
+      "y": 601.0851725037128,
+      "rotation": 0,
+      "color": null,
+      "createdAt": 1791301291372,
+      "updatedAt": 1791346057453
+    }
+  ],
+  "beverages": [
+    {
+      "id": "d0baff81-7af3-4793-8a9b-bd69892c8a56",
+      "name": "Coca Cola",
+      "category": "soft",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505329687,
+      "updatedAt": 1790505329687
+    },
+    {
+      "id": "a0661a1c-5253-4732-af75-e7e5ce7c04b5",
+      "name": "Fanta",
+      "category": "soft",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505352985,
+      "updatedAt": 1790505352985
+    },
+    {
+      "id": "345f4360-a871-4364-9636-cbd5c4ffd66c",
+      "name": "Amstel 50cl",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 3,
+      "createdAt": 1790505399635,
+      "updatedAt": 1790505474815
+    },
+    {
+      "id": "8bd05cad-e644-46ef-a50f-1ca825831d22",
+      "name": "Amstel Bright 50cl",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 3,
+      "createdAt": 1790505441961,
+      "updatedAt": 1790505479372
+    },
+    {
+      "id": "271b8524-8157-4a5f-8015-0c390ef579c7",
+      "name": "Primus",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 3,
+      "createdAt": 1790505456380,
+      "updatedAt": 1790505484429
+    },
+    {
+      "id": "0d68bb9a-a064-4144-91f0-e740432bd55d",
+      "name": "Amstel Royal",
+      "category": "beer",
+      "isAlcoholic": true,
+      "stock": 2,
+      "notes": "2 par personne",
+      "createdAt": 1790505518355,
+      "updatedAt": 1790505534544
+    },
+    {
+      "id": "a4460cd2-84ad-40d2-b049-6e46ff9e79ea",
+      "name": "Aquavie",
+      "category": "water",
+      "isAlcoholic": false,
+      "stock": null,
+      "createdAt": 1790505589966,
+      "updatedAt": 1790505589966
+    },
+    {
+      "id": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",
+      "name": "Fruito Passion",
+      "category": "juice",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505625452,
+      "updatedAt": 1790505682097
+    },
+    {
+      "id": "8b4f5442-b7f7-4cd7-8b62-d8efd6cf1c0f",
+      "name": "Fruito Mango",
+      "category": "juice",
+      "isAlcoholic": false,
+      "stock": 3,
+      "notes": "3 par personne",
+      "createdAt": 1790505663426,
+      "updatedAt": 1790505663426
+    }
+  ]
+}

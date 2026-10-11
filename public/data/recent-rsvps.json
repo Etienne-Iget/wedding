@@ -1,0 +1,38 @@
+{
+  "exportedAt": "2026-10-11T13:26:17.713Z",
+  "rsvps": [
+    {
+      "id": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "invitationId": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
+      "invitationNumber": "INV-005",
+      "familyName": "Igugu Kuderha Denis ",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "note": "Parent du Marie",
+      "submittedAt": 1791624949954,
+      "updatedAt": 1791624949954
+    },
+    {
+      "id": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "invitationId": "78d37e19-4bf6-4461-ba12-541dcd493b94",
+      "invitationNumber": "INV-003",
+      "familyName": "Tshisekedi Igugu Etienne",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "note": null,
+      "submittedAt": 1791288936897,
+      "updatedAt": 1791299151215
+    },
+    {
+      "id": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "invitationId": "078f4365-20bb-4f18-86ab-0e7a6d56e2a6",
+      "invitationNumber": "INV-001",
+      "familyName": "Igugu Olivier",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "note": null,
+      "submittedAt": 1790177573108,
+      "updatedAt": 1791298338613
+    }
+  ]
+}
