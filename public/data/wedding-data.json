@@ -4,8 +4,8 @@
   "exportedAt": "2026-10-11T13:26:17.700Z",
   "settings": {
     "id": "current",
-    "weddingId": "etienne-hannah-2026",
     "applicationName": "Wedding Guest Manager",
+    "weddingId": "etienne-hannah-2026",
     "brideName": "Hannah",
     "groomName": "Étienne",
     "weddingDate": "2026-12-26",
@@ -17,6 +17,8 @@
     "primaryColor": "#b8860b",
     "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
     "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
+    "welcomeMessage": "Nous sommes ravis de vous compter parmi nos invités. Merci de confirmer votre présence !",
+    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, en date du {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\n\nCliquez sur ce lien pour voir votre invitation, le programme et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
     "events": {
       "dot": {
         "date": "2026-12-23",
