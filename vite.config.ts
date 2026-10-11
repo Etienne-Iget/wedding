@@ -8,6 +8,7 @@ import { jsonPersistPlugin } from './src/plugins/json-persist';
 export default defineConfig({
   server: {
     host: '0.0.0.0',
+    allowedHosts: ['wedding-aiyr.onrender.com'],
   },
   preview: {
     host: '0.0.0.0',
