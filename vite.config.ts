@@ -4,17 +4,21 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
 import { jsonPersistPlugin } from './src/plugins/json-persist';
 
+const disableRefresh = process.env.NODE_ENV === 'production';
+
 // https://vite.dev/config/
 export default defineConfig({
   server: {
     host: '0.0.0.0',
     allowedHosts: ['wedding-aiyr.onrender.com'],
+    ...(disableRefresh ? { hmr: false } : {}),
   },
-  preview: {
-    host: '0.0.0.0',
-    port: Number(process.env.PORT) || 10000,
-    allowedHosts: ['wedding-aiyr.onrender.com'],
-  },
+  oxc: disableRefresh
+    ? {
+        jsx: { refresh: false },
+        jsxRefreshExclude: /\.[jt]sx?$/,
+      }
+    : undefined,
   plugins: [
     react(),
     jsonPersistPlugin(),
@@ -42,6 +46,11 @@ export default defineConfig({
       },
     }),
   ],
+  preview: {
+    host: '0.0.0.0',
+    port: Number(process.env.PORT) || 10000,
+    allowedHosts: ['wedding-aiyr.onrender.com'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
