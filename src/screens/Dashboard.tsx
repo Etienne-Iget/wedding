@@ -29,15 +29,21 @@ function StatCard({
   sub,
   icon,
   accent,
+  onClick,
 }: {
   label: string;
   value: string | number;
   sub?: string;
   icon: React.ReactNode;
   accent: string;
+  onClick: () => void;
 }) {
   return (
-    <div className="card p-5 animate-slide-up">
+    <button
+      type="button"
+      onClick={onClick}
+      className="card group p-5 text-left animate-slide-up transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+    >
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm text-ink-400">{label}</p>
@@ -46,7 +52,10 @@ function StatCard({
         </div>
         <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${accent}`}>{icon}</div>
       </div>
-    </div>
+      <div className="mt-4 flex items-center gap-1 text-xs font-medium text-gold-600 opacity-0 transition-opacity group-hover:opacity-100">
+        Ouvrir <ArrowRight size={14} />
+      </div>
+    </button>
   );
 }
 
@@ -180,6 +189,7 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
           sub={`${stats.totalPeopleAuthorized} personnes autorisées`}
           icon={<Mail size={22} />}
           accent="bg-gold-100 text-gold-600"
+          onClick={() => onNavigate('invitations')}
         />
         <StatCard
           label="Invités enregistrés"
@@ -187,6 +197,7 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
           sub={`sur ${stats.maxGuestsAllowed} maximum`}
           icon={<Users size={22} />}
           accent="bg-blue-100 text-blue-600"
+          onClick={() => onNavigate('guests')}
         />
         <StatCard
           label="Confirmer / Refusés"
@@ -194,6 +205,7 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
           sub={`${stats.pendingCount} en attente`}
           icon={<CalendarCheck size={22} />}
           accent="bg-sage-500/20 text-sage-600"
+          onClick={() => onNavigate('rsvp')}
         />
         <StatCard
           label="Tables"
@@ -201,6 +213,7 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
           sub={`${stats.totalCapacity} places — ${stats.seatedCount} attribuées`}
           icon={<Table2 size={22} />}
           accent="bg-blush-400/30 text-blush-500"
+          onClick={() => onNavigate('tables')}
         />
       </div>
 
