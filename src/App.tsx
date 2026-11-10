@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Sidebar, type RouteId } from '@/components/layout/Sidebar';
 import { ToastProvider } from '@/components/ui/Toast';
 import { StoreProvider, useStore } from '@/store/StoreContext';
@@ -42,6 +42,29 @@ function AppContent() {
     }
   }, []);
 
+  useEffect(() => {
+    window.history.replaceState({ route: 'dashboard' }, '');
+    const onPopState = (event: PopStateEvent) => {
+      const previous = (event.state as { route?: RouteId } | null)?.route;
+      setRoute(previous ?? 'dashboard');
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const navigate = useCallback(
+    (id: RouteId) => {
+      if (id === route) return;
+      window.history.pushState({ route: id }, '');
+      setRoute(id);
+    },
+    [route],
+  );
+
+  const goBack = useCallback(() => {
+    window.history.back();
+  }, []);
+
   if (!loaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cream">
@@ -80,7 +103,7 @@ function AppContent() {
 
   const render = () => {
     switch (route) {
-      case 'dashboard': return <Dashboard onNavigate={setRoute} onPreview={() => setShowAdminPreview(true)} />;
+      case 'dashboard': return <Dashboard onNavigate={navigate} onPreview={() => setShowAdminPreview(true)} />;
       case 'settings': return <SettingsScreen />;
       case 'invitations': return <InvitationsScreen />;
       case 'guests': return <GuestsScreen />;
@@ -90,13 +113,20 @@ function AppContent() {
       case 'beverages': return <BeveragesScreen />;
       case 'floorplan': return <FloorPlanScreen />;
       case 'backup': return <BackupScreen />;
-      default: return <Dashboard onNavigate={setRoute} />;
+      default: return <Dashboard onNavigate={navigate} onPreview={() => setShowAdminPreview(true)} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-cream">
-      <Sidebar current={route} onNavigate={setRoute} coupleNames={coupleNames} weddingDate={weddingDate} logoSrc={settings?.logoSrc} />
+      <Sidebar
+        current={route}
+        onNavigate={navigate}
+        onBack={goBack}
+        coupleNames={coupleNames}
+        weddingDate={weddingDate}
+        logoSrc={settings?.logoSrc}
+      />
       <main className="lg:pl-64 pt-16 lg:pt-0 min-h-screen flex flex-col">
         <div className="flex-1 mx-auto max-w-6xl w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8 animate-fade-in" key={route}>
           {render()}

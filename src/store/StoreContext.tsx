@@ -110,6 +110,9 @@ function defaultSettings(): WeddingSettings {
     primaryColor: '#b8860b',
     logoSrc: null,
     heroPhotoSrc: null,
+    welcomeMessage: '',
+    invitationMessageTemplate: '',
+    receptionTime: '',
     events: {
       dot: { date: '', time: '', venueName: '', venueAddress: '' },
       civil: { date: '', time: '', venueName: '', venueAddress: '' },

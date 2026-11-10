@@ -24,6 +24,7 @@ export interface WeddingSettings {
   heroPhotoSrc: string | null;
   welcomeMessage: string;
   invitationMessageTemplate: string;
+  receptionTime: string;
   events: {
     dot: WeddingEvent;
     civil: WeddingEvent;

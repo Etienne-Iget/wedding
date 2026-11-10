@@ -1,7 +1,7 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-10-11T13:26:17.700Z",
+  "exportedAt": "2026-11-10T04:54:52.079Z",
   "settings": {
     "id": "current",
     "applicationName": "Wedding Guest Manager",
@@ -18,7 +18,8 @@
     "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
     "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
     "welcomeMessage": "Nous sommes ravis de vous compter parmi nos invités. Merci de confirmer votre présence !",
-    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, en date du {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\n\nCliquez sur ce lien pour voir votre invitation, le programme et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
+    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\nPAS D’ENFANT\n\nCliquez sur ce lien pour voir votre invitation, le programme et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
+    "receptionTime": "18:30",
     "events": {
       "dot": {
         "date": "2026-12-23",
@@ -39,7 +40,7 @@
         "venueAddress": "Bujumbura"
       }
     },
-    "updatedAt": 1791287506976
+    "updatedAt": 1794286491778
   },
   "invitations": [
     {
@@ -117,6 +118,266 @@
       "contactPhone": "+243994947954",
       "createdAt": 1791725177398,
       "updatedAt": 1791725177398
+    },
+    {
+      "id": "15c831ca-8680-4809-b17f-ab0c5f881300",
+      "invitationNumber": "INV-008",
+      "familyName": "M. Philippe",
+      "maxPeople": 2,
+      "qrToken": "48c486858a4f6879e2160235c85b4b3a",
+      "contactPhone": "+3248853603",
+      "notes": "Invité Hannah",
+      "createdAt": 1794281955539,
+      "updatedAt": 1794282126587
+    },
+    {
+      "id": "d148d814-c12e-44f2-b391-2a081da3774d",
+      "invitationNumber": "INV-009",
+      "familyName": "M. Jean-Francois",
+      "maxPeople": 2,
+      "qrToken": "eccc9ac70d3d74ef1dfc128b9e037734",
+      "contactPhone": "+32496297082",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282027646,
+      "updatedAt": 1794282141310
+    },
+    {
+      "id": "90b36901-68f2-4809-b54e-e1c4b104e0de",
+      "invitationNumber": "INV-010",
+      "familyName": "Gaudance",
+      "maxPeople": 2,
+      "qrToken": "43ecd17a35bf8acb211c7bf5e1f12a15",
+      "contactPhone": "+25767870515",
+      "notes": "invité Hannah",
+      "createdAt": 1794282111895,
+      "updatedAt": 1794282111895
+    },
+    {
+      "id": "4b1b5794-90dc-455c-b51c-4f895846ccdc",
+      "invitationNumber": "INV-011",
+      "familyName": "Mme Fifi",
+      "maxPeople": 2,
+      "qrToken": "e1283ed76154bd5c84026150048c09a2",
+      "contactPhone": "+25779421490",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282206175,
+      "updatedAt": 1794282206175
+    },
+    {
+      "id": "d81c45d6-dbcd-4674-81a1-df43db6dab51",
+      "invitationNumber": "INV-012",
+      "familyName": "Marius",
+      "maxPeople": 2,
+      "qrToken": "be332a728ef12c50b27bfca00e671c05",
+      "contactPhone": "+243982245517",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282294004,
+      "updatedAt": 1794282294004
+    },
+    {
+      "id": "eb4de243-2282-47af-a5f2-478a425fb161",
+      "invitationNumber": "INV-013",
+      "familyName": "Deborah & Pamela",
+      "maxPeople": 2,
+      "qrToken": "a077a085ae1153a9b08b6d2a14477ad2",
+      "contactPhone": "+25761630837",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282366416,
+      "updatedAt": 1794282366416
+    },
+    {
+      "id": "8826b833-9ec6-45c5-94a1-3d875365f9a7",
+      "invitationNumber": "INV-014",
+      "familyName": "Titre & Dany",
+      "maxPeople": 2,
+      "qrToken": "6355e57c6e977fe3fb8265325ebd4885",
+      "contactPhone": "+ 1 (785) 338 2655",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282473667,
+      "updatedAt": 1794282473667
+    },
+    {
+      "id": "15af55b3-d227-4503-99f7-59376d61bb25",
+      "invitationNumber": "INV-015",
+      "familyName": "Mme Lydie",
+      "maxPeople": 2,
+      "qrToken": "e875f9defd3f06080eff7ee5f410ff6c",
+      "contactPhone": "+25775894183",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282533786,
+      "updatedAt": 1794282533786
+    },
+    {
+      "id": "8eb5e173-782c-42c6-89e8-a22b9ba29db3",
+      "invitationNumber": "INV-016",
+      "familyName": "M. Alain",
+      "maxPeople": 2,
+      "qrToken": "f1cba432c50a25cd4dcfaaa6b0d2b033",
+      "contactPhone": "+25768419244",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282600516,
+      "updatedAt": 1794282600516
+    },
+    {
+      "id": "88c43639-88d8-453f-a0f4-5462e212b556",
+      "invitationNumber": "INV-017",
+      "familyName": "Julien & Zachary",
+      "maxPeople": 2,
+      "qrToken": "81cb9eba7b657ca96c9114a0cf5c5f67",
+      "contactPhone": "+25779487031",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282764163,
+      "updatedAt": 1794282764163
+    },
+    {
+      "id": "d6900004-dc36-4c30-8481-fea352bc101e",
+      "invitationNumber": "INV-018",
+      "familyName": "Papa Kazadi",
+      "maxPeople": 2,
+      "qrToken": "19ba89e385ec9ccb990fc67c6d95bdf0",
+      "contactPhone": "+25779936577",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282859603,
+      "updatedAt": 1794282859603
+    },
+    {
+      "id": "c43334ad-bb2e-4e6b-b5d0-245baf9dbf14",
+      "invitationNumber": "INV-019",
+      "familyName": "Jay & Mike",
+      "maxPeople": 2,
+      "qrToken": "1cdfc06fe63cc60a51315102d4ceba59",
+      "contactPhone": "+25765167733",
+      "notes": "Invité Hannah",
+      "createdAt": 1794282918929,
+      "updatedAt": 1794282918929
+    },
+    {
+      "id": "7639da39-d419-4e63-9820-b192f2fa25b4",
+      "invitationNumber": "INV-020",
+      "familyName": "Charity & Sa Soeur",
+      "maxPeople": 2,
+      "qrToken": "8a60b84d0612c0739a45ed53216ed4e4",
+      "contactPhone": "+25768370043",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283019526,
+      "updatedAt": 1794283019526
+    },
+    {
+      "id": "a79f498d-af94-4e28-a253-f6250bff8297",
+      "invitationNumber": "INV-021",
+      "familyName": "Maman Jessy",
+      "maxPeople": 2,
+      "qrToken": "463109b51d50ff0f5bff982b791811b3",
+      "contactPhone": "+25761958486",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283099621,
+      "updatedAt": 1794283099621
+    },
+    {
+      "id": "7a63e84c-5452-4b80-a669-e1f737a9183a",
+      "invitationNumber": "INV-022",
+      "familyName": "Mme. Ariella",
+      "maxPeople": 2,
+      "qrToken": "46b6815e95c6ee30859734fc19969052",
+      "contactPhone": "+25762662606",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283180332,
+      "updatedAt": 1794283180332
+    },
+    {
+      "id": "ad09d619-5adb-4c28-a714-a533d1a60a6b",
+      "invitationNumber": "INV-023",
+      "familyName": "Mme Sarah",
+      "maxPeople": 2,
+      "qrToken": "477e523e8882f09704ee580686ad0e79",
+      "contactPhone": "+25768725584",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283290455,
+      "updatedAt": 1794283290455
+    },
+    {
+      "id": "03da63af-65f0-4dcd-b2d4-84b4c7b6518b",
+      "invitationNumber": "INV-024",
+      "familyName": "Raphael & Getta",
+      "maxPeople": 2,
+      "qrToken": "989d9d925071db9462a8c332efa2ccf9",
+      "contactPhone": "+25766138328",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283371332,
+      "updatedAt": 1794283371332
+    },
+    {
+      "id": "3b4fc160-b825-4ec9-9a84-97c30d0e3087",
+      "invitationNumber": "INV-025",
+      "familyName": "M. Malu",
+      "maxPeople": 2,
+      "qrToken": "4be685cdb9724eb0565df52b106d8445",
+      "contactPhone": "+25775306750",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283419426,
+      "updatedAt": 1794283419426
+    },
+    {
+      "id": "0d021316-c8bf-40a7-8c8b-d6ca6011b8b0",
+      "invitationNumber": "INV-026",
+      "familyName": "Domene & Kevin",
+      "maxPeople": 2,
+      "qrToken": "d406d8733ce2459012f5607eca407ed2",
+      "contactPhone": "+25766482610",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283510078,
+      "updatedAt": 1794283510078
+    },
+    {
+      "id": "5d9b767d-f8c2-44b1-addd-c40131c90001",
+      "invitationNumber": "INV-027",
+      "familyName": "M. Bonneaventure",
+      "maxPeople": 2,
+      "qrToken": "e71a02fddccc8bc746b7f84070b9d0b9",
+      "contactPhone": "+25779843912",
+      "notes": "Invité Hannah",
+      "createdAt": 1794283647578,
+      "updatedAt": 1794283647578
+    },
+    {
+      "id": "95f338ae-fbc0-4edc-be64-a0b32c9abc8c",
+      "invitationNumber": "INV-028",
+      "familyName": "Lionel Nkenyereye",
+      "maxPeople": 2,
+      "qrToken": "6a02123769a2e8d69331a6890423d5c0",
+      "contactPhone": "+821028378201",
+      "createdAt": 1794283795424,
+      "updatedAt": 1794283795424
+    },
+    {
+      "id": "b8eada97-a3d1-4c55-8501-664453ac84e0",
+      "invitationNumber": "INV-029",
+      "familyName": "M. Salum",
+      "maxPeople": 2,
+      "qrToken": "c73f13c9289820b362b5641db000ed72",
+      "contactPhone": "+821031651182",
+      "createdAt": 1794283900460,
+      "updatedAt": 1794283900460
+    },
+    {
+      "id": "cc540026-944f-49a2-924a-619e99cda973",
+      "invitationNumber": "INV-030",
+      "familyName": "Inamahoro Flour",
+      "maxPeople": 2,
+      "qrToken": "c845ddc5dda96b6a40ff429e25f72ca9",
+      "contactPhone": "+25761519349",
+      "createdAt": 1794284031405,
+      "updatedAt": 1794284031405
+    },
+    {
+      "id": "ee951f33-5dd9-4fe0-99d3-228771c237c9",
+      "invitationNumber": "INV-031",
+      "familyName": "Nyembo Justin",
+      "maxPeople": 2,
+      "qrToken": "74ff61d94515a1da85720c0be6ea8186",
+      "contactPhone": "+243826629552",
+      "createdAt": 1794284104184,
+      "updatedAt": 1794284104184
     }
   ],
   "guests": [
@@ -262,6 +523,222 @@
       "submittedAt": null,
       "note": null,
       "updatedAt": 1791725177398
+    },
+    {
+      "id": "15c831ca-8680-4809-b17f-ab0c5f881300",
+      "invitationId": "15c831ca-8680-4809-b17f-ab0c5f881300",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794281955539
+    },
+    {
+      "id": "d148d814-c12e-44f2-b391-2a081da3774d",
+      "invitationId": "d148d814-c12e-44f2-b391-2a081da3774d",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282027646
+    },
+    {
+      "id": "90b36901-68f2-4809-b54e-e1c4b104e0de",
+      "invitationId": "90b36901-68f2-4809-b54e-e1c4b104e0de",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282111895
+    },
+    {
+      "id": "4b1b5794-90dc-455c-b51c-4f895846ccdc",
+      "invitationId": "4b1b5794-90dc-455c-b51c-4f895846ccdc",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282206175
+    },
+    {
+      "id": "d81c45d6-dbcd-4674-81a1-df43db6dab51",
+      "invitationId": "d81c45d6-dbcd-4674-81a1-df43db6dab51",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282294004
+    },
+    {
+      "id": "eb4de243-2282-47af-a5f2-478a425fb161",
+      "invitationId": "eb4de243-2282-47af-a5f2-478a425fb161",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282366416
+    },
+    {
+      "id": "8826b833-9ec6-45c5-94a1-3d875365f9a7",
+      "invitationId": "8826b833-9ec6-45c5-94a1-3d875365f9a7",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282473667
+    },
+    {
+      "id": "15af55b3-d227-4503-99f7-59376d61bb25",
+      "invitationId": "15af55b3-d227-4503-99f7-59376d61bb25",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282533786
+    },
+    {
+      "id": "8eb5e173-782c-42c6-89e8-a22b9ba29db3",
+      "invitationId": "8eb5e173-782c-42c6-89e8-a22b9ba29db3",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282600516
+    },
+    {
+      "id": "88c43639-88d8-453f-a0f4-5462e212b556",
+      "invitationId": "88c43639-88d8-453f-a0f4-5462e212b556",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282764163
+    },
+    {
+      "id": "d6900004-dc36-4c30-8481-fea352bc101e",
+      "invitationId": "d6900004-dc36-4c30-8481-fea352bc101e",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282859603
+    },
+    {
+      "id": "c43334ad-bb2e-4e6b-b5d0-245baf9dbf14",
+      "invitationId": "c43334ad-bb2e-4e6b-b5d0-245baf9dbf14",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794282918929
+    },
+    {
+      "id": "7639da39-d419-4e63-9820-b192f2fa25b4",
+      "invitationId": "7639da39-d419-4e63-9820-b192f2fa25b4",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283019526
+    },
+    {
+      "id": "a79f498d-af94-4e28-a253-f6250bff8297",
+      "invitationId": "a79f498d-af94-4e28-a253-f6250bff8297",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283099621
+    },
+    {
+      "id": "7a63e84c-5452-4b80-a669-e1f737a9183a",
+      "invitationId": "7a63e84c-5452-4b80-a669-e1f737a9183a",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283180332
+    },
+    {
+      "id": "ad09d619-5adb-4c28-a714-a533d1a60a6b",
+      "invitationId": "ad09d619-5adb-4c28-a714-a533d1a60a6b",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283290455
+    },
+    {
+      "id": "03da63af-65f0-4dcd-b2d4-84b4c7b6518b",
+      "invitationId": "03da63af-65f0-4dcd-b2d4-84b4c7b6518b",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283371332
+    },
+    {
+      "id": "3b4fc160-b825-4ec9-9a84-97c30d0e3087",
+      "invitationId": "3b4fc160-b825-4ec9-9a84-97c30d0e3087",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283419426
+    },
+    {
+      "id": "0d021316-c8bf-40a7-8c8b-d6ca6011b8b0",
+      "invitationId": "0d021316-c8bf-40a7-8c8b-d6ca6011b8b0",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283510078
+    },
+    {
+      "id": "5d9b767d-f8c2-44b1-addd-c40131c90001",
+      "invitationId": "5d9b767d-f8c2-44b1-addd-c40131c90001",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283647578
+    },
+    {
+      "id": "95f338ae-fbc0-4edc-be64-a0b32c9abc8c",
+      "invitationId": "95f338ae-fbc0-4edc-be64-a0b32c9abc8c",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283795424
+    },
+    {
+      "id": "b8eada97-a3d1-4c55-8501-664453ac84e0",
+      "invitationId": "b8eada97-a3d1-4c55-8501-664453ac84e0",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794283900460
+    },
+    {
+      "id": "cc540026-944f-49a2-924a-619e99cda973",
+      "invitationId": "cc540026-944f-49a2-924a-619e99cda973",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794284031405
+    },
+    {
+      "id": "ee951f33-5dd9-4fe0-99d3-228771c237c9",
+      "invitationId": "ee951f33-5dd9-4fe0-99d3-228771c237c9",
+      "status": "pending",
+      "attendingCount": 0,
+      "submittedAt": null,
+      "note": null,
+      "updatedAt": 1794284104184
     }
   ],
   "tables": [

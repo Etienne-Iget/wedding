@@ -22,6 +22,7 @@ interface FormValues {
   heroPhotoSrc: string;
   welcomeMessage: string;
   invitationMessageTemplate: string;
+  receptionTime: string;
   dotDate: string;
   dotTime: string;
   dotVenueName: string;
@@ -67,6 +68,7 @@ export function SettingsScreen() {
         heroPhotoSrc: settings.heroPhotoSrc ?? '',
         welcomeMessage: settings.welcomeMessage ?? '',
         invitationMessageTemplate: settings.invitationMessageTemplate ?? '',
+        receptionTime: settings.receptionTime ?? '',
         dotDate: ev.dot.date,
         dotTime: ev.dot.time,
         dotVenueName: ev.dot.venueName,
@@ -151,6 +153,7 @@ export function SettingsScreen() {
       heroPhotoSrc: heroPhotoSrc || null,
       welcomeMessage: values.welcomeMessage,
       invitationMessageTemplate: values.invitationMessageTemplate,
+      receptionTime: values.receptionTime,
       events: {
         dot: { date: values.dotDate, time: values.dotTime, venueName: values.dotVenueName, venueAddress: values.dotVenueAddress },
         civil: { date: values.civilDate, time: values.civilTime, venueName: values.civilVenueName, venueAddress: values.civilVenueAddress },
@@ -315,6 +318,9 @@ export function SettingsScreen() {
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Date du mariage" error={errors.weddingDate?.message}>
               <input type="date" className="input" {...register('weddingDate', { required: 'Champ requis' })} />
+            </Field>
+            <Field label="Heure de la réception" help="Affichée à côté de la date sur la page d'invitation">
+              <input type="time" step="60" className="input" {...register('receptionTime')} />
             </Field>
             <Field label="Nombre maximum d'invités" error={errors.maxGuests?.message}>
               <input

@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import {
+  ArrowLeft,
   LayoutDashboard,
   Settings,
   Mail,
@@ -58,12 +59,13 @@ const groupLabels: Record<NavItem['group'], string> = {
 interface SidebarProps {
   current: RouteId;
   onNavigate: (id: RouteId) => void;
+  onBack: () => void;
   coupleNames: string;
   weddingDate: string;
   logoSrc?: string | null;
 }
 
-export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoSrc }: SidebarProps) {
+export function Sidebar({ current, onNavigate, onBack, coupleNames, weddingDate, logoSrc }: SidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const close = () => setMobileOpen(false);
@@ -72,23 +74,35 @@ export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoSrc
     close();
   }, [current]);
 
+  const goHome = () => {
+    onNavigate('dashboard');
+    close();
+  };
+
   const groups: NavItem['group'][] = ['plan', 'invites', 'logistique', 'systeme'];
 
   const content = (
     <div className="flex h-full flex-col bg-ink-800 text-ink-100">
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-500/20 text-gold-300 shrink-0 overflow-hidden">
-          {logoSrc ? (
-            <img src={logoSrc} alt="Logo" className="h-full w-full object-contain" />
-          ) : (
-            <Heart size={20} fill="currentColor" />
-          )}
-        </div>
-        <div className="min-w-0">
-          <p className="font-display text-lg text-white truncate">{coupleNames}</p>
-          <p className="text-xs text-ink-300 truncate">{weddingDate}</p>
-        </div>
+        <button
+          type="button"
+          onClick={goHome}
+          aria-label="Aller au tableau de bord"
+          className="flex min-w-0 items-center gap-3 rounded-lg text-left transition-opacity hover:opacity-80"
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-500/20 text-gold-300 shrink-0 overflow-hidden">
+            {logoSrc ? (
+              <img src={logoSrc} alt="Logo" className="h-full w-full object-contain" />
+            ) : (
+              <Heart size={20} fill="currentColor" />
+            )}
+          </div>
+          <div className="min-w-0">
+            <p className="font-display text-lg text-white truncate">{coupleNames}</p>
+            <p className="text-xs text-ink-300 truncate">{weddingDate}</p>
+          </div>
+        </button>
         <button onClick={close} className="ml-auto btn-icon text-ink-300 hover:text-white lg:hidden">
           <X size={20} />
         </button>
@@ -136,16 +150,33 @@ export function Sidebar({ current, onNavigate, coupleNames, weddingDate, logoSrc
   return (
     <>
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-ink-800 px-4 py-3 text-white">
-        <div className="flex items-center gap-2">
-          {logoSrc ? (
-            <img src={logoSrc} alt="Logo" className="h-6 w-6 object-contain" />
-          ) : (
-            <Heart size={18} className="text-gold-400" fill="currentColor" />
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-ink-800 px-2 py-3 pr-4 text-white">
+        <div className="flex min-w-0 items-center gap-1">
+          {current !== 'dashboard' && (
+            <button
+              type="button"
+              onClick={onBack}
+              aria-label="Retour"
+              className="btn-icon text-white hover:bg-white/10 shrink-0"
+            >
+              <ArrowLeft size={22} />
+            </button>
           )}
-          <span className="font-display text-base">{coupleNames}</span>
+          <button
+            type="button"
+            onClick={goHome}
+            aria-label="Aller au tableau de bord"
+            className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1 transition-opacity active:opacity-70"
+          >
+            {logoSrc ? (
+              <img src={logoSrc} alt="Logo" className="h-6 w-6 object-contain shrink-0" />
+            ) : (
+              <Heart size={18} className="text-gold-400 shrink-0" fill="currentColor" />
+            )}
+            <span className="font-display text-base truncate">{coupleNames}</span>
+          </button>
         </div>
-        <button onClick={() => setMobileOpen(true)} className="btn-icon text-white hover:bg-white/10">
+        <button onClick={() => setMobileOpen(true)} className="btn-icon text-white hover:bg-white/10 shrink-0">
           <Menu size={22} />
         </button>
       </div>

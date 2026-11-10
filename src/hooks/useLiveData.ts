@@ -1,8 +1,8 @@
 import { useStore } from '@/store/StoreContext';
 import type { WeddingSettings, Invitation, Guest, TableEntity, Beverage, Rsvp } from '@/types';
 
-export function useSettings(): WeddingSettings | undefined {
-  return useStore().settings ?? undefined;
+export function useSettings(): WeddingSettings | null {
+  return useStore().settings;
 }
 
 export function useInvitations(): Invitation[] {

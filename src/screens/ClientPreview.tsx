@@ -220,11 +220,14 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               <div className="flex items-center gap-2">
                 <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Date</span>
                 <span className="h-px w-4 bg-gold-400/50" />
-                <span className="text-white text-lg font-medium">{formatDate(settings.weddingDate)}</span>
+                <span className="text-white text-lg font-medium">
+                  {formatDate(settings.weddingDate)}
+                  {settings.receptionTime && ` à ${formatTime(settings.receptionTime)}`}
+                </span>
               </div>
               {settings.venueName && (
                 <div className="flex items-center gap-2">
-                  <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Lieu</span>
+                  <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Lieu de la réception</span>
                   <span className="h-px w-4 bg-gold-400/50" />
                   <span className="text-ink-200 text-lg font-medium">{settings.venueName}</span>
                 </div>
