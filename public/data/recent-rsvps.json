@@ -1,6 +1,17 @@
 {
-  "exportedAt": "2026-11-10T04:54:52.089Z",
+  "exportedAt": "2026-11-15T06:53:20.471Z",
   "rsvps": [
+    {
+      "id": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "invitationId": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "invitationNumber": "INV-004",
+      "familyName": "Bahizire Dieudonné Kadwidwi",
+      "status": "confirmed",
+      "attendingCount": 2,
+      "note": "Belle famille",
+      "submittedAt": 1794722152669,
+      "updatedAt": 1794722152669
+    },
     {
       "id": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
       "invitationId": "4f4d7c29-eca7-46ca-a55c-52a405693f05",

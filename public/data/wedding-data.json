@@ -1,11 +1,11 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-11-10T04:54:52.079Z",
+  "exportedAt": "2026-11-15T06:53:20.459Z",
   "settings": {
     "id": "current",
-    "applicationName": "Wedding Guest Manager",
     "weddingId": "etienne-hannah-2026",
+    "applicationName": "Wedding Guest Manager",
     "brideName": "Hannah",
     "groomName": "Étienne",
     "weddingDate": "2026-12-26",
@@ -17,9 +17,6 @@
     "primaryColor": "#b8860b",
     "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
     "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
-    "welcomeMessage": "Nous sommes ravis de vous compter parmi nos invités. Merci de confirmer votre présence !",
-    "invitationMessageTemplate": "Chère famille {familyName},\n\nLa famille Igugu Kuderha Denis et Madiya Mukendji Clémentine a le réel plaisir de vous inviter à honorer de votre présence les cérémonies de mariage de leur fils Etienne Igugu, qui s’unit pour la vie à sa bien-aimée Hannah Kadwidwi, {date}.\n\nVotre invitation : {invitationNumber}\nNombre de personnes autorisées : {maxPeople}\nPAS D’ENFANT\n\nCliquez sur ce lien pour voir votre invitation, le programme et confirmer votre présence :\n{link}\n\nVous pouvez scanner le QR code joint pour accéder directement à votre page.\n\nVotre présence à leurs côtés sera pour eux une grande joie et un précieux témoignage de votre affection.\n",
-    "receptionTime": "18:30",
     "events": {
       "dot": {
         "date": "2026-12-23",
@@ -365,9 +362,9 @@
       "familyName": "Inamahoro Flour",
       "maxPeople": 2,
       "qrToken": "c845ddc5dda96b6a40ff429e25f72ca9",
-      "contactPhone": "+25761519349",
+      "contactPhone": "+25767772389",
       "createdAt": 1794284031405,
-      "updatedAt": 1794284031405
+      "updatedAt": 1794288693792
     },
     {
       "id": "ee951f33-5dd9-4fe0-99d3-228771c237c9",
@@ -458,6 +455,32 @@
       "isChild": false,
       "createdAt": 1791624949954,
       "updatedAt": 1791625082604
+    },
+    {
+      "id": "0b1c2369-ed97-401a-854b-93785aae12d5",
+      "invitationId": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "firstName": "Dieudonné",
+      "lastName": "Bahizire Kadwidwi",
+      "tableId": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
+      "seatNumber": 4,
+      "beverageId": "a4460cd2-84ad-40d2-b049-6e46ff9e79ea",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1794722152669,
+      "updatedAt": 1794722376018
+    },
+    {
+      "id": "9ee888eb-ba75-40e8-8332-634c1eea85c0",
+      "invitationId": "155f8909-9458-47b8-af88-2ec5337fb1ee",
+      "firstName": "Yvonne",
+      "lastName": "Kadwidwi",
+      "tableId": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
+      "seatNumber": 3,
+      "beverageId": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "createdAt": 1794722152669,
+      "updatedAt": 1794722345016
     }
   ],
   "rsvps": [
@@ -491,11 +514,11 @@
     {
       "id": "155f8909-9458-47b8-af88-2ec5337fb1ee",
       "invitationId": "155f8909-9458-47b8-af88-2ec5337fb1ee",
-      "status": "pending",
-      "attendingCount": 0,
-      "submittedAt": null,
-      "note": null,
-      "updatedAt": 1791298691026
+      "status": "confirmed",
+      "attendingCount": 2,
+      "submittedAt": 1794722152669,
+      "note": "Belle famille",
+      "updatedAt": 1794722152669
     },
     {
       "id": "4f4d7c29-eca7-46ca-a55c-52a405693f05",
@@ -974,9 +997,9 @@
       "name": "Aquavie",
       "category": "water",
       "isAlcoholic": false,
-      "stock": null,
+      "stock": 3,
       "createdAt": 1790505589966,
-      "updatedAt": 1790505589966
+      "updatedAt": 1794725600157
     },
     {
       "id": "1ad1d4f5-e1e8-4d60-9068-04073b03d649",

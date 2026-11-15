@@ -68,6 +68,7 @@ export interface Rsvp {
   attendingCount: number;
   submittedAt: number | null;
   note?: string | null;
+  isNew?: boolean;
   updatedAt: number;
 }
 

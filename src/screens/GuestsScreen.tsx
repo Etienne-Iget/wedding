@@ -13,7 +13,7 @@ import { Modal } from '@/components/ui/Modal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
-import { useInvitations, useGuests, useTables, useBeverages, useSettings } from '@/hooks/useLiveData';
+import { useInvitations, useGuests, useTables, useBeverages, useSettings, useRsvps } from '@/hooks/useLiveData';
 import { useStore } from '@/store/StoreContext';
 import { uuid } from '@/lib/id';
 import type { Guest } from '@/types';
@@ -35,7 +35,8 @@ export function GuestsScreen() {
   const beverages = useBeverages();
   const settings = useSettings();
   const { show } = useToast();
-  const { addGuest, updateGuest, deleteGuest } = useStore();
+  const rsvps = useRsvps();
+  const { addGuest, updateGuest, deleteGuest, markRsvpReviewed } = useStore();
 
   const [search, setSearch] = useState('');
   const [filterInv, setFilterInv] = useState('');
@@ -48,6 +49,10 @@ export function GuestsScreen() {
   const invById = useMemo(() => new Map(invitations.map((i) => [i.id, i])), [invitations]);
   const tableById = useMemo(() => new Map(tables.map((t) => [t.id, t])), [tables]);
   const bevById = useMemo(() => new Map(beverages.map((b) => [b.id, b])), [beverages]);
+  const newResponseInvIds = useMemo(
+    () => new Set(rsvps.filter((r) => r.isNew).map((r) => r.invitationId)),
+    [rsvps]
+  );
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -135,6 +140,7 @@ export function GuestsScreen() {
       });
       show('success', 'Invité ajouté.');
     }
+    markRsvpReviewed(values.invitationId);
     setShowForm(false);
   };
 
@@ -202,11 +208,15 @@ export function GuestsScreen() {
                       const inv = invById.get(g.invitationId);
                       const table = g.tableId ? tableById.get(g.tableId) : undefined;
                       const bev = g.beverageId ? bevById.get(g.beverageId) : undefined;
+                      const isNewResponse = newResponseInvIds.has(g.invitationId);
                       return (
-                        <tr key={g.id} className="hover:bg-gold-50/30 transition-colors">
+                        <tr
+                          key={g.id}
+                          className={`transition-colors ${isNewResponse ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gold-50/30'}`}
+                        >
                           <td className="px-4 py-3 font-mono text-xs text-gold-600">{inv?.invitationNumber}</td>
-                          <td className="px-4 py-3 text-ink-600">{inv?.familyName}</td>
-                          <td className="px-4 py-3 font-medium text-ink-800">
+                          <td className={`px-4 py-3 ${isNewResponse ? 'font-medium text-red-700' : 'text-ink-600'}`}>{inv?.familyName}</td>
+                          <td className={`px-4 py-3 font-medium ${isNewResponse ? 'text-red-700' : 'text-ink-800'}`}>
                             {g.firstName} {g.lastName}
                             {g.isChild && <span className="ml-1.5 inline-flex items-center gap-0.5 text-xs text-blue-500"><Baby size={12} /> enfant</span>}
                           </td>

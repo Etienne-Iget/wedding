@@ -13,6 +13,7 @@ import {
   Eye,
   Image as ImageIcon,
   Download,
+  Bell,
 } from 'lucide-react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { Modal } from '@/components/ui/Modal';
@@ -110,6 +111,8 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
 
   const invById = useMemo(() => new Map(invitations.map((i) => [i.id, i])), [invitations]);
 
+  const newResponses = useMemo(() => rsvps.filter((r) => r.isNew), [rsvps]);
+
   const statusLabel: Record<RsvpStatus, string> = {
     confirmed: 'Présent',
     declined: 'Absent',
@@ -123,6 +126,27 @@ export function Dashboard({ onNavigate, onPreview }: { onNavigate: (r: RouteId) 
         subtitle={settings ? `${settings.brideName} & ${settings.groomName} — ${formatDate(settings.weddingDate)}` : 'Chargement…'}
         icon={<TrendingUp size={22} />}
       />
+
+      {newResponses.length > 0 && (
+        <div className="flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50 p-4 sm:flex-row sm:items-center sm:justify-between animate-slide-up">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-600">
+              <Bell size={18} />
+            </div>
+            <div>
+              <p className="font-medium text-red-800">
+                {newResponses.length} nouvelle{newResponses.length > 1 ? 's' : ''} réponse{newResponses.length > 1 ? 's' : ''} d'invités
+              </p>
+              <p className="text-sm text-red-700">
+                {newResponses.map((r) => invById.get(r.invitationId)?.familyName ?? '—').join(', ')}
+              </p>
+            </div>
+          </div>
+          <button onClick={() => onNavigate('guests')} className="btn-primary btn-sm shrink-0">
+            Voir les invités
+          </button>
+        </div>
+      )}
 
       {/* Hero banner */}
       {settings && (

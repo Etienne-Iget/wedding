@@ -123,6 +123,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       attendingCount: status === 'confirmed' ? attendingCount : 0,
       submittedAt: existing?.submittedAt ?? now,
       note: note || null,
+      isNew: true,
       updatedAt: now,
     });
 

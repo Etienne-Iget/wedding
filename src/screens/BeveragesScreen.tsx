@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import {
   Wine,
   Plus,
+  Printer,
   Pencil,
   Trash2,
   Grape,
@@ -19,9 +20,10 @@ import { Modal } from '@/components/ui/Modal';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/components/ui/Toast';
-import { useBeverages, useGuests } from '@/hooks/useLiveData';
+import { useBeverages, useGuests, useSettings } from '@/hooks/useLiveData';
 import { useStore } from '@/store/StoreContext';
 import { uuid } from '@/lib/id';
+import { beverageOrderLines, DRINKS_PER_GUEST } from '@/lib/beverageOrder';
 import type { Beverage } from '@/types';
 
 type Category = Beverage['category'];
@@ -72,6 +74,12 @@ export function BeveragesScreen() {
   const guests = useGuests();
   const { show } = useToast();
   const { addBeverage, updateBeverage, deleteBeverage } = useStore();
+  const settings = useSettings();
+  const orderLines = useMemo(() => beverageOrderLines(beverages, guests), [beverages, guests]);
+  const orderTotal = orderLines.reduce((sum, l) => sum + l.quantity, 0);
+  const orderToBuy = orderLines.reduce((sum, l) => sum + l.toOrder, 0);
+  const drinksPlanned = guests.length * DRINKS_PER_GUEST;
+  const drinksRemaining = Math.max(0, drinksPlanned - orderTotal);
 
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Beverage | null>(null);
@@ -139,6 +147,89 @@ export function BeveragesScreen() {
         icon={<Wine size={22} />}
         actions={<button onClick={openCreate} className="btn-primary"><Plus size={18} /> Nouvelle boisson</button>}
       />
+
+      <section className="card p-6">
+        <div className="no-print mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-ink-800">Bon de commande</h3>
+            <p className="text-sm text-ink-400">Total des boissons choisies par les invités</p>
+          </div>
+          <button onClick={() => window.print()} disabled={orderLines.length === 0} className="btn-secondary">
+            <Printer size={18} /> Imprimer le bon
+          </button>
+        </div>
+
+        <div id="beverage-order-print">
+          <div className="mb-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">Bon de commande boissons</p>
+            {settings && (
+              <p className="mt-1 font-display text-2xl text-ink-800">{settings.brideName} &amp; {settings.groomName}</p>
+            )}
+            {settings && (
+              <p className="text-sm text-ink-500">
+                {new Date(settings.weddingDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+            )}
+          </div>
+
+          <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <div className="rounded-lg bg-ink-50 p-4">
+              <p className="text-xs uppercase tracking-wider text-ink-500">Invités</p>
+              <p className="mt-1 text-2xl font-semibold text-ink-800">{guests.length}</p>
+            </div>
+            <div className="rounded-lg bg-ink-50 p-4">
+              <p className="text-xs uppercase tracking-wider text-ink-500">Boissons prévues</p>
+              <p className="mt-1 text-2xl font-semibold text-ink-800">{drinksPlanned}</p>
+              <p className="text-xs text-ink-400">{DRINKS_PER_GUEST} par invité</p>
+            </div>
+            <div className="rounded-lg bg-ink-50 p-4">
+              <p className="text-xs uppercase tracking-wider text-ink-500">Boissons choisies</p>
+              <p className="mt-1 text-2xl font-semibold text-gold-700">{orderTotal}</p>
+            </div>
+            <div className="rounded-lg bg-ink-50 p-4">
+              <p className="text-xs uppercase tracking-wider text-ink-500">Reste à choisir</p>
+              <p className="mt-1 text-2xl font-semibold text-ink-800">{drinksRemaining}</p>
+            </div>
+          </div>
+
+          {orderLines.length === 0 ? (
+            <p className="text-sm text-ink-400">Aucune boisson choisie pour le moment.</p>
+          ) : (
+            <div className="overflow-x-auto rounded-lg border border-ink-100">
+              <table className="w-full text-sm">
+                <thead className="bg-ink-50 text-left text-xs uppercase tracking-wider text-ink-500">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">Boisson</th>
+                    <th className="px-4 py-3 font-medium">Catégorie</th>
+                    <th className="px-4 py-3 font-medium text-right">Quantité choisie</th>
+                    <th className="px-4 py-3 font-medium text-right">En stock</th>
+                    <th className="px-4 py-3 font-medium text-right">À commander</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-ink-100">
+                  {orderLines.map((l) => (
+                    <tr key={l.beverage.id}>
+                      <td className="px-4 py-3 font-medium text-ink-800">{l.beverage.name}</td>
+                      <td className="px-4 py-3 text-ink-600">{categoryLabels[l.beverage.category]}</td>
+                      <td className="px-4 py-3 text-right text-ink-700">{l.quantity}</td>
+                      <td className="px-4 py-3 text-right text-ink-600">{l.beverage.stock ?? '—'}</td>
+                      <td className="px-4 py-3 text-right font-semibold text-gold-700">{l.toOrder}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="border-t-2 border-ink-200 bg-ink-50 text-sm">
+                  <tr>
+                    <td className="px-4 py-3 font-semibold text-ink-800" colSpan={2}>Total</td>
+                    <td className="px-4 py-3 text-right font-semibold text-ink-800">{orderTotal}</td>
+                    <td />
+                    <td className="px-4 py-3 text-right font-semibold text-gold-700">{orderToBuy}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </div>
+      </section>
 
       {beverages.length === 0 ? (
         <EmptyState

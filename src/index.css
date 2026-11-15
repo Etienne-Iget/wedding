@@ -115,4 +115,7 @@
 /* Print styles for PDFs / documents */
 @media print {
   .no-print { display: none !important; }
+  body * { visibility: hidden; }
+  #beverage-order-print, #beverage-order-print * { visibility: visible; }
+  #beverage-order-print { position: absolute; left: 0; top: 0; width: 100%; }
 }

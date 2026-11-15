@@ -80,6 +80,7 @@ export const rsvpSchema = z.object({
   attendingCount: z.number().int().min(0),
   submittedAt: z.number().optional().nullable(),
   note: z.string().optional().nullable(),
+  isNew: z.boolean().optional(),
   updatedAt: z.number(),
 });
 

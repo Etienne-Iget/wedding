@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-11-10T04:54:52.089Z",
+  "exportedAt": "2026-11-15T06:53:20.471Z",
   "guests": [
     {
       "id": "ce3604e2-18bd-4a66-ab99-1ea50f63c322",
@@ -78,6 +78,32 @@
       "beverageQuantity": 1,
       "isChild": false,
       "updatedAt": 1791625082604
+    },
+    {
+      "id": "0b1c2369-ed97-401a-854b-93785aae12d5",
+      "firstName": "Dieudonné",
+      "lastName": "Bahizire Kadwidwi",
+      "familyName": "Bahizire Dieudonné Kadwidwi",
+      "invitationNumber": "INV-004",
+      "tableName": "Table Parent",
+      "seatNumber": 4,
+      "beverageName": "Aquavie",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1794722376018
+    },
+    {
+      "id": "9ee888eb-ba75-40e8-8332-634c1eea85c0",
+      "firstName": "Yvonne",
+      "lastName": "Kadwidwi",
+      "familyName": "Bahizire Dieudonné Kadwidwi",
+      "invitationNumber": "INV-004",
+      "tableName": "Table Parent",
+      "seatNumber": 3,
+      "beverageName": "Fruito Passion",
+      "beverageQuantity": 1,
+      "isChild": false,
+      "updatedAt": 1794722345016
     }
   ]
 }

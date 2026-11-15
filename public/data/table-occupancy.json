@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-11-10T04:54:52.089Z",
+  "exportedAt": "2026-11-15T06:53:20.471Z",
   "tables": [
     {
       "id": "be83b846-82be-463d-8980-393c2e99dee6",
@@ -28,8 +28,8 @@
       "id": "0c6c220b-ea3b-414c-a78f-ab780600c1d0",
       "name": "Table Parent",
       "capacity": 4,
-      "occupied": 2,
-      "available": 2,
+      "occupied": 4,
+      "available": 0,
       "guests": [
         {
           "id": "872bc24e-7905-437d-869b-111a03961a54",
@@ -43,6 +43,20 @@
           "firstName": "Clementine",
           "lastName": "Madiya",
           "seatNumber": 2,
+          "isChild": false
+        },
+        {
+          "id": "0b1c2369-ed97-401a-854b-93785aae12d5",
+          "firstName": "Dieudonné",
+          "lastName": "Bahizire Kadwidwi",
+          "seatNumber": 4,
+          "isChild": false
+        },
+        {
+          "id": "9ee888eb-ba75-40e8-8332-634c1eea85c0",
+          "firstName": "Yvonne",
+          "lastName": "Kadwidwi",
+          "seatNumber": 3,
           "isChild": false
         }
       ]

@@ -41,6 +41,7 @@ interface StoreValue extends StoreState {
   updateGuest: (g: Guest) => void;
   deleteGuest: (id: string) => void;
   upsertRsvp: (rsvp: Rsvp) => void;
+  markRsvpReviewed: (invitationId: string) => void;
   mergeRsvps: (list: Rsvp[]) => number;
   addTable: (t: TableEntity) => void;
   updateTable: (t: TableEntity) => void;
@@ -338,6 +339,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       return { ...prev, rsvps: [...prev.rsvps, rsvp] };
     });
 
+  const markRsvpReviewed = (invitationId: string) =>
+    mutate((prev) => ({
+      ...prev,
+      rsvps: prev.rsvps.map((r) =>
+        r.invitationId === invitationId && r.isNew ? { ...r, isNew: false } : r
+      ),
+    }));
+
   const mergeRsvps = (list: Rsvp[]): number => {
     mutate((prev) => {
       const rsvps = [...prev.rsvps];
@@ -439,6 +448,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     updateGuest,
     deleteGuest,
     upsertRsvp,
+    markRsvpReviewed,
     mergeRsvps,
     addTable,
     updateTable,
