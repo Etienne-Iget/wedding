@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Heart, MapPin, Clock, Calendar, Check, X, Minus, Wine } from 'lucide-react';
+import { Heart, MapPin, Clock, Calendar, Check, X, Minus, Wine, Mail } from 'lucide-react';
 import { useSettings, useInvitations, useGuests, useRsvps, useBeverages } from '@/hooks/useLiveData';
 import { useStore } from '@/store/StoreContext';
 import { generateQrDataUrl } from '@/lib/pdf';
@@ -49,6 +49,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const [note, setNote] = useState('');
   const [people, setPeople] = useState<{ firstName: string; beverageId: string }[]>([{ firstName: '', beverageId: '' }]);
   const [submitted, setSubmitted] = useState(false);
+  const [invitationOpened, setInvitationOpened] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   const rsvpByInv = new Map(rsvps.map((r) => [r.invitationId, r]));
@@ -170,6 +171,67 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const logo = settings.logoSrc;
 
   const isGuestMode = !!inviteToken;
+  const linkedInvitation = foundInv ? invitations.find((inv) => inv.id === foundInv) : undefined;
+  const linkedGuestNames = linkedInvitation
+    ? guests
+        .filter((guest) => guest.invitationId === linkedInvitation.id)
+        .map((guest) => `${guest.firstName} ${guest.lastName}`.trim())
+        .filter(Boolean)
+    : [];
+  const envelopeGuestName = linkedGuestNames.join(' & ') || linkedInvitation?.familyName || 'Votre invitation';
+
+  if (isGuestMode && !invitationOpened) {
+    return (
+      <div className="fixed inset-0 z-50 overflow-hidden bg-[#eee1cc] text-[#4b3428]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.42),transparent_68%)]" />
+        <div className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 py-8 text-center sm:px-5 sm:py-12">
+          <div className="mb-10 animate-fade-in sm:mb-14">
+            <p className="font-display text-3xl tracking-[0.2em] text-[#4b3428] sm:text-5xl sm:tracking-[0.32em]">
+              {envelopeGuestName}
+            </p>
+            <div className="mx-auto mt-5 h-px w-16 bg-[#b98c63]/70" />
+          </div>
+
+          <button
+            type="button"
+            aria-label="Ouvrir l'invitation"
+            onClick={() => setInvitationOpened(true)}
+            className="group relative aspect-[1.45] w-full max-w-[620px] overflow-hidden rounded-[4px] bg-[#cba47b] px-4 pb-7 pt-24 text-center shadow-[0_24px_40px_rgba(90,58,35,0.25)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_48px_rgba(90,58,35,0.3)] focus:outline-none focus:ring-4 focus:ring-[#b98c63]/40 sm:px-8 sm:pb-12 sm:pt-36"
+          >
+            <span className="absolute inset-0 bg-[#d9b58d] transition-transform duration-500 group-hover:scale-[1.02]" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 57%)' }} />
+            <span className="absolute inset-0 bg-[#b98c63]/70" style={{ clipPath: 'polygon(0 100%, 100% 100%, 50% 52%)' }} />
+            <span className="absolute inset-0 bg-[#c39a70]/80" style={{ clipPath: 'polygon(0 0, 50% 50%, 0 100%)' }} />
+            <span className="absolute inset-0 bg-[#bd9168]/80" style={{ clipPath: 'polygon(100% 0, 50% 50%, 100% 100%)' }} />
+
+            <span className="relative z-10 mx-auto flex h-20 w-20 items-center justify-center rounded-full border-[5px] border-[#96643e] bg-[#a96f3f] p-2 shadow-[0_8px_16px_rgba(85,48,22,0.35)] transition duration-500 group-hover:scale-110 group-hover:rotate-3 sm:h-36 sm:w-36 sm:border-[7px] sm:p-3">
+              <span className="flex h-full w-full items-center justify-center rounded-full border border-[#e3b887]/70 bg-[#a96f3f] p-3">
+                {logo ? (
+                  <img src={logo} alt="Logo des mariés" className="h-full w-full rounded-full object-contain" />
+                ) : (
+                  <Heart size={46} className="text-[#f1c99d]" fill="currentColor" />
+                )}
+              </span>
+            </span>
+
+            <span className="relative z-10 mt-7 block text-balance font-display text-xl italic text-[#4b3428] sm:mt-12 sm:text-4xl">
+              {settings.groomName} &amp; {settings.brideName}
+            </span>
+          </button>
+
+          <div className="mt-10 animate-pulse text-[#765845] sm:mt-14">
+            <Mail size={20} className="mx-auto mb-3" />
+            <p className="max-w-xs font-display text-lg italic sm:max-w-none sm:text-2xl">Cliquez sur l'enveloppe pour voir l'invitation</p>
+          </div>
+
+          {settings.weddingDate && (
+            <p className="mt-6 text-xs font-semibold tracking-[0.35em] text-[#b26036]">
+              {formatDate(settings.weddingDate).toUpperCase()}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink-900">
@@ -184,7 +246,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       )}
 
       {/* Hero section */}
-      <div className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
+      <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           {heroImage ? (
             <img src={heroImage} alt="Couple" className="h-full w-full object-cover" />
@@ -194,12 +256,12 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
           <div className="absolute inset-0 bg-gradient-to-b from-ink-900/40 via-ink-900/60 to-ink-900/90" />
         </div>
 
-        <div className="relative z-10 text-center px-6 animate-fade-in">
+        <div className="relative z-10 w-full max-w-3xl px-4 py-16 text-center animate-fade-in sm:px-6">
           {logo && (
             <img src={logo} alt="Logo" className="mx-auto h-20 w-20 object-contain mb-6" />
           )}
           <p className="text-gold-300 text-sm font-medium tracking-[0.3em] uppercase mb-4">Nous nous marions</p>
-          <h1 className="font-display text-5xl sm:text-7xl text-white leading-tight">
+          <h1 className="font-display text-4xl leading-tight text-white sm:text-7xl">
             {settings.brideName}
           </h1>
           <div className="my-4 flex items-center justify-center gap-4">
@@ -207,7 +269,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
             <Heart size={24} className="text-gold-400" fill="currentColor" />
             <span className="h-px w-12 bg-gold-400" />
           </div>
-          <h1 className="font-display text-5xl sm:text-7xl text-white leading-tight">
+          <h1 className="font-display text-4xl leading-tight text-white sm:text-7xl">
             {settings.groomName}
           </h1>
 
@@ -270,7 +332,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       </div>
 
       {/* Events section */}
-      <div className="bg-cream py-20 px-6">
+      <div className="bg-cream px-4 py-14 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-center font-display text-4xl text-ink-800 mb-2">Le programme</h2>
           <div className="mx-auto h-px w-20 bg-gold-400 mb-12" />
@@ -296,7 +358,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       </div>
 
       {/* RSVP section */}
-      <div id="rsvp" className="bg-ink-800 py-20 px-6 scroll-mt-0">
+      <div id="rsvp" className="scroll-mt-0 bg-ink-800 px-4 py-14 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-center font-display text-4xl text-white mb-2">Confirmez votre présence</h2>
           <div className="mx-auto h-px w-20 bg-gold-400 mb-12" />
@@ -366,7 +428,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
               <div>
                 <label className="block text-sm text-ink-300 mb-3">Serez-vous présent ?</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <StatusButton active={status === 'confirmed'} onClick={() => setStatus('confirmed')} icon={<Check size={18} />} label="Présent" />
                   <StatusButton active={status === 'declined'} onClick={() => setStatus('declined')} icon={<X size={18} />} label="Absent" />
                   <StatusButton active={status === 'pending'} onClick={() => setStatus('pending')} icon={<Minus size={18} />} label="Indécis" />
@@ -377,7 +439,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                 <>
                   <div>
                     <label className="block text-sm text-ink-300 mb-2">Nombre de personnes présentes</label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <CountButton
                         active={attendingCount === 1}
                         onClick={() => {
@@ -407,8 +469,8 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                       {people.slice(0, attendingCount).map((p, idx) => (
                         <div key={idx} className="space-y-2">
                           <p className="text-xs text-gold-300 font-medium">Personne {idx + 1}</p>
-                          <div className="flex items-center gap-2">
-                            <Wine size={16} className="text-gold-400 shrink-0" />
+                          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+                            <Wine size={16} className="hidden shrink-0 text-gold-400 sm:block" />
                             <input
                               className="flex-1 rounded-lg bg-white/10 border border-white/20 px-3 py-2 text-white text-sm focus:border-gold-400 focus:outline-none"
                               placeholder="Prénom"
@@ -416,7 +478,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                               onChange={(e) => setPeople((prev) => prev.map((x, i) => i === idx ? { ...x, firstName: e.target.value } : x))}
                             />
                             <select
-                              className="w-32 rounded-lg bg-white/10 border border-white/20 px-3 py-2 text-white text-sm focus:border-gold-400 focus:outline-none"
+                              className="min-h-11 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm text-white focus:border-gold-400 focus:outline-none sm:w-32"
                               value={p.beverageId}
                               onChange={(e) => setPeople((prev) => prev.map((x, i) => i === idx ? { ...x, beverageId: e.target.value } : x))}
                             >
@@ -446,7 +508,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
               <button
                 onClick={submitRsvp}
-                className="w-full rounded-lg bg-gold-500 px-6 py-3.5 text-white font-medium transition-colors hover:bg-gold-600"
+                className="min-h-12 w-full rounded-lg bg-gold-500 px-6 py-3.5 font-medium text-white transition-colors hover:bg-gold-600"
               >
                 Confirmer ma réponse
               </button>
@@ -535,7 +597,7 @@ function StatusButton({ active, onClick, icon, label }: { active: boolean; onCli
   return (
     <button
       onClick={onClick}
-      className={`flex items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+      className={`flex min-h-12 items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
         active
           ? 'bg-gold-500 text-white border-gold-500'
           : 'bg-white/5 text-ink-200 border-white/20 hover:bg-white/10'
@@ -550,7 +612,7 @@ function CountButton({ active, onClick, label }: { active: boolean; onClick: () 
   return (
     <button
       onClick={onClick}
-      className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+      className={`min-h-12 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
         active
           ? 'bg-gold-500 text-white border-gold-500'
           : 'bg-white/5 text-ink-200 border-white/20 hover:bg-white/10'
