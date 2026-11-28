@@ -314,6 +314,9 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
         <div className="hidden items-center gap-8 text-[9px] font-semibold uppercase tracking-[0.22em] text-[#765c45] sm:flex">
           <a href="#programme" className="transition-colors hover:text-[#a66f42]">Programme</a>
           <a href="#rsvp" className="transition-colors hover:text-[#a66f42]">Répondre</a>
+          {settings.airtelMoneyNumber && (
+            <a href="#airtel-money" className="font-bold text-[#b42318] transition-colors hover:text-[#8f1d14]">Airtel Money</a>
+          )}
         </div>
         {settings.weddingDate && <span className="text-[9px] font-semibold tracking-[0.12em] text-[#765c45]">{formatDate(settings.weddingDate)}</span>}
       </nav>
@@ -646,7 +649,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       </div>
 
       {settings.airtelMoneyNumber && (
-        <section className="border-t border-[#a77d62] bg-[#8b6650] px-6 py-10 text-center text-[#fff7ed]">
+        <section id="airtel-money" className="border-t border-[#a77d62] bg-[#8b6650] px-6 py-10 text-center text-[#fff7ed]">
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#f0d8c4]">Soutenir les mariés</p>
           <h3 className="mt-2 font-display text-3xl">Airtel Money</h3>
           <p className="mt-2 text-sm text-[#f8e9dc]">Vous pouvez envoyer votre contribution au</p>
