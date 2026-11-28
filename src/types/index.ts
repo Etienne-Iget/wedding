@@ -18,6 +18,7 @@ export interface WeddingSettings {
   venueAddress: string;
   maxGuests: number;
   contactEmail: string;
+  airtelMoneyNumber?: string;
   currency: string;
   primaryColor: string;
   logoSrc: string | null;

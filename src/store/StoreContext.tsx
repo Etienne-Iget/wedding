@@ -107,6 +107,7 @@ function defaultSettings(): WeddingSettings {
     venueAddress: '',
     maxGuests: 100,
     contactEmail: '',
+    airtelMoneyNumber: '',
     currency: 'EUR',
     primaryColor: '#b8860b',
     logoSrc: null,

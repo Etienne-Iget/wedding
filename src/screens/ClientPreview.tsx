@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Heart, MapPin, Clock, Calendar, Check, X, Minus, Wine, Mail } from 'lucide-react';
+import { Heart, MapPin, Clock, Calendar, Check, X, Minus, Wine, Mail, Flower2 } from 'lucide-react';
 import { useSettings, useInvitations, useGuests, useRsvps, useBeverages } from '@/hooks/useLiveData';
 import { useStore } from '@/store/StoreContext';
 import { generateQrDataUrl } from '@/lib/pdf';
@@ -169,6 +169,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
   const countdown = daysUntil(settings.weddingDate);
   const heroImage = settings.heroPhotoSrc;
   const logo = settings.logoSrc;
+  const monogram = `${settings.brideName.trim().charAt(0).toLocaleUpperCase('fr-FR')}&${settings.groomName.trim().charAt(0).toLocaleUpperCase('fr-FR')}`;
 
   const isGuestMode = !!inviteToken;
   const linkedInvitation = foundInv ? invitations.find((inv) => inv.id === foundInv) : undefined;
@@ -182,59 +183,140 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
   if (isGuestMode && !invitationOpened) {
     return (
-      <div className="fixed inset-0 z-50 overflow-hidden bg-[#eee1cc] text-[#4b3428]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.42),transparent_68%)]" />
+      <div className="fixed inset-0 z-50 overflow-hidden bg-gradient-to-br from-[#f5efe3] via-[#ede4d3] to-[#e2d5c0] text-[#5a4632]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.5),transparent_70%)]" />
+
+        {/* Floating decorative elements */}
+        <div className="pointer-events-none absolute left-[8%] top-[12%] hidden opacity-20 sm:block">
+          <Flower2 size={48} className="text-[#b8a78c]" />
+        </div>
+        <div className="pointer-events-none absolute right-[10%] top-[18%] hidden opacity-20 sm:block">
+          <Flower2 size={36} className="text-[#b8a78c]" />
+        </div>
+        <div className="pointer-events-none absolute bottom-[10%] left-[12%] hidden opacity-15 sm:block">
+          <Flower2 size={40} className="text-[#b8a78c]" />
+        </div>
+
         <div className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 py-8 text-center sm:px-5 sm:py-12">
-          <div className="mb-10 animate-fade-in sm:mb-14">
-            <p className="font-display text-3xl tracking-[0.2em] text-[#4b3428] sm:text-5xl sm:tracking-[0.32em]">
+          {/* Guest name header */}
+          <div className="mb-8 animate-fade-in sm:mb-12">
+            <p className="text-xs font-medium uppercase tracking-[0.4em] text-[#b08d6a] sm:text-sm">Cher invité</p>
+            <p className="mt-3 font-display text-2xl tracking-[0.15em] text-[#5a4632] sm:text-4xl sm:tracking-[0.25em]">
               {envelopeGuestName}
             </p>
-            <div className="mx-auto mt-5 h-px w-16 bg-[#b98c63]/70" />
+            <div className="mx-auto mt-4 flex items-center justify-center gap-2">
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#c9b89c]" />
+              <span className="h-1.5 w-1.5 rotate-45 bg-[#c9b89c]" />
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#c9b89c]" />
+            </div>
           </div>
 
+          {/* Envelope */}
           <button
             type="button"
             aria-label="Ouvrir l'invitation"
             onClick={() => setInvitationOpened(true)}
-            className="group relative aspect-[1.45] w-full max-w-[620px] overflow-hidden rounded-[4px] bg-[#cba47b] px-4 pb-7 pt-24 text-center shadow-[0_24px_40px_rgba(90,58,35,0.25)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_30px_48px_rgba(90,58,35,0.3)] focus:outline-none focus:ring-4 focus:ring-[#b98c63]/40 sm:px-8 sm:pb-12 sm:pt-36"
+            className="group relative w-full max-w-[580px] focus:outline-none"
           >
-            <span className="absolute inset-0 bg-[#d9b58d] transition-transform duration-500 group-hover:scale-[1.02]" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 57%)' }} />
-            <span className="absolute inset-0 bg-[#b98c63]/70" style={{ clipPath: 'polygon(0 100%, 100% 100%, 50% 52%)' }} />
-            <span className="absolute inset-0 bg-[#c39a70]/80" style={{ clipPath: 'polygon(0 0, 50% 50%, 0 100%)' }} />
-            <span className="absolute inset-0 bg-[#bd9168]/80" style={{ clipPath: 'polygon(100% 0, 50% 50%, 100% 100%)' }} />
+            {/* Envelope body with depth shadow */}
+            <div className="relative mx-auto aspect-[1.5] w-full overflow-hidden rounded-[6px] bg-[#e8dcc8] shadow-[0_28px_50px_rgba(90,70,40,0.22),0_8px_16px_rgba(90,70,40,0.12)] ring-1 ring-[#d0c2aa] transition-all duration-500 group-hover:-translate-y-1.5 group-hover:shadow-[0_36px_60px_rgba(90,70,40,0.28),0_12px_20px_rgba(90,70,40,0.14)] sm:rounded-[8px]">
 
-            <span className="relative z-10 mx-auto flex h-20 w-20 items-center justify-center rounded-full border-[5px] border-[#96643e] bg-[#a96f3f] p-2 shadow-[0_8px_16px_rgba(85,48,22,0.35)] transition duration-500 group-hover:scale-110 group-hover:rotate-3 sm:h-36 sm:w-36 sm:border-[7px] sm:p-3">
-              <span className="flex h-full w-full items-center justify-center rounded-full border border-[#e3b887]/70 bg-[#a96f3f] p-3">
-                {logo ? (
-                  <img src={logo} alt="Logo des mariés" className="h-full w-full rounded-full object-contain" />
-                ) : (
-                  <Heart size={46} className="text-[#f1c99d]" fill="currentColor" />
+              {/* Paper texture overlay */}
+              <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,transparent,transparent_2px,rgba(180,160,130,0.03)_2px,rgba(180,160,130,0.03)_4px)]" />
+
+              {/* Bottom flap (pocket) */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#e0d3bc] to-[#d4c6ad]" style={{ clipPath: 'polygon(0 100%, 100% 100%, 50% 48%)' }} />
+
+              {/* Left flap */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#ece2d0] to-[#ddd0bb] transition-all duration-500 group-hover:from-[#eee5d4] group-hover:to-[#e0d4c0]" style={{ clipPath: 'polygon(0 0, 50% 46%, 0 100%)' }} />
+
+              {/* Right flap */}
+              <div className="absolute inset-0 bg-gradient-to-bl from-[#e6dbca] to-[#d8ccba] transition-all duration-500 group-hover:from-[#e8dfd0] group-hover:to-[#dccfbb]" style={{ clipPath: 'polygon(100% 0, 50% 46%, 100% 100%)' }} />
+
+              {/* Top flap (closed) */}
+              <div
+                className="absolute inset-0 bg-gradient-to-b from-[#f2e9da] to-[#e6dac6] transition-all duration-700 ease-in-out"
+                style={{ clipPath: 'polygon(0 0, 100% 0, 50% 50%)' }}
+              />
+
+              {/* Flap seam lines for realism */}
+              <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 50% 50%, 0 100%)' }}>
+                <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-black/[0.04] to-transparent" />
+              </div>
+              <div className="absolute inset-0" style={{ clipPath: 'polygon(100% 0, 50% 50%, 100% 100%)' }}>
+                <div className="absolute right-0 top-0 h-full w-full bg-gradient-to-l from-black/[0.04] to-transparent" />
+              </div>
+              <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 50%)' }}>
+                <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-black/[0.05] to-transparent" />
+              </div>
+
+              {/* Wax seal with logo */}
+              <div className="absolute left-1/2 top-[46%] z-20 -translate-x-1/2 -translate-y-1/2">
+                <div className="relative transition-all duration-500 group-hover:scale-110 group-hover:rotate-[6deg]">
+                  {/* Wax seal glow */}
+                  <div className="absolute inset-0 -z-10 scale-125 rounded-full bg-[#b8654e]/20 blur-md transition-opacity duration-500 group-hover:opacity-80" />
+
+                  {/* Wax seal outer ring */}
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#c46b52] via-[#b85a3e] to-[#a04a33] shadow-[inset_0_2px_4px_rgba(255,220,200,0.25),inset_0_-3px_6px_rgba(60,20,10,0.3),0_6px_12px_rgba(80,30,15,0.3)] sm:h-24 sm:w-24">
+                    {/* Inner wax ring */}
+                    <div className="flex h-[88%] w-[88%] items-center justify-center rounded-full bg-gradient-to-br from-[#b85a3e] to-[#9a4530] shadow-[inset_0_1px_3px_rgba(255,200,180,0.15),inset_0_-2px_4px_rgba(50,15,5,0.25)]">
+                      {/* Logo container */}
+                      <div className="flex h-[82%] w-[82%] items-center justify-center overflow-hidden rounded-full bg-[#d4a895]/30 ring-1 ring-[#e8c5b0]/40">
+                        {logo ? (
+                          <img src={logo} alt="Logo des mariés" className="h-full w-full rounded-full object-cover ring-1 ring-[#f0d8c8]/50" />
+                        ) : (
+                          <div className="flex flex-col items-center gap-0.5">
+                            <Heart size={22} className="text-[#f0d0c0]" fill="currentColor" />
+                            <span className="text-[7px] font-semibold uppercase tracking-widest text-[#f0d0c0] sm:text-[9px]">Forever</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Names on envelope body */}
+              <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-5 pt-3 text-center sm:pb-8 sm:pt-6">
+                <span className="block text-balance font-display text-lg italic leading-tight text-[#6a5238] sm:text-3xl">
+                  {settings.groomName} &amp; {settings.brideName}
+                </span>
+                {settings.weddingDate && (
+                  <span className="mt-1.5 block text-[10px] font-medium tracking-[0.3em] text-[#a08560] sm:mt-2 sm:text-xs">
+                    {formatDate(settings.weddingDate).toUpperCase()}
+                  </span>
                 )}
-              </span>
-            </span>
+              </div>
+            </div>
 
-            <span className="relative z-10 mt-7 block text-balance font-display text-xl italic text-[#4b3428] sm:mt-12 sm:text-4xl">
-              {settings.groomName} &amp; {settings.brideName}
-            </span>
+            {/* Hover hint glow */}
+            <div className="pointer-events-none absolute -inset-4 -z-10 rounded-full bg-[#c9b89c]/0 blur-2xl transition-all duration-500 group-hover:bg-[#c9b89c]/15" />
           </button>
 
-          <div className="mt-10 animate-pulse text-[#765845] sm:mt-14">
-            <Mail size={20} className="mx-auto mb-3" />
-            <p className="max-w-xs font-display text-lg italic sm:max-w-none sm:text-2xl">Cliquez sur l'enveloppe pour voir l'invitation</p>
+          {/* Click prompt */}
+          <div className="mt-8 animate-fade-in sm:mt-12">
+            <div className="flex items-center gap-3 text-[#8a7456]">
+              <span className="h-px w-6 bg-[#c9b89c]/60 sm:w-10" />
+              <Mail size={18} className="animate-pulse text-[#a08560]" />
+              <span className="h-px w-6 bg-[#c9b89c]/60 sm:w-10" />
+            </div>
+            <p className="mt-3 max-w-xs font-display text-base italic sm:max-w-none sm:text-xl">Cliquez sur l'enveloppe pour voir l'invitation</p>
           </div>
-
-          {settings.weddingDate && (
-            <p className="mt-6 text-xs font-semibold tracking-[0.35em] text-[#b26036]">
-              {formatDate(settings.weddingDate).toUpperCase()}
-            </p>
-          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-ink-900">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#f4ede2] text-[#4b382c]">
+      <nav className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-[#d8c3a2]/20 bg-[#f5eee4] px-5 text-[#503426] sm:px-10">
+        <span className="font-display text-lg font-semibold">{monogram.slice(0, 1)}<span className="text-[#a66f42]">&amp;</span>{monogram.slice(2)}</span>
+        <div className="hidden items-center gap-8 text-[9px] font-semibold uppercase tracking-[0.22em] text-[#765c45] sm:flex">
+          <a href="#programme" className="transition-colors hover:text-[#a66f42]">Programme</a>
+          <a href="#rsvp" className="transition-colors hover:text-[#a66f42]">Répondre</a>
+        </div>
+        {settings.weddingDate && <span className="text-[9px] font-semibold tracking-[0.12em] text-[#765c45]">{formatDate(settings.weddingDate)}</span>}
+      </nav>
       {/* Close button — only for admin preview, not for guests */}
       {!isGuestMode && (
         <button
@@ -246,48 +328,59 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       )}
 
       {/* Hero section */}
-      <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
+      <div className="relative flex min-h-[calc(100svh-3.5rem)] max-h-[calc(100svh-3.5rem)] items-center justify-center overflow-hidden bg-[#2f211b]">
         <div className="absolute inset-0">
           {heroImage ? (
             <img src={heroImage} alt="Couple" className="h-full w-full object-cover" />
           ) : (
-            <div className="h-full w-full bg-gradient-to-br from-ink-800 via-ink-900 to-ink-800" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_top,#644b3a,#2f211b_68%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-ink-900/40 via-ink-900/60 to-ink-900/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#2f211b]/25 via-[#2f211b]/55 to-[#2f211b]/95" />
         </div>
 
-        <div className="relative z-10 w-full max-w-3xl px-4 py-16 text-center animate-fade-in sm:px-6">
+        <div className="relative z-10 w-full max-w-6xl px-5 py-5 text-center animate-fade-in sm:px-12 sm:py-10 sm:text-left">
+          <div className="mb-4 flex items-center justify-center gap-3 text-gold-300/80 sm:mb-6 sm:justify-start">
+            <span className="h-px w-12 bg-gold-300/60" /><Heart size={16} fill="currentColor" /><span className="h-px w-12 bg-gold-300/60" />
+          </div>
           {logo && (
-            <img src={logo} alt="Logo" className="mx-auto h-20 w-20 object-contain mb-6" />
+            <img src={logo} alt="Logo" className="mx-auto mb-3 h-12 w-12 object-contain sm:mx-0 sm:h-16 sm:w-16" />
           )}
-          <p className="text-gold-300 text-sm font-medium tracking-[0.3em] uppercase mb-4">Nous nous marions</p>
-          <h1 className="font-display text-4xl leading-tight text-white sm:text-7xl">
+          <p className="text-[#c49a70] text-[10px] font-medium tracking-[0.38em] uppercase mb-3 sm:text-xs sm:mb-5">Nous nous marions</p>
+          <h1 className="break-words font-display text-3xl leading-tight text-[#c49a70] sm:text-8xl">
             {settings.brideName}
           </h1>
-          <div className="my-4 flex items-center justify-center gap-4">
+          <div className="my-2 flex items-center justify-center gap-3 text-gold-300 sm:my-5 sm:gap-4">
             <span className="h-px w-12 bg-gold-400" />
             <Heart size={24} className="text-gold-400" fill="currentColor" />
             <span className="h-px w-12 bg-gold-400" />
           </div>
-          <h1 className="font-display text-4xl leading-tight text-white sm:text-7xl">
+          <h1 className="break-words font-display text-3xl leading-tight text-[#c49a70] sm:text-8xl">
             {settings.groomName}
           </h1>
 
           {countdown !== null && countdown > 0 && (
-            <p className="mt-8 text-gold-300 font-display text-2xl">
+            <p className="mt-3 text-gold-300 font-display text-lg sm:mt-8 sm:text-2xl">
               Dans {countdown} jours
             </p>
           )}
           {settings.weddingDate && (
-            <div className="mt-4 flex flex-col items-center gap-1.5">
+            <div className="mt-3 flex w-full max-w-sm flex-col items-center gap-1 sm:mt-6 sm:gap-1.5 border-l border-[#b98c63]/60 py-3 pl-4 sm:items-start">
               <div className="flex items-center gap-2">
                 <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Date</span>
                 <span className="h-px w-4 bg-gold-400/50" />
-                <span className="text-white text-lg font-medium">
+                <span className="text-[#ead7c0] text-lg font-medium">
                   {formatDate(settings.weddingDate)}
-                  {settings.receptionTime && ` à ${formatTime(settings.receptionTime)}`}
                 </span>
               </div>
+              {settings.receptionTime && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Réception</span>
+                  <span className="h-px w-4 bg-gold-400/50" />
+                  <span className="flex items-center gap-1.5 text-[#ead7c0] text-lg font-medium">
+                    <Clock size={15} className="text-[#6d967b]" /> {formatTime(settings.receptionTime)}
+                  </span>
+                </div>
+              )}
               {settings.venueName && (
                 <div className="flex items-center gap-2">
                   <span className="text-gold-300 text-xs font-semibold tracking-widest uppercase">Lieu de la réception</span>
@@ -299,27 +392,22 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
           )}
 
           {settings.welcomeMessage && (
-            <p className="mt-6 max-w-md mx-auto text-ink-200 text-base italic leading-relaxed">
+            <p className="mt-3 max-w-md text-sm italic leading-relaxed text-[#bda58d] sm:mt-6 sm:text-base">
               {settings.welcomeMessage}
             </p>
           )}
 
           {qrCodeUrl && (
-            <div className="mb-6 inline-flex flex-col items-center gap-2">
-              <div className="rounded-xl bg-white p-3 shadow-lg">
-                <img src={qrCodeUrl} alt="QR code d'invitation" className="h-28 w-28" />
+            <div className="mt-3 inline-flex max-w-[calc(100vw-2rem)] flex-col items-center gap-2 rounded-2xl border border-[#c49a70]/30 bg-[#050403]/55 p-2 shadow-[0_12px_30px_rgba(0,0,0,0.24)] sm:absolute sm:right-0 sm:top-1/2 sm:mt-0 sm:-translate-y-1/2 sm:items-start sm:p-3">
+              <div className="rounded-xl bg-white p-2 shadow-lg sm:p-3">
+                <img src={qrCodeUrl} alt="QR code d'invitation" className="h-20 w-20 sm:h-32 sm:w-32" />
               </div>
-              {foundInv && (
-                <p className="font-mono text-xs text-gold-300">
-                  {invitations.find((i) => i.id === foundInv)?.invitationNumber}
-                </p>
-              )}
             </div>
           )}
 
           <a
             href="#rsvp"
-            className="mt-2 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-3.5 text-white font-medium text-lg transition-all hover:bg-gold-600 hover:scale-105 shadow-lg shadow-gold-500/20"
+            className="mt-2 inline-flex items-center gap-2 rounded-full border border-gold-300/70 bg-gold-500/90 px-8 py-3.5 text-white font-medium text-lg shadow-[0_10px_30px_rgba(184,134,11,0.24)] transition-all hover:scale-105 hover:bg-gold-400"
           >
             <Heart size={20} fill="currentColor" />
             Confirmez votre présence
@@ -331,13 +419,32 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
         </div>
       </div>
 
-      {/* Events section */}
-      <div className="bg-cream px-4 py-14 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="text-center font-display text-4xl text-ink-800 mb-2">Le programme</h2>
-          <div className="mx-auto h-px w-20 bg-gold-400 mb-12" />
+      {/* Couple section */}
+      <section className="border-y border-[#cbbca9] bg-[linear-gradient(180deg,#eadfd0_0%,#e5e4d8_100%)] px-4 py-16 text-center sm:px-6 sm:py-24">
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-3 flex items-center justify-center gap-3 text-[#a66f42]"><span className="h-px w-10 bg-[#b98c63]" /><Heart size={14} fill="currentColor" /><span className="h-px w-10 bg-[#b98c63]" /></div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#9b7655]">Les mariés</p>
+          <div className="mt-8 flex items-center justify-center gap-2 sm:gap-10">
+            <div className="min-w-0 flex-1 text-right"><p className="break-words font-display text-2xl italic leading-tight text-[#503426] sm:text-5xl">{settings.brideName}</p><p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-[#9b7655]">La mariée</p></div>
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[#a9bbaa] bg-[#dce6d8] shadow-[0_6px_16px_rgba(85,76,55,0.18)] sm:h-24 sm:w-24">
+              {logo ? <img src={logo} alt="Logo des mariés" className="h-full w-full rounded-full object-cover p-1" /> : <Heart size={28} className="text-[#8f4c35]" fill="currentColor" />}
+            </div>
+            <div className="min-w-0 flex-1 text-left"><p className="break-words font-display text-2xl italic leading-tight text-[#503426] sm:text-5xl">{settings.groomName}</p><p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-[#9b7655]">Le marié</p></div>
+          </div>
+        </div>
+      </section>
 
-          <div className="space-y-8">
+      {/* Events section */}
+      <div id="programme" className="relative overflow-hidden border-y border-[#ded2c3] bg-[#f7f1e8] px-4 py-16 text-[#4b382c] sm:px-6 sm:py-24">
+        <div className="pointer-events-none absolute left-0 top-10 h-40 w-40 rounded-full bg-[#dce6d8]/45 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[#ead8c8]/45 blur-3xl" />
+        <div className="mx-auto w-full max-w-4xl">
+          <div className="mb-3 flex items-center justify-center gap-3 text-gold-600"><span className="h-px w-10 bg-gold-300" /><Heart size={14} fill="currentColor" /><span className="h-px w-10 bg-gold-300" /></div>
+          <div className="mb-3 flex items-center gap-3 text-[#a76e4c]"><span className="text-[10px] font-semibold tracking-[0.25em]">03</span><span className="h-px w-12 bg-[#c9a98a]" /></div>
+          <div className="mb-12 flex items-center gap-3"><span className="h-px w-8 bg-[#bd8b6d]" /><span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#9c6b50]">Le rendez-vous</span></div>
+          <h2 className="font-display text-5xl leading-[0.95] text-[#3e2d25] sm:text-7xl">Programme</h2>
+
+          <div className="mt-12 space-y-0 border-t border-[#d9cbbd]">
             <EventCard
               title="La Dot"
               event={ev.dot}
@@ -358,13 +465,17 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
       </div>
 
       {/* RSVP section */}
-      <div id="rsvp" className="scroll-mt-0 bg-ink-800 px-4 py-14 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="text-center font-display text-4xl text-white mb-2">Confirmez votre présence</h2>
-          <div className="mx-auto h-px w-20 bg-gold-400 mb-12" />
+      <div id="rsvp" className="scroll-mt-0 border-t border-[#a77d62] bg-[linear-gradient(135deg,#8b6650_0%,#795644_100%)] px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto grid w-full max-w-6xl gap-x-16 gap-y-8 sm:grid-cols-2">
+          <div className="mb-2 flex items-center gap-3 text-[#e6c6ad] sm:col-span-2"><span className="text-[10px] font-semibold tracking-[0.25em]">04</span><span className="h-px w-12 bg-[#c4977d]" /></div>
+          <div className="self-start sm:row-start-2">
+            <div className="mb-7 flex items-center gap-3"><span className="h-px w-8 bg-[#c4977d]" /><span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#e6c6ad]">Votre présence</span></div>
+            <h2 className="font-display text-5xl leading-[0.92] text-[#fff7ed] sm:text-7xl">Répondez à<br /><em className="text-[#c48768]">notre invitation</em></h2>
+            <p className="mt-10 max-w-md text-sm leading-7 text-[#ead8cc]">Votre présence est le plus beau cadeau que vous puissiez nous offrir. Merci de nous répondre avant le grand jour.</p>
+          </div>
 
           {!foundInv && !submitted && (
-            <div className="space-y-4">
+            <div className="space-y-4 sm:row-start-2">
               {isGuestMode ? (
                 <p className="text-center text-ink-300 text-sm mb-6">
                   Recherchez votre invitation ci-dessous pour confirmer votre présence.
@@ -377,7 +488,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               {!isGuestMode && (
                 <input
                   className="w-full rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white placeholder:text-ink-400 focus:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400/30"
-                  placeholder="Ex : INV-001 ou Kabeya"
+                  placeholder="Rechercher par nom de famille"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -391,7 +502,6 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
                       className="flex w-full items-center justify-between rounded-lg bg-white/5 px-4 py-3 text-left transition-colors hover:bg-white/10"
                     >
                       <div>
-                        <p className="font-mono text-xs text-gold-300">{inv.invitationNumber}</p>
                         <p className="text-white font-medium">{inv.familyName}</p>
                         <p className="text-xs text-ink-400">{inv.maxPeople} personnes autorisées</p>
                       </div>
@@ -413,9 +523,8 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
           )}
 
           {foundInv && !submitted && (
-            <div className="space-y-6">
+            <div className="space-y-6 sm:row-start-2">
               <div className="text-center">
-                <p className="font-mono text-xs text-gold-300">{invitations.find((i) => i.id === foundInv)?.invitationNumber}</p>
                 <h3 className="font-display text-2xl text-white">
                   Famille {invitations.find((i) => i.id === foundInv)?.familyName}
                 </h3>
@@ -427,7 +536,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               </div>
 
               <div>
-                <label className="block text-sm text-ink-300 mb-3">Serez-vous présent ?</label>
+                <label className="block text-[10px] font-semibold uppercase tracking-[0.25em] text-[#ead8cc] mb-3">Serez-vous parmi nous ?</label>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <StatusButton active={status === 'confirmed'} onClick={() => setStatus('confirmed')} icon={<Check size={18} />} label="Présent" />
                   <StatusButton active={status === 'declined'} onClick={() => setStatus('declined')} icon={<X size={18} />} label="Absent" />
@@ -496,11 +605,11 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
               )}
 
               <div>
-                <label className="block text-sm text-ink-300 mb-2">Note (optionnel)</label>
+                <label className="block text-[10px] font-semibold uppercase tracking-[0.25em] text-[#ead8cc] mb-2">Un mot pour les mariés</label>
                 <textarea
                   className="w-full rounded-lg bg-white/10 border border-white/20 px-4 py-3 text-white text-sm focus:border-gold-400 focus:outline-none"
                   rows={2}
-                  placeholder="Restriction alimentaire, remarque…"
+                  placeholder="Un message, une attention…"
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                 />
@@ -516,7 +625,7 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
           )}
 
           {submitted && (
-            <div className="text-center space-y-4">
+            <div className="mx-auto max-w-md rounded-2xl sm:row-start-2 border border-[#d4bb95]/30 bg-[#fffaf1]/[0.06] p-8 text-center space-y-4">
               <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-sage-500/20">
                 <Check size={40} className="text-sage-400" />
               </div>
@@ -536,14 +645,23 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
         </div>
       </div>
 
+      {settings.airtelMoneyNumber && (
+        <section className="border-t border-[#a77d62] bg-[#8b6650] px-6 py-10 text-center text-[#fff7ed]">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#f0d8c4]">Soutenir les mariés</p>
+          <h3 className="mt-2 font-display text-3xl">Airtel Money</h3>
+          <p className="mt-2 text-sm text-[#f8e9dc]">Vous pouvez envoyer votre contribution au</p>
+          <p className="mt-3 font-mono text-xl font-semibold tracking-wider">{settings.airtelMoneyNumber}</p>
+        </section>
+      )}
+
       {/* Footer */}
-      <div className="bg-ink-900 py-12 px-6 text-center">
+      <div className="border-t border-[#4d382d] bg-[#2f211b] px-6 py-16 text-center">
         {logo ? (
           <img src={logo} alt="Logo" className="mx-auto h-12 w-12 object-contain mb-3" />
         ) : (
           <Heart size={20} className="text-gold-500 mx-auto mb-3" fill="currentColor" />
         )}
-        <p className="font-display text-xl text-white">{settings.brideName} & {settings.groomName}</p>
+        <p className="font-display text-3xl text-[#c49a70]">{settings.brideName} <span className="text-gold-300">&amp;</span> {settings.groomName}</p>
         <p className="text-ink-400 text-sm mt-1">{formatDate(settings.weddingDate)}</p>
         <p className="text-ink-500 text-xs mt-6">
           Design by <span className="font-medium text-gold-400">Igugu Etienne</span>
@@ -555,41 +673,30 @@ export function ClientPreview({ onClose, inviteToken }: { onClose: () => void; i
 
 function EventCard({ title, event, icon }: { title: string; event: WeddingEvent; icon: React.ReactNode }) {
   if (!event.date && !event.venueName) return null;
+  const dateParts = formatDate(event.date).split(' ');
+  const day = dateParts[0] ?? '';
+  const month = dateParts[1]?.slice(0, 3).toUpperCase() ?? '';
+
   return (
-    <div className="card p-6 sm:p-8 animate-slide-up">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-50">
-          {icon}
+    <article className="group grid grid-cols-[78px_minmax(0,1fr)_16px] gap-4 border-b border-[#d9cbbd] py-7 transition-colors hover:bg-[#eee4d7]/70 sm:grid-cols-[110px_minmax(0,1fr)_24px] sm:gap-8 sm:py-9">
+      <div className="flex flex-col justify-center text-center text-[#a45f43]">
+        <span className="font-display text-4xl leading-none sm:text-5xl">{day}</span>
+        <span className="mt-1 text-[9px] font-semibold tracking-[0.18em] text-[#9c806c]">{month}</span>
+      </div>
+      <div className="min-w-0">
+        <div className="mb-2 flex items-center gap-2 text-[#a76e4c]">
+          <Clock size={13} />
+          <span className="text-[10px] font-semibold tracking-[0.2em]">{formatTime(event.time)}</span>
         </div>
-        <h3 className="font-display text-2xl text-ink-800">{title}</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="font-display text-2xl leading-tight text-[#3e2d25] sm:text-3xl">{title}</h3>
+          <span className="hidden text-[#6d967b] sm:block">{icon}</span>
+        </div>
+        <p className="mt-1 text-sm leading-6 text-[#806f64]">{event.venueName ? `Un moment précieux à partager à ${event.venueName}.` : 'Un moment précieux à partager ensemble.'}</p>
+        {event.venueName && <p className="mt-2 flex items-center gap-1.5 text-[10px] text-[#8d7c70]"><MapPin size={12} className="text-[#6d967b]" />{event.venueName}</p>}
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 sm:gap-4 ml-2">
-        {event.date && (
-          <div className="flex items-start gap-2">
-            <Calendar size={18} className="text-gold-500 shrink-0 mt-0.5" />
-            <div>
-              <span className="text-xs font-semibold tracking-wider uppercase text-gold-600">Date</span>
-              <p className="text-ink-700 font-medium">{formatDate(event.date)}{event.time && ` à ${formatTime(event.time)}`}</p>
-            </div>
-          </div>
-        )}
-        {event.venueName && (
-          <div className="flex items-start gap-2">
-            <MapPin size={18} className="text-gold-500 shrink-0 mt-0.5" />
-            <div>
-              <span className="text-xs font-semibold tracking-wider uppercase text-gold-600">Lieu</span>
-              <p className="text-ink-700 font-medium">{event.venueName}</p>
-            </div>
-          </div>
-        )}
-        {event.venueAddress && (
-          <div className="flex items-start gap-2 text-ink-500 text-sm sm:col-span-2">
-            <MapPin size={14} className="text-ink-300 shrink-0 mt-0.5" />
-            <span>{event.venueAddress}</span>
-          </div>
-        )}
-      </div>
-    </div>
+      <span className="self-center text-xl text-[#a76e4c] transition-transform group-hover:translate-x-1">›</span>
+    </article>
   );
 }
 
@@ -599,8 +706,8 @@ function StatusButton({ active, onClick, icon, label }: { active: boolean; onCli
       onClick={onClick}
       className={`flex min-h-12 items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
         active
-          ? 'bg-gold-500 text-white border-gold-500'
-          : 'bg-white/5 text-ink-200 border-white/20 hover:bg-white/10'
+          ? 'bg-[#6d4d3e] text-[#fff7ed] border-[#c4977d] shadow-[0_6px_16px_rgba(60,35,25,0.2)]'
+          : 'bg-transparent text-[#f0ddd0] border-[#d4bb95]/50 hover:bg-[#fffaf1]/[0.1]'
       }`}
     >
       {icon} {label}
@@ -614,8 +721,8 @@ function CountButton({ active, onClick, label }: { active: boolean; onClick: () 
       onClick={onClick}
       className={`min-h-12 rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
         active
-          ? 'bg-gold-500 text-white border-gold-500'
-          : 'bg-white/5 text-ink-200 border-white/20 hover:bg-white/10'
+          ? 'bg-[#6d4d3e] text-[#fff7ed] border-[#c4977d] shadow-[0_6px_16px_rgba(60,35,25,0.2)]'
+          : 'bg-transparent text-[#f0ddd0] border-[#d4bb95]/50 hover:bg-[#fffaf1]/[0.1]'
       }`}
     >
       {label}

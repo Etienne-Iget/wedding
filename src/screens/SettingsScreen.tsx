@@ -15,6 +15,7 @@ interface FormValues {
   venueAddress: string;
   maxGuests: number;
   contactEmail: string;
+  airtelMoneyNumber: string;
   currency: string;
   weddingId: string;
   primaryColor: string;
@@ -61,6 +62,7 @@ export function SettingsScreen() {
         venueAddress: settings.venueAddress,
         maxGuests: settings.maxGuests,
         contactEmail: settings.contactEmail,
+        airtelMoneyNumber: settings.airtelMoneyNumber ?? '',
         currency: settings.currency,
         weddingId: settings.weddingId,
         primaryColor: settings.primaryColor,
@@ -147,6 +149,7 @@ export function SettingsScreen() {
       venueAddress: values.venueAddress,
       maxGuests: values.maxGuests,
       contactEmail: values.contactEmail,
+      airtelMoneyNumber: values.airtelMoneyNumber,
       currency: values.currency,
       primaryColor: values.primaryColor,
       logoSrc: logoSrc || null,
@@ -359,6 +362,9 @@ export function SettingsScreen() {
             </Field>
             <Field label="Email de contact">
               <input type="email" className="input" {...register('contactEmail')} />
+            </Field>
+            <Field label="Numéro Airtel Money" help="Affiché sous la confirmation de présence">
+              <input type="tel" className="input" placeholder="Ex : 097 000 00 00" {...register('airtelMoneyNumber')} />
             </Field>
             <Field label="Devise">
               <select className="input" {...register('currency')}>
