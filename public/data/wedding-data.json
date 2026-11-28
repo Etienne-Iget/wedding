@@ -1,7 +1,7 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-11-28T10:53:01.047Z",
+  "exportedAt": "2026-11-28T12:37:06.387Z",
   "settings": {
     "id": "current",
     "applicationName": "Wedding Guest Manager",
@@ -16,7 +16,7 @@
     "airtelMoneyNumber": "097 554 777464",
     "currency": "USD",
     "primaryColor": "#b8860b",
-    "logoSrc": "/images/img-1790183706201-4uxtn1.jpg",
+    "logoSrc": "/images/img-1795869418857-h6539b.jpg",
     "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
     "welcomeMessage": "",
     "invitationMessageTemplate": "",
@@ -41,7 +41,7 @@
         "venueAddress": "Bujumbura"
       }
     },
-    "updatedAt": 1795863180746
+    "updatedAt": 1795869426087
   },
   "invitations": [
     {

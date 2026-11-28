@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import type { WeddingSettings } from '@/types';
-import { generatePoster } from '@/lib/poster';
 
 function setMetaAttr(selector: string, attr: string, value: string) {
   const el = document.querySelector(selector) as HTMLMetaElement | null;
@@ -8,31 +7,15 @@ function setMetaAttr(selector: string, attr: string, value: string) {
 }
 
 export function useShareImage(settings: WeddingSettings | null) {
-  const lastKey = useRef('');
-
   useEffect(() => {
     if (!settings) return;
 
-    const key = `${settings.brideName}|${settings.groomName}|${settings.weddingDate}|${settings.heroPhotoSrc ?? ''}`;
-    if (key === lastKey.current) return;
-    lastKey.current = key;
-
-    const absolutePosterUrl = `${window.location.origin}/poster.webp`;
+    const absolutePosterUrl = `${window.location.origin}/poster-share.webp`;
     setMetaAttr('meta[property="og:image"]', 'content', absolutePosterUrl);
     setMetaAttr('meta[name="twitter:image"]', 'content', absolutePosterUrl);
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const dataUrl = await generatePoster(settings, { format: 'square' });
-        if (cancelled) return;
-        setMetaAttr('meta[property="og:image"]', 'content', dataUrl);
-        setMetaAttr('meta[name="twitter:image"]', 'content', dataUrl);
-      } catch {
-        // keep static poster URL as fallback
-      }
-    })();
-
-    return () => { cancelled = true; };
+    setMetaAttr('meta[property="og:title"]', 'content', `${settings.brideName} & ${settings.groomName} — Invitation`);
+    setMetaAttr('meta[property="og:description"]', 'content', 'Découvrez notre invitation et confirmez votre présence.');
+    setMetaAttr('meta[name="twitter:title"]', 'content', `${settings.brideName} & ${settings.groomName} — Invitation`);
+    setMetaAttr('meta[name="twitter:description"]', 'content', 'Découvrez notre invitation et confirmez votre présence.');
   }, [settings]);
 }
