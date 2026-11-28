@@ -1,11 +1,11 @@
 {
   "version": 1,
   "weddingId": "etienne-hannah-2026",
-  "exportedAt": "2026-11-28T12:37:06.387Z",
+  "exportedAt": "2026-11-28T13:00:04.404Z",
   "settings": {
     "id": "current",
-    "applicationName": "Wedding Guest Manager",
     "weddingId": "etienne-hannah-2026",
+    "applicationName": "Wedding Guest Manager",
     "brideName": "Hannah",
     "groomName": "Étienne",
     "weddingDate": "2026-12-26",
@@ -13,25 +13,21 @@
     "venueAddress": "Bujumbura",
     "maxGuests": 100,
     "contactEmail": "etienneiget5@gmail.com",
-    "airtelMoneyNumber": "097 554 777464",
     "currency": "USD",
     "primaryColor": "#b8860b",
-    "logoSrc": "/images/img-1795869418857-h6539b.jpg",
+    "logoSrc": "/images/img-1795869931470-8u6dqn.jpg",
     "heroPhotoSrc": "/images/img-1790183714780-7kdob7.png",
-    "welcomeMessage": "",
-    "invitationMessageTemplate": "",
-    "receptionTime": "18:00",
     "events": {
       "dot": {
         "date": "2026-12-23",
-        "time": "14:30",
-        "venueName": "Fidodido",
+        "time": "18:00",
+        "venueName": "cfr Chez la Mariée",
         "venueAddress": "Bujumbura"
       },
       "civil": {
         "date": "2026-12-26",
-        "time": "11:30",
-        "venueName": "Kiriri Garden",
+        "time": "10:00",
+        "venueName": "Ambassade de la RD. Congo",
         "venueAddress": "Bujumbura"
       },
       "religious": {
@@ -41,7 +37,7 @@
         "venueAddress": "Bujumbura"
       }
     },
-    "updatedAt": 1795869426087
+    "updatedAt": 1795870223822
   },
   "invitations": [
     {
